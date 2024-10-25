@@ -1,0 +1,27 @@
+export const menuList = [
+  {
+    title: 'home',
+    link: '/',
+    icon: 'home'
+  },
+  {
+    title: 'user management',
+    link: '/user-management',
+    icon: 'user-group'
+  },
+  {
+    title: 'request account',
+    link: '/request-account',
+    icon: 'user-plus'
+  },
+  {
+    title: "activity log",
+    link: "/activity-log",
+    icon: "document-text"
+  },
+  {
+    title: "roles",
+    link: "/roles",
+    icon: "shield-check"
+  }
+]
