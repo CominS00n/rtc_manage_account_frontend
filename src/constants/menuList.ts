@@ -15,7 +15,7 @@ export const menuList = [
     icon: 'user-plus'
   },
   {
-    title: "activity log",
+    title: "activity logs",
     link: "/activity-log",
     icon: "document-text"
   },

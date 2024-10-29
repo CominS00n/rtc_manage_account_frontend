@@ -12,6 +12,11 @@ const routes = [
     component: () => import('../views/userManageView.vue'),
   },
   {
+    path: '/activity-log',
+    name: 'Activity Log',
+    component: () => import('../views/ActivityLogView.vue')
+  },
+  {
     path: '/:catchAll(.*)',
     name: '404 Not Found',
     component: () => import('@/views/NotFound.vue'),
