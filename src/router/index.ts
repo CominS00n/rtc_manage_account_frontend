@@ -4,23 +4,23 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/HomeView.vue')
+    component: () => import('../views/HomeView.vue'),
   },
-  // {
-  //   path: '/login',
-  //   name: 'Login',
-  //   component: () => import('../views/LoginView.vue')
-  // },
   {
-    path: "/:catchAll(.*)",
-    name: "404 Not Found",
-    component: () => import("@/views/NotFound.vue"),
+    path: '/user-management',
+    name: 'User Management',
+    component: () => import('../views/userManageView.vue'),
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: '404 Not Found',
+    component: () => import('@/views/NotFound.vue'),
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: routes
+  routes: routes,
 })
 
 export default router
