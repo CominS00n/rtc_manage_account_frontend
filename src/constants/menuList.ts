@@ -23,5 +23,5 @@ export const menuList = [
     title: "roles",
     link: "/roles",
     icon: "shield-check"
-  }
+  },
 ]

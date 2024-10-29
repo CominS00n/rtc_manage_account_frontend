@@ -1,6 +1,6 @@
 <template>
   <span>
-    <Icon :icon="`heroicons-outline:${props.icon}`" />
+    <Icon :icon="`heroicons-outline:${props.icon || 'home'}`" />
   </span>
 </template>
 <script lang="ts" setup>

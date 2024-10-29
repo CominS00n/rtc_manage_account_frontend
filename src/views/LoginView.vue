@@ -1,38 +1,77 @@
 <template>
-  <section class="fixed h-screen w-screen top-0 left-0 z-[9999]">
-    <div class="flex justify-center items-center h-full">
-      <div class="login">
-        <nt_card title="Hollo Word!" class="max-w-96">
-          <template #detail>
-            <ul class="steps">
-              <li class="step step-warning" data-content="">Register</li>
-              <li class="step step-warning">Choose plan</li>
-              <li class="step">Purchase</li>
-              <li class="step">Receive Product</li>
-            </ul>
-          </template>
-        </nt_card>
+  <section>
+    <div>
+      <button
+        @click="isModal = true"
+        class="w-full bg-yellow-400 rounded-md p-2 text-white"
+      >
+        Login
+      </button>
+    </div>
+    <div
+      class="fixed h-screen w-screen top-0 left-0 z-[9999] flex justify-center items-center"
+      v-show="isModal"
+    >
+      <div>
+        <div
+          class="fixed w-full h-full bg-black bg-opacity-50 -z-10 top-0 left-0"
+          @click="handleClose"
+        ></div>
+        <div class="login">
+          <nt_card class="max-w-96">
+            <template #icon>
+              <button>
+                <nt_icon icon="x-mark" @click="handleClose" />
+              </button>
+            </template>
+            <template #detail>
+              <label for="username">username</label>
+              <input type="text" name="username" v-model="username" />
+              <label for="password">password</label>
+              <input type="password" name="password" v-model="password" />
+            </template>
+
+            <template #action>
+              <button @click="handleLogin">Login</button>
+            </template>
+          </nt_card>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from 'vue'
-import nt_card from '@/components/cards/nt_card.vue'
+import { ref } from 'vue'
+import useLoginApi from '@/composable/loginApi'
 
-defineEmits(['close'])
+import nt_card from '@/components/cards/nt_card.vue'
+import nt_icon from '@/components/icon/nt_icon.vue'
+
+const isModal = ref<boolean>(false)
+const username = ref<string>('')
+const password = ref<string>('')
+
+const { login } = useLoginApi()
+
+const handleLogin = async () => {
+  // console.log(username, password)
+  await login(username.value, password.value)
+  handleClose()
+}
+
+const handleClose = () => {
+  isModal.value = false
+}
 </script>
 
 <style scoped>
-.login::before {
-  content: '';
-  position: fixed;
+input[type='text'],
+input[type='password'] {
   width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: -1;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
 }
 </style>
