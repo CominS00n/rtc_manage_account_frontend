@@ -4,7 +4,7 @@ export default function useLoginApi() {
   const login = async (username: string, password: string) => {
     try {
       await axios.post(
-        'http://localhost:8000/api/v1/login',
+        'http://localhost:8000/api/v2/login',
         {
           username: username,
           password: password,
