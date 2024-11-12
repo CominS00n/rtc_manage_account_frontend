@@ -1,8 +1,9 @@
 export type User = {
-  id: number
-  name: string
-  username: string
-  email: string
+  user_id: number
+  user_name: string
+  user_username: string
+  user_email: string
+  roles: string
 }
 
 export type ActivityLog = {
@@ -10,7 +11,7 @@ export type ActivityLog = {
   activityUser: string
   activityDetails: string
   activityDate: Date
-  
+
 }
 
 

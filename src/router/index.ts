@@ -18,6 +18,11 @@ const routes = [
         component: () => import('../views/userManageView.vue'),
       },
       {
+        path: '/request-account',
+        name: 'Request Account',
+        component: () => import('../views/RequestAccView.vue'),
+      },
+      {
         path: '/activity-log',
         name: 'Activity Log',
         component: () => import('../views/ActivityLogView.vue'),

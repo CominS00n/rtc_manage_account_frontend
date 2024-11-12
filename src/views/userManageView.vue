@@ -11,41 +11,49 @@
               <th>Name</th>
               <th>Username</th>
               <th>Email</th>
+              <th>Role</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in result" :key="item.email">
-              <td>{{ item.id }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.username }}</td>
-              <td>{{ item.email }}</td>
+            <tr v-for="item in users" :key="item.user_email">
+              <td>{{ item.user_id }}</td>
+              <td>{{ item.user_name }}</td>
+              <td>{{ item.user_username }}</td>
+              <td>{{ item.user_email }}</td>
+              <td>
+                <ul
+                  v-for="subItem in item.roles"
+                  :key="subItem.role_id"
+                  class="md:inline-flex md:ml-2 first:ml-0"
+                >
+                  <li class="badge badge-ghost text-center ">
+                    <p>{{ subItem.role_name }}</p>
+                  </li>
+                </ul>
+              </td>
               <td>
                 <nt_icon icon="user-circle" class="text-xl text-green-500" />
               </td>
             </tr>
           </tbody>
         </table>
-        <!-- {{ result }} -->
       </template>
     </nt_card>
   </section>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 
-import type { User } from '@/types/ntType'
+// import type { User } from '@/types/ntType'
 import useUserApi from '@/composable/userApi'
 import nt_card from '@/components/cards/nt_card.vue'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
 const { getUsers, users } = useUserApi()
-const result = ref<User[]>([])
 
 onMounted(async () => {
-  await getUsers().then(() => {
-    result.value = users.value
-  })
+  await getUsers()
 })
 </script>

@@ -35,9 +35,11 @@ const { login } = useLoginApi()
 const handleLogin = async () => {
   // console.log(username, password)
   await login(username.value, password.value)
+  alert('Login success')
+  router.push('/')
 }
 
-const handleBack = () => router.push('/')
+const handleBack = () => router.go(-1)
 </script>
 
 <style scoped>
