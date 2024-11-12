@@ -1,21 +1,28 @@
 <template>
-  <main>
-    <RouterView />
-  </main>
+  <div class="main-layout">
+    <aside>
+      <navigationBar />
+    </aside>
+    <main>
+      <div class="content-body h-full overflow-y-auto rounded-md">
+        <RouterView />
+      </div>
+    </main>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import navigationBar from '@/components/layouts/navigationBar.vue'
 </script>
 
-<!-- <style lang="css">
-
+<style lang="css" scoped>
 :root {
   --scrollbar-thumb: #363636;
   --scrollbar-track: #f1f1f1;
 }
 
-#app {
+.main-layout {
   @apply grid grid-cols-5 h-screen;
 }
 
@@ -31,7 +38,4 @@ main {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
-
-
-
-</style> -->
+</style>

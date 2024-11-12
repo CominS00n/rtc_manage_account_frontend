@@ -23,22 +23,18 @@
     </nav>
 
     <div>
-      <login-view />
+      <router-link to="/login">Login </router-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter, RouterLink } from 'vue-router'
 import { menuList } from '@/constants/menuList'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
-import LoginView from '@/views/LoginView.vue'
-// import LoginView from '@/views/LoginView.vue'
 
 const router = useRouter()
-
-console.log(router.currentRoute.value.path)
 </script>
 
 <style scoped>
