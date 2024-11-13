@@ -27,6 +27,11 @@ const routes = [
         name: 'Activity Log',
         component: () => import('../views/ActivityLogView.vue'),
       },
+      {
+        path: '/roles',
+        name: 'Role Management',
+        component: () => import('../views/RoleManageView.vue'),
+      },
     ],
   },
   {
