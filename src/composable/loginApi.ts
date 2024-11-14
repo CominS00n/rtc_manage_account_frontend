@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default function useLoginApi() {
   const login = async (username: string, password: string) => {
-    console.log(username, password)
+    // console.log(username, password)
     try {
       await axios.post(
         'http://localhost:8000/api/v2/login',
