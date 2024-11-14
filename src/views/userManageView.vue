@@ -44,15 +44,54 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { ref } from 'vue'
 
-import useUserApi from '@/composable/userApi'
+// import useUserApi from '@/composable/userApi'
 import nt_card from '@/components/cards/nt_card.vue'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
-const { getUsers, users } = useUserApi()
+// const { getUsers, users } = useUserApi()
 
-onMounted(async () => {
-  await getUsers()
-})
+// onMounted(async () => {
+//   await getUsers()
+//   console.log(users.value)
+// })
+
+const users = ref([
+  {
+    user_id: 1,
+    user_name: 'sitthihai puckpoo',
+    user_email: 'spuckpoo@gmail.com',
+    user_username: 'admin',
+    user_password:
+      '$2b$10$54g.qYL5Xh5aH5sbjEwMtu3WW8iWbw8wTcSto3nMd1m/fzLownAFG',
+    roles: [
+      {
+        role_id: 1,
+        role_name: 'super-admin',
+        permissions: ['allowAll'],
+      },
+      {
+        role_id: 2,
+        role_name: 'admin',
+        permissions: [
+          'userCreate',
+          'userRead',
+          'userUpdate',
+          'userDelete',
+          'roleCreate',
+          'roleRead',
+          'permRead',
+          'rolePermCreate',
+          'rolePermRead',
+          'reqAccountCreate',
+          'reqAccountRead',
+          'reqAccountUpdate',
+          'reqAccountDelete',
+        ],
+      },
+    ],
+    groups: ['user', 'admin'],
+  },
+])
 </script>

@@ -24,20 +24,47 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
-import type { ActivityLog } from '@/types/ntType'
-import useActivityLogApi from '@/composable/activityLogApi'
+// import type { ActivityLog } from '@/types/ntType'
+// import useActivityLogApi from '@/composable/activityLogApi'
 import nt_card from '@/components/cards/nt_card.vue'
 
-const { activityLogs, getActivityLogs } = useActivityLogApi()
+// const { activityLogs, getActivityLogs } = useActivityLogApi()
 
-const result = ref<ActivityLog[]>([])
+// const result = ref<ActivityLog[]>([])
 
-onMounted(async () => {
-  await getActivityLogs().then(() => {
-    result.value = activityLogs.value
-    console.log(result.value)
-  })
-})
+// onMounted(async () => {
+//   await getActivityLogs().then(() => {
+//     result.value = activityLogs.value
+//     console.log(result.value)
+//   })
+// })
+
+const result = ref([
+  {
+    id: 1,
+    activityUser: 'sitthihai puckpoo',
+    activityDetails: 'User logged in',
+    activityDate: '2024-11-12',
+  },
+  {
+    id: 2,
+    activityUser: 'sitthihai puckpoo',
+    activityDetails: 'User logged in',
+    activityDate: '2024-11-13',
+  },
+  {
+    id: 3,
+    activityUser: 'sitthihai puckpoo',
+    activityDetails: 'User logged in',
+    activityDate: '2024-11-14',
+  },
+  {
+    id: 4,
+    activityUser: 'sitthihai puckpoo',
+    activityDetails: 'User logged in',
+    activityDate: '2024-11-11',
+  },
+])
 </script>
