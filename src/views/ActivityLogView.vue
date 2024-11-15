@@ -1,6 +1,7 @@
 <template>
   <section>
-    <nt_card title="Activity Log">
+    <h1 class="font-bold text-2xl py-3">Activity Log</h1>
+    <nt_card>
       <template #detail>
         <table class="table table-zebra">
           <thead>

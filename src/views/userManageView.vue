@@ -1,8 +1,7 @@
 <template>
   <section>
-    <!-- <h1>User Management</h1>
-    <p>Welcome to the User Manage page!</p> -->
-    <nt_card title="User Management">
+    <h1 class="font-bold text-2xl py-3">User Management</h1>
+    <nt_card>
       <template #detail>
         <table class="table table-zebra">
           <thead>
