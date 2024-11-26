@@ -1,150 +1,221 @@
 <template>
   <div class="container mx-auto overflow flex flex-col gap-y-4">
     <h1 class="font-bold text-2xl py-3">RTC Request Account</h1>
-    <nt_card class="">
-      <template #detail>
-        <h4 class="font-bold text-lg pb-6">User Information</h4>
+    <v-card>
+      <v-card-title class="font-weight-bold m-2">User Information</v-card-title>
+      <v-card-text>
         <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6 items-center">
-          <label class="input input-bordered flex items-center gap-2">
-            Name :
-            <input type="text" class="grow" placeholder="Full Name" />
-          </label>
-          <label class="input input-bordered flex items-center gap-2">
-            Position :
-            <input type="text" class="grow" placeholder="Position" />
-          </label>
-          <label class="input input-bordered flex items-center gap-2">
-            Company :
-            <input type="text" class="grow" placeholder="Company" />
-          </label>
-          <label class="input input-bordered flex items-center gap-2">
-            Division :
-            <input type="text" class="grow" placeholder="Division" />
-          </label>
-          <label class="input input-bordered flex items-center gap-2">
-            Telephone :
-            <input type="text" class="grow" placeholder="09xxxxxxxx" />
-          </label>
-          <label class="input input-bordered flex items-center gap-2">
-            E-mail Address :
-            <input type="text" class="grow" placeholder="mail@mail.com" />
-          </label>
+          <v-text-field
+            label="Name"
+            variant="outlined"
+            density="compact"
+          ></v-text-field>
+          <v-text-field
+            label="Position"
+            variant="outlined"
+            density="compact"
+          ></v-text-field>
+          <v-text-field
+            label="Company"
+            variant="outlined"
+            density="compact"
+          ></v-text-field>
+          <v-text-field
+            label="Division"
+            variant="outlined"
+            density="compact"
+          ></v-text-field>
+          <v-text-field
+            label="Telephone"
+            variant="outlined"
+            density="compact"
+          ></v-text-field>
+          <v-text-field
+            label="E-mail Address"
+            variant="outlined"
+            density="compact"
+          ></v-text-field>
         </div>
-      </template>
-    </nt_card>
+      </v-card-text>
+    </v-card>
 
-    <nt_card>
-      <template #detail>
-        <h4 class="font-bold text-lg pb-6">Request Information</h4>
-        <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6 items-center">
-          <div class="flex items-center gap-2 p-4">
+    <v-card>
+      <v-card-title class="font-weight-bold m-2"
+        >Request Information</v-card-title
+      >
+      <v-card-text>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3">
+          <div class="flex gap-2">
             Request Type :
-            <label
-              class="flex items-center gap-2"
-              v-for="type in req_types"
-              :key="type"
-            >
-              <input type="checkbox" class="checkbox checkbox-sm" />
+            <label class="flex gap-2" v-for="type in req_types" :key="type">
+              <input type="checkbox" class="checkbox checkbox-sm border" />
               <span class="capitalize">
                 {{ type }}
               </span>
             </label>
           </div>
           <div>
-            <label class="input input-bordered flex items-center gap-2">
-              System :
-              <input
-                type="text"
-                class="grow"
-                placeholder="server: 10.100.xxx.xx"
-              />
-            </label>
+            <v-text-field
+              label="System"
+              variant="outlined"
+              density="compact"
+              hide-details
+            ></v-text-field>
           </div>
           <div>
-            <label class="input input-bordered flex items-center gap-2">
-              Request Date :
-              <input type="date" class="grow" />
-            </label>
+            <v-date-input
+              label="Request Date"
+              prepend-icon=""
+              variant="outlined"
+              density="compact"
+              persistent-placeholder
+            ></v-date-input>
           </div>
         </div>
-      </template>
-    </nt_card>
+      </v-card-text>
+    </v-card>
 
-    <nt_card>
-      <template #detail>
-        <h4 class="font-bold text-lg pb-6">Request Information</h4>
-        <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6 items-center">
-          <label class="flex items-center gap-2 p-4">
-            Type of Account :
-            <select class="select select-bordered select-sm w-full max-w-xs">
-              <option disabled selected>Select account type</option>
-              <option>Permanent</option>
-              <option>Temporary</option>
-            </select>
-          </label>
-          <label class="input input-bordered flex items-center gap-2">
-            Request Date :
-            <input type="date" class="grow" />
-          </label>
-          <div class="flex gap-4 p-4 flex-wrap">
+    <v-card>
+      <v-card-title class="font-weight-bold m-2"
+        >Request Information</v-card-title
+      >
+      <v-card-text>
+        <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6 mb-3">
+          <v-select
+            v-model="selected_type"
+            label="Select Type of Account"
+            :items="['Permanent', 'Temporary']"
+            density="compact"
+            variant="outlined"
+            hide-details
+            clearable
+          ></v-select>
+          <div>
+            <v-date-input
+              v-show="selected_type === 'Temporary'"
+              label="Expire Date"
+              prepend-icon=""
+              variant="outlined"
+              density="compact"
+              persistent-placeholder
+              hide-details
+            ></v-date-input>
+          </div>
+          <div class="flex gap-4 flex-wrap">
             <p class="w-full">Service Type :</p>
-            <label
-              class="flex items-center gap-2"
-              v-for="type in service_types"
-              :key="type"
-            >
-              <input type="checkbox" class="checkbox checkbox-sm" />
+            <label class="flex gap-2" v-for="type in service_types" :key="type">
+              <input type="checkbox" class="checkbox checkbox-sm border" />
               <span class="capitalize">
                 {{ type }}
               </span>
             </label>
           </div>
-          <div class="flex gap-4 p-4 flex-wrap">
+          <div class="flex gap-4 flex-wrap">
             <p class="w-full">User Type :</p>
             <label
               class="flex items-center gap-2"
               v-for="type in user_types"
               :key="type"
             >
-              <input type="checkbox" class="checkbox checkbox-sm" />
+              <input type="checkbox" class="checkbox checkbox-sm border" />
               <span class="capitalize">
                 {{ type }}
               </span>
             </label>
           </div>
         </div>
-      </template>
-    </nt_card>
+      </v-card-text>
+    </v-card>
 
-    <nt_card>
-      <template #detail>
-        <h4 class="font-bold text-lg pb-6">Approval</h4>
-        <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6 items-center">
-          <label class="flex items-center gap-2 p-4">
-            Head of Requestor Approver :
-            <select class="select select-bordered select-sm w-full max-w-xs">
-              <option disabled selected>Select requestor approver</option>
-              <option>example@mail.com (Full Name)</option>
-              <option>example@mail.com (Full Name)</option>
-            </select>
-          </label>
-          <label class="flex items-center gap-2 p-4">
-            Implementor :
-            <select class="select select-bordered select-sm w-full max-w-xs">
-              <option disabled selected>Select implementor</option>
-              <option>example@mail.com (Full Name)</option>
-              <option>example@mail.com (Full Name)</option>
-            </select>
-          </label>
+    <v-card>
+      <v-card-title class="font-weight-bold m-2">Approval</v-card-title>
+      <v-card-text>
+        <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6">
+          <div>
+            <p class="font-weight-bold mb-2">Head of Requester</p>
+            <div class="space-y-1.5">
+              <div
+                class="inline-flex w-full items-center"
+                v-for="(item, i) in headOfReq"
+                :key="i"
+              >
+                <v-text-field
+                  v-model="item.name"
+                  label="Name"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                ></v-text-field>
+                <hr class="bg-gray-400 h-10 border mx-2" />
+                <v-text-field
+                  v-model="item.email"
+                  label="Email"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                ></v-text-field>
+                <v-btn
+                  size="x-small"
+                  icon=""
+                  @click="removeHeadOfReqCount(i)"
+                  class="ml-2"
+                  color="#f87171"
+                  ><nt_icon icon="trash"
+                /></v-btn>
+              </div>
+              <div class="divider divider-neutral mt-4">
+                <v-btn size="x-small" icon="" @click="addHeadOfReq"
+                  ><nt_icon icon="plus"
+                /></v-btn>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="font-weight-bold mb-2">Implementor</p>
+            <v-select
+              label="Select Implementor"
+              :items="[
+                'example1@mail.com (Full Name)',
+                'example2@mail.com (Full Name)',
+              ]"
+              density="compact"
+              variant="outlined"
+              clearable
+            ></v-select>
+          </div>
         </div>
-      </template>
-    </nt_card>
+      </v-card-text>
+    </v-card>
+
+    <div class="flex w-full gap-x-2">
+      <v-btn color="#facc15" class="flex-1 text-white">Submit</v-btn>
+      <v-btn variant="outlined">Cancel</v-btn>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import nt_card from '@/components/cards/nt_card.vue'
+import { ref, onMounted } from 'vue'
+import { VDateInput } from 'vuetify/labs/VDateInput'
+import nt_icon from '@/components/icon/nt_icon.vue'
+
+const selected_type = ref<string | null>(null)
+const initialCount = ref(1)
+const headOfReq = ref<{ name: string; email: string }[]>([])
+
+function addHeadOfReq() {
+  headOfReq.value.push({ name: '', email: '' })
+}
+
+function removeHeadOfReqCount(index: number) {
+  headOfReq.value.splice(index, 1)
+}
+
+onMounted(() => {
+  for (let i = 0; i < initialCount.value; i++) {
+    addHeadOfReq()
+  }
+})
 
 const req_types = ref<string[]>([
   'new',
@@ -174,13 +245,3 @@ const user_types = ref<string[]>([
   'support',
 ])
 </script>
-
-<style scoped>
-/* input[type='text'] {
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
-} */
-</style>
