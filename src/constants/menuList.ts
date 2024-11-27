@@ -24,4 +24,14 @@ export const menuList = [
     link: "/roles",
     icon: "shield-check"
   },
+  {
+    title: "test data",
+    link: "/test-data/10",
+    icon: "file-text"
+  },
+  {
+    title: "approval",
+    link: "/approval/10",
+    icon: "check-circle"
+  },
 ]

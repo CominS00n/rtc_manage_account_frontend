@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto overflow flex flex-col gap-y-4">
+  <div class="container mx-auto flex flex-col gap-y-4">
     <h1 class="font-bold text-2xl py-3">RTC Request Account</h1>
     <v-card>
       <v-card-title class="font-weight-bold m-2">User Information</v-card-title>
