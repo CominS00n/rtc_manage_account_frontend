@@ -70,9 +70,9 @@
             >Request Information</v-card-title
           >
           <v-card-text>
-            <div class="grid grid-cols-2 gap-x-6 gap-y-3">
-              <div class="flex gap-2">
-                Request Type :
+            <div class="grid grid-cols-2 gap-x-6 gap-y-6">
+              <div class="flex gap-2 flex-wrap">
+                <p>Request Type :</p>
                 <label class="flex gap-2" v-for="type in req_types" :key="type">
                   <input
                     type="checkbox"
@@ -187,96 +187,148 @@
         <v-card>
           <v-card-title class="font-weight-bold m-2">Approval</v-card-title>
           <v-card-text>
-            <!-- <div v-for="approved in approvedInformation" :key="approved.id">
-              <v-stepper :items="approved.id"></v-stepper>
-            </div> -->
-            <div v-for="approved in approvedInformation" :key="approved.id">
-              <div class="inline-flex justify-center flex-col gap-y-2 mt-4">
-                <p>{{ approved.type }}</p>
-                <div class="border border-gray-300 w-fit">
-                  <VueSignaturePad
-                    ref="signature"
-                    height="150px"
-                    width="350px"
-                    :max-width="options.maxWidth"
-                    :min-width="options.minWidth"
-                    :options="{
-                      penColor: options.penColor,
-                      backgroundColor: options.backgroundColor,
-                    }"
-                    :disabled="approved.name !== approval?.name"
-                  />
-                </div>
-                <p class="text-center">( {{ approved.name }} )</p>
-                <v-text-field
-                  label="Remark"
-                  prepend-icon=""
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  :disabled="approved.name !== approval?.name"
-                ></v-text-field>
-                <div class="flex w-full gap-2">
-                  <v-btn
-                    color="#facc15"
-                    class="text-white flex-1"
-                    size="small"
-                    @click="signature_approvedSave"
-                    :disabled="approved.name !== approval?.name"
+            <div
+              v-for="(approved, i) in approvedInformation"
+              :key="approved.id"
+              class="capitalize border"
+            >
+              <v-stepper>
+                <v-stepper-header
+                  @click="handleShowStep(approved.status)"
+                  class="relative"
+                >
+                  <div class="absolute right-6">
+                    <nt_icon icon="chevron-down" />
+                  </div>
+                  <v-stepper-item
+                    :value="i + 1"
+                    class="capitalize"
+                    :color="
+                      approved.status === 'Approved'
+                        ? 'green'
+                        : approved.status === 'Reject'
+                          ? 'red'
+                          : ''
+                    "
                   >
-                    Approval
-                  </v-btn>
-                  <v-btn
-                    size="small"
-                    variant="outlined"
-                    @click="signature_approvedSave"
-                    :disabled="approved.name !== approval?.name"
+                    <template #title>
+                      <p @click="handleShowStep(approved.status)">
+                        {{ approved.name }}
+                        <span class="text-xs text-gray-400">{{
+                          approved.type
+                        }}</span>
+                        <br />
+                      </p>
+                      <p class="text-xs text-left">
+                        <v-chip size="x-small" >{{ approved.status }}</v-chip>
+                      </p>
+                    </template>
+                    <template #icon>
+                      <nt_icon
+                        :icon="
+                          approved.status === 'Approved'
+                            ? 'check'
+                            : approved.status === 'Reject'
+                              ? 'x-mark'
+                              : '?'
+                        "
+                        :color="approved.status === 'Approved' ? 'green' : ''"
+                      />
+                    </template>
+                  </v-stepper-item>
+                </v-stepper-header>
+                <transition name="step-transition">
+                  <v-stepper-window
+                    direction="vertical"
+                    v-show="approved.name === approval?.name || isShowStep"
                   >
-                    Reject
-                  </v-btn>
-                </div>
-              </div>
+                    <v-stepper-window-item :value="i + 1">
+                      <p>{{ approved.type }}</p>
+                      <!-- transition from w-0 to w-fit -->
+
+                      <div class="border border-gray-300 w-fit">
+                        <VueSignaturePad
+                          ref="signature"
+                          height="150px"
+                          width="350px"
+                          :max-width="options.maxWidth"
+                          :min-width="options.minWidth"
+                          :options="{
+                            penColor: options.penColor,
+                            backgroundColor: options.backgroundColor,
+                          }"
+                          :disabled="approved.name !== approval?.name"
+                        />
+                      </div>
+                      <p class="text-center my-2">( {{ approved.name }} )</p>
+                      <v-text-field
+                        label="Remark"
+                        prepend-icon=""
+                        variant="outlined"
+                        density="compact"
+                        hide-details
+                        :disabled="approved.name !== approval?.name"
+                      ></v-text-field>
+                      <div
+                        class="flex w-full gap-2 mt-4"
+                        v-show="approved.signature === null"
+                      >
+                        <v-btn
+                          color="#facc15"
+                          class="text-white flex-1"
+                          size="small"
+                          @click="signature_approvedSave"
+                          :disabled="approved.name !== approval?.name"
+                        >
+                          Approval
+                        </v-btn>
+                        <v-btn
+                          size="small"
+                          variant="outlined"
+                          @click="signature_approvedSave"
+                          :disabled="approved.name !== approval?.name"
+                        >
+                          Reject
+                        </v-btn>
+                      </div>
+                    </v-stepper-window-item>
+                  </v-stepper-window>
+                </transition>
+              </v-stepper>
             </div>
           </v-card-text>
         </v-card>
       </div>
     </div>
-    <!-- <div class="absolute top-14 right-2">
-      <v-card>
-        <v-card-title>Steps</v-card-title>
-        <v-card-text>
-          <ol class="list-decimal list-inside">
-            <li>Sign the signature pad</li>
-            <li>Fill the remark</li>
-            <li>Click the approval button</li>
-          </ol>
-        </v-card-text>
-      </v-card>
-    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAccReqApi } from '@/composable/accReqApi'
+// import { useAccReqApi } from '@/composable/accReqApi'
 import { VueSignaturePad } from '@selemondev/vue3-signature-pad'
+import nt_icon from '@/components/icon/nt_icon.vue'
+// import { VStepperVertical } from 'vuetify/labs/VStepperVertical'
 
-import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
 import type { ApprovedInformation, AccReq } from '@/types/accReqs'
-
+import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
 const route = useRoute()
 const id = ref(Number(route.params.id))
 
-const { getAccReqs, accReqs } = useAccReqApi()
+// const { getAccReqs, accReqs } = useAccReqApi()
 const information = ref<AccReq[]>([])
 const approvedInformation = ref<ApprovedInformation[]>([])
 const selectedServiceTypes = ref<string[]>([])
 const selectedUserTypes = ref<string[]>([])
 const approval = ref<ApprovedInformation | null>(null)
 
+import data from '@/mockdata/req.json'
+const accReqs = ref<AccReq[]>([])
+
 onMounted(async () => {
-  await getAccReqs(id.value)
+  // await getAccReqs(id.value)
+  accReqs.value = data.data.filter(accReq => accReq.id === id.value)
   approvedInformation.value = accReqs.value[0]?.approved || []
   information.value = accReqs.value.map(accReq => {
     return {
@@ -346,4 +398,29 @@ const signature_approvedSave = () => {
   signature_approved.value =
     (signature.value?.saveSignature && signature.value.saveSignature()) || ''
 }
+
+const isShowStep = ref<boolean>(false)
+const handleShowStep = (status: string) => {
+  if (status === 'Approved' || status === 'Reject') {
+    isShowStep.value = !isShowStep.value
+  }
+  return isShowStep.value
+}
 </script>
+
+<style scoped>
+.step-transition-enter-active,
+.step-transition-leave-active {
+  transition: all 0.5s ease;
+}
+.step-transition-enter-from,
+.step-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.step-transition-enter-to,
+.step-transition-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>

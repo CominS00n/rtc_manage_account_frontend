@@ -21,7 +21,7 @@
     "pinia": "^2.2.4",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5",
-    "vuetify": "3.6.0"
+    "vuetify": "^3.7.4"
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.2",

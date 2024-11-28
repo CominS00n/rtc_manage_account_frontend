@@ -234,24 +234,29 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAccReqApi } from '@/composable/accReqApi'
+// import { useAccReqApi } from '@/composable/accReqApi'
 import { VueSignaturePad } from '@selemondev/vue3-signature-pad'
 
 import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
 import type { ApprovedInformation, AccReq } from '@/types/accReqs'
 
+import data from '@/mockdata/req.json'
+
 const route = useRoute()
 const id = ref(Number(route.params.id))
 
-const { getAccReqs, accReqs } = useAccReqApi()
+// const { getAccReqs, accReqs } = useAccReqApi()
 const information = ref<AccReq[]>([])
 const approvedInformation = ref<ApprovedInformation[]>([])
 const selectedServiceTypes = ref<string[]>([])
 const selectedUserTypes = ref<string[]>([])
 const approval = ref<ApprovedInformation | null>(null)
+const accReqs = ref<AccReq[]>([])
 
 onMounted(async () => {
-  await getAccReqs(id.value)
+  // await getAccReqs(id.value)
+
+  accReqs.value = data.data.filter(accReq => accReq.id === id.value)
   approvedInformation.value = accReqs.value[0]?.approved || []
   information.value = accReqs.value.map(accReq => {
     return {

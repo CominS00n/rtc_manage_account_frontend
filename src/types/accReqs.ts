@@ -5,7 +5,7 @@ export interface ApprovedInformation {
   name: string
   email: string
   signature: string | null
-  remark: string
+  remark: string | null
   status: string
   date: string | null
   created_at: string
