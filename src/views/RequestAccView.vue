@@ -6,31 +6,37 @@
       <v-card-text>
         <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6 items-center">
           <v-text-field
+            id="name"
             label="Name"
             variant="outlined"
             density="compact"
           ></v-text-field>
           <v-text-field
+            id="position"
             label="Position"
             variant="outlined"
             density="compact"
           ></v-text-field>
           <v-text-field
+            id="company"
             label="Company"
             variant="outlined"
             density="compact"
           ></v-text-field>
           <v-text-field
+            id="division"
             label="Division"
             variant="outlined"
             density="compact"
           ></v-text-field>
           <v-text-field
+            id="telephone"
             label="Telephone"
             variant="outlined"
             density="compact"
           ></v-text-field>
           <v-text-field
+            id="email"
             label="E-mail Address"
             variant="outlined"
             density="compact"
@@ -56,6 +62,7 @@
           </div>
           <div>
             <v-text-field
+              id="system"
               label="System"
               variant="outlined"
               density="compact"
@@ -64,6 +71,7 @@
           </div>
           <div>
             <v-date-input
+              id="request_date"
               label="Request Date"
               prepend-icon=""
               variant="outlined"
@@ -92,6 +100,7 @@
           ></v-select>
           <div>
             <v-date-input
+              id="expire_date"
               v-show="selected_type === 'Temporary'"
               label="Expire Date"
               prepend-icon=""
@@ -140,6 +149,7 @@
                 :key="i"
               >
                 <v-text-field
+                  :id="item.name"
                   v-model="item.name"
                   label="Name"
                   variant="outlined"
@@ -148,6 +158,7 @@
                 ></v-text-field>
                 <hr class="bg-gray-400 h-10 border mx-2" />
                 <v-text-field
+                  :id="item.email"
                   v-model="item.email"
                   label="Email"
                   variant="outlined"
