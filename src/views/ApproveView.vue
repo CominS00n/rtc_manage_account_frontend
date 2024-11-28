@@ -17,7 +17,6 @@
                 label="Name"
                 variant="underlined"
                 density="compact"
-                hide-details
                 v-model="item.full_name"
                 readonly
               ></v-text-field>
@@ -25,7 +24,6 @@
                 label="Position"
                 variant="underlined"
                 density="compact"
-                hide-details
                 v-model="item.position"
                 readonly
               ></v-text-field>
@@ -33,7 +31,6 @@
                 label="Company"
                 variant="underlined"
                 density="compact"
-                hide-details
                 v-model="item.company"
                 readonly
               ></v-text-field>
@@ -41,7 +38,6 @@
                 label="Division"
                 variant="underlined"
                 density="compact"
-                hide-details
                 v-model="item.division"
                 readonly
               ></v-text-field>
@@ -49,7 +45,6 @@
                 label="Telephone"
                 variant="underlined"
                 density="compact"
-                hide-details
                 v-model="item.telephone"
                 readonly
               ></v-text-field>
@@ -57,7 +52,6 @@
                 label="E-mail Address"
                 variant="underlined"
                 density="compact"
-                hide-details
                 v-model="item.email"
                 readonly
               ></v-text-field>
