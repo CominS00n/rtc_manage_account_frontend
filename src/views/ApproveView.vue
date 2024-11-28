@@ -212,16 +212,18 @@
                     "
                   >
                     <template #title>
-                      <p @click="handleShowStep(approved.status)">
-                        {{ approved.name }}
-                        <span class="text-xs text-gray-400">{{
-                          approved.type
-                        }}</span>
-                        <br />
-                      </p>
-                      <p class="text-xs text-left">
-                        <v-chip size="x-small" >{{ approved.status }}</v-chip>
-                      </p>
+                      <div @click="handleShowStep(approved.status)">
+                        <p>
+                          {{ approved.name }}
+                          <span class="text-xs text-gray-400">{{
+                            approved.type
+                          }}</span>
+                          <br />
+                        </p>
+                        <p class="text-xs text-left">
+                          <v-chip size="x-small">{{ approved.status }}</v-chip>
+                        </p>
+                      </div>
                     </template>
                     <template #icon>
                       <nt_icon
