@@ -273,12 +273,12 @@ const initialCount = ref(1)
 const valid = ref<boolean>(false)
 
 // Data variable user information
-const name = ref<string>('Sitthichai')
-const position = ref<string>('developer')
-const company = ref<string>('company')
-const division = ref<string>('division')
-const telephone = ref<string>('123456789')
-const email = ref<string>('pop@mail.com')
+const name = ref<string>('')
+const position = ref<string>('')
+const company = ref<string>('')
+const division = ref<string>('')
+const telephone = ref<string>('')
+const email = ref<string>('')
 
 // Data variable request information
 const request_type = ref<string[]>([])
