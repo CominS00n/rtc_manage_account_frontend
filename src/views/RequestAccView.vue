@@ -374,7 +374,7 @@ onMounted(() => {
 const implementorItems = ref<string[]>(['example1@mail.com (Full Name)'])
 
 const req_types = ref<string[]>([
-  'New',
+  'New Account',
   'Terminate',
   'Reset Password',
   'Change',
