@@ -89,18 +89,17 @@
                   readonly
                 ></v-text-field>
               </div>
-              <div>
-                <v-text-field
-                  label="Request Date"
-                  prepend-icon=""
-                  variant="underlined"
-                  density="compact"
-                  persistent-placeholder
-                  hide-details
-                  v-model="item.req_date"
-                  readonly
-                ></v-text-field>
-              </div>
+
+              <v-text-field
+                label="Request Date"
+                prepend-icon=""
+                variant="underlined"
+                density="compact"
+                persistent-placeholder
+                hide-details
+                v-model="item.req_date"
+                readonly
+              ></v-text-field>
             </div>
           </v-card-text>
         </v-card>
@@ -302,29 +301,31 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-// import { useAccReqApi } from '@/composable/accReqApi'
+import { useAccReqApi } from '@/composable/accReqApi'
 import { VueSignaturePad } from '@selemondev/vue3-signature-pad'
 import nt_icon from '@/components/icon/nt_icon.vue'
-// import { VStepperVertical } from 'vuetify/labs/VStepperVertical'
 
 import type { ApprovedInformation, AccReq } from '@/types/accReqs'
 import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
 const route = useRoute()
 const id = ref(Number(route.params.id))
 
-// const { getAccReqs, accReqs } = useAccReqApi()
+const { getAccReqs, accReqs } = useAccReqApi()
 const information = ref<AccReq[]>([])
 const approvedInformation = ref<ApprovedInformation[]>([])
 const selectedServiceTypes = ref<string[]>([])
 const selectedUserTypes = ref<string[]>([])
 const approval = ref<ApprovedInformation | null>(null)
 
-import data from '@/mockdata/req.json'
-const accReqs = ref<AccReq[]>([])
+// import data from '@/mockdata/req.json'
+// const accReqs = ref<AccReq[]>([])
 
 onMounted(async () => {
-  // await getAccReqs(id.value)
-  accReqs.value = data.data.filter(accReq => accReq.id === id.value)
+  await getAccReqs(id.value)
+  // accReqs.value = data.data.filter(accReq => accReq.id === id.value).map(accReq => ({
+  //   ...accReq,
+  //   system: Array.isArray(accReq.system) ? accReq.system : [accReq.system]
+  // }))
   approvedInformation.value = accReqs.value[0]?.approved || []
   information.value = accReqs.value.map(accReq => {
     return {

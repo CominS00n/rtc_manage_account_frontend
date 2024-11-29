@@ -32,11 +32,6 @@ const routes = [
         name: 'Role Management',
         component: () => import('../views/RoleManageView.vue'),
       },
-      {
-        path: '/test-data/:id',
-        name: 'Test Data',
-        component: () => import('../views/DataTestView.vue'),
-      }
     ],
   },
   {

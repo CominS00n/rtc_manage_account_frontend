@@ -255,8 +255,12 @@ const accReqs = ref<AccReq[]>([])
 
 onMounted(async () => {
   // await getAccReqs(id.value)
-
-  accReqs.value = data.data.filter(accReq => accReq.id === id.value)
+  accReqs.value = data.data
+    .filter(accReq => accReq.id === id.value)
+    .map(accReq => ({
+      ...accReq,
+      system: Array.isArray(accReq.system) ? accReq.system : [accReq.system],
+    }))
   approvedInformation.value = accReqs.value[0]?.approved || []
   information.value = accReqs.value.map(accReq => {
     return {

@@ -21,7 +21,7 @@ export interface AccReq {
   telephone: string
   email: string
   req_type: string
-  system: string
+  system: string[]
   req_date: string
   account_type: string
   expiry_date: string | null
