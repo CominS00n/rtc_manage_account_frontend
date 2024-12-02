@@ -1,3 +1,9 @@
+export enum status_type {
+  pending = 'Pending',
+  approved = 'Approved',
+  rejected = 'Rejected',
+}
+
 export type accountInformation = {
   full_name: string
   position: string
@@ -26,3 +32,12 @@ export interface sendReq {
   approved_result: approvedInformation[]
 }
 
+export type approved = {
+  acc_req_id: number
+  name: string
+  email: string
+  status: status_type
+  signature: string
+  remark: string | null
+  date: string
+}

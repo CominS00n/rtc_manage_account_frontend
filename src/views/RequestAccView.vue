@@ -66,7 +66,7 @@
         >
         <v-card-text>
           <div class="grid grid-cols-2 gap-x-6 gap-y-3">
-            <div class="flex gap-2">
+            <div class="flex gap-2 flex-wrap">
               Request Type :
               <label class="flex gap-2" v-for="type in req_types" :key="type">
                 <input
@@ -137,7 +137,7 @@
                 :rules="dateRules"
               ></v-date-input>
             </div>
-            <div class="flex gap-4 flex-wrap">
+            <div class="flex gap-4 flex-wrap items-center">
               <p class="w-full">Service Type :</p>
               <label
                 class="flex gap-2"
@@ -153,6 +153,26 @@
                 <span class="capitalize">
                   {{ type }}
                 </span>
+              </label>
+              <label class="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  class="checkbox checkbox-sm border"
+                  v-model="otherService"
+                />
+                <span class="capitalize"> Other </span>
+                <v-combobox
+                  v-model="otherServiceType"
+                  id="otherService"
+                  variant="underlined"
+                  density="compact"
+                  chips
+                  multiple
+                  hide-details
+                  :disabled="!otherService"
+                  :hidden="!otherService"
+                  class="ml-3 min-w-[200px] max-w-[400px]"
+                ></v-combobox>
               </label>
             </div>
             <div class="flex gap-4 flex-wrap">
@@ -295,6 +315,24 @@ watch(selected_type, newValue => {
 })
 const service_type = ref<string[]>([])
 const user_type = ref<string[]>([])
+const otherService = ref<boolean>(false)
+const otherServiceType = ref<string[]>([])
+watch(otherServiceType, (newValue, oldValue) => {
+  newValue.forEach(item => {
+    if (!service_type.value.includes(item)) {
+      service_type.value.push(item)
+    }
+  })
+
+  oldValue.forEach(item => {
+    if (!newValue.includes(item)) {
+      const index = service_type.value.indexOf(item)
+      if (index > -1) {
+        service_type.value.splice(index, 1)
+      }
+    }
+  })
+})
 
 // Data variable Approval
 const headOfReq = ref<{ name: string; type: string; email: string }[]>([])
@@ -324,8 +362,9 @@ const sendRequest = async () => {
 
   const implementor_email = ref<string>(implementor.value?.split(' ')[0] || '')
   const implementor_name = ref<string>(
-    implementor.value?.split(' ')[1].replace('(', '').replace(')', '') || '',
+    implementor.value?.split('(')[1].replace(')', '') || '',
   )
+  console.log(implementor_name.value)
   const implementor_type = ref<string>('Implementor')
   const implementor_result: approvedInformation[] = [
     {
@@ -351,6 +390,7 @@ const sendRequest = async () => {
   }
 
   await postAccReq(last_result)
+  location.reload()
 }
 
 function addHeadOfReq() {
@@ -371,7 +411,7 @@ onMounted(() => {
   }
 })
 
-const implementorItems = ref<string[]>(['example1@mail.com (Full Name)'])
+const implementorItems = ref<string[]>(['spuckpooforwork@gmail.com (CominS00n)'])
 
 const req_types = ref<string[]>([
   'New Account',

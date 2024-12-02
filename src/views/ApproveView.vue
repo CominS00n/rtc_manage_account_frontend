@@ -1,12 +1,12 @@
 <template>
-  <div class="container mx-auto px-4 h-screen overflow-y-auto relative">
+  <div class="container mx-auto px-4 h-screen overflow-y-auto">
     <h1 class="font-bold text-2xl py-3 px-4">Approve RTC Request Account</h1>
     <div
       class="flex gap-x-6 overflow-y-auto"
       v-for="item in information"
       :key="item.id"
     >
-      <div class="flex flex-col gap-y-4">
+      <div class="flex flex-col gap-y-4 flex-1">
         <v-card>
           <v-card-title class="font-weight-bold m-2"
             >User Information</v-card-title
@@ -65,9 +65,12 @@
           >
           <v-card-text>
             <div class="grid grid-cols-2 gap-x-6 gap-y-6">
-              <div class="flex gap-2 flex-wrap">
+              <div class="flex items-center gap-x-4">
                 <p>Request Type :</p>
-                <label class="flex gap-2" v-for="type in req_types" :key="type">
+                <v-chip class="capitalize" color="primary" text-color="white">
+                  {{ item.req_type }}
+                </v-chip>
+                <!-- <label class="flex gap-2" v-for="type in req_types" :key="type">
                   <input
                     type="checkbox"
                     class="checkbox checkbox-sm border"
@@ -77,17 +80,29 @@
                   <span class="capitalize">
                     {{ type }}
                   </span>
-                </label>
+                </label> -->
               </div>
               <div>
-                <v-text-field
+                <div class="inline-flex items-center gap-x-4 flex-wrap">
+                  <p>System :</p>
+                  <v-chip
+                    class="capitalize"
+                    color="primary"
+                    text-color="white"
+                    v-for="system in item.system"
+                    :key="system"
+                  >
+                    {{ system }}
+                  </v-chip>
+                </div>
+                <!-- <v-text-field
                   label="System"
                   variant="underlined"
                   density="compact"
                   hide-details
                   v-model="item.system"
                   readonly
-                ></v-text-field>
+                ></v-text-field> -->
               </div>
 
               <v-text-field
@@ -133,9 +148,20 @@
                   readonly
                 ></v-text-field>
               </div>
-              <div class="flex gap-x-4 flex-wrap">
-                <p class="w-full">Service Type :</p>
-                <label
+              <div class="flex items-start">
+                <div class="inline-flex items-center gap-x-4 flex-wrap">
+                  <p>Service Type :</p>
+                  <v-chip
+                    class="capitalize"
+                    v-for="type in selectedServiceTypes"
+                    :key="type"
+                    color="primary"
+                    text-color="white"
+                  >
+                    {{ type }}
+                  </v-chip>
+                </div>
+                <!-- <label
                   class="flex gap-2"
                   v-for="type in service_types"
                   :key="type"
@@ -150,11 +176,22 @@
                   <span class="capitalize">
                     {{ type }}
                   </span>
-                </label>
+                </label> -->
               </div>
-              <div class="flex gap-4 flex-wrap">
-                <p class="w-full">User Type :</p>
-                <label
+              <div class="flex gap-4 items-start">
+                <div class="inline-flex items-center gap-x-4 flex-wrap">
+                  <p>User Type :</p>
+                  <v-chip
+                    class="capitalize"
+                    v-for="type in selectedUserTypes"
+                    :key="type"
+                    color="primary"
+                    text-color="white"
+                  >
+                    {{ type }}
+                  </v-chip>
+                </div>
+                <!-- <label
                   class="flex items-center gap-2"
                   v-for="type in user_types"
                   :key="type"
@@ -169,7 +206,7 @@
                   <span class="capitalize">
                     {{ type }}
                   </span>
-                </label>
+                </label> -->
               </div>
             </div>
           </v-card-text>
@@ -181,20 +218,20 @@
           <v-card-title class="font-weight-bold m-2">Approval</v-card-title>
           <v-card-text>
             <div
-              v-for="(approved, i) in approvedInformation"
+              v-for="(approved, index) in approvedInformation"
               :key="approved.id"
               class="capitalize border"
             >
               <v-stepper>
                 <v-stepper-header
-                  @click="handleShowStep(approved.status)"
+                  @click="handleShowStep(index)"
                   class="relative"
                 >
                   <div class="absolute right-6">
                     <nt_icon icon="chevron-down" />
                   </div>
                   <v-stepper-item
-                    :value="i + 1"
+                    :value="index + 1"
                     class="capitalize"
                     :color="
                       approved.status === 'Approved'
@@ -205,7 +242,7 @@
                     "
                   >
                     <template #title>
-                      <div @click="handleShowStep(approved.status)">
+                      <div @click="handleShowStep(index)">
                         <p>
                           {{ approved.name }}
                           <span class="text-xs text-gray-400">{{
@@ -235,15 +272,18 @@
                 <transition name="step-transition">
                   <v-stepper-window
                     direction="vertical"
-                    v-show="approved.name === approval?.name || isShowStep"
+                    v-show="
+                      approved.name === approval?.name || isShowStep[index]
+                    "
                   >
-                    <v-stepper-window-item :value="i + 1">
+                    <v-stepper-window-item :value="index + 1">
                       <p>{{ approved.type }}</p>
-                      <!-- transition from w-0 to w-fit -->
-
                       <div class="border border-gray-300 w-fit">
                         <VueSignaturePad
-                          ref="signature"
+                          :ref="
+                            el =>
+                              (signatureRefs[index] = el as CanvasSignatureRef)
+                          "
                           height="150px"
                           width="350px"
                           :max-width="options.maxWidth"
@@ -253,6 +293,14 @@
                             backgroundColor: options.backgroundColor,
                           }"
                           :disabled="approved.name !== approval?.name"
+                          v-if="approved.signature === null"
+                        />
+                        <img
+                          :src="approved.signature"
+                          alt="signature"
+                          height="150px"
+                          width="350px"
+                          v-else
                         />
                       </div>
                       <p class="text-center my-2">( {{ approved.name }} )</p>
@@ -261,8 +309,9 @@
                         prepend-icon=""
                         variant="outlined"
                         density="compact"
+                        v-model="approved.remark"
                         hide-details
-                        :disabled="approved.name !== approval?.name"
+                        :readonly="approved.signature !== null"
                       ></v-text-field>
                       <div
                         class="flex w-full gap-2 mt-4"
@@ -272,15 +321,13 @@
                           color="#facc15"
                           class="text-white flex-1"
                           size="small"
-                          @click="signature_approvedSave"
-                          :disabled="approved.name !== approval?.name"
+                          @click="signature_approvedSave(index, approved)"
                         >
                           Approval
                         </v-btn>
                         <v-btn
                           size="small"
                           variant="outlined"
-                          @click="signature_approvedSave"
                           :disabled="approved.name !== approval?.name"
                         >
                           Reject
@@ -302,30 +349,52 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAccReqApi } from '@/composable/accReqApi'
-import { VueSignaturePad } from '@selemondev/vue3-signature-pad'
 import nt_icon from '@/components/icon/nt_icon.vue'
+import { jwtDecode } from 'jwt-decode'
 
 import type { ApprovedInformation, AccReq } from '@/types/accReqs'
-import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
-const route = useRoute()
-const id = ref(Number(route.params.id))
+import type { approved } from '@/types/sendReq'
+import { status_type } from '@/types/sendReq'
 
-const { getAccReqs, accReqs } = useAccReqApi()
+import { VueSignaturePad } from '@selemondev/vue3-signature-pad'
+import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
+
+interface approval_type {
+  id?: number
+  acc_req_id: number
+  type?: string
+  name: string
+  email: string
+  signature: string | null
+  remark: string | null
+  status: string
+  date: string | null
+  created_at?: string
+  updated_at?: string
+}
+
+const route = useRoute()
+
+const token = ref(route.params.token as string)
+let decodedToken: { id: number } | null = null
+
+try {
+  decodedToken = jwtDecode<{ id: number }>(token.value)
+} catch (error) {
+  console.error('Invalid token:', error)
+}
+
+const id = ref(decodedToken ? decodedToken.id : 0)
+
+const { getAccReqs, accReqs, approveAccReq } = useAccReqApi()
 const information = ref<AccReq[]>([])
 const approvedInformation = ref<ApprovedInformation[]>([])
 const selectedServiceTypes = ref<string[]>([])
 const selectedUserTypes = ref<string[]>([])
 const approval = ref<ApprovedInformation | null>(null)
 
-// import data from '@/mockdata/req.json'
-// const accReqs = ref<AccReq[]>([])
-
 onMounted(async () => {
   await getAccReqs(id.value)
-  // accReqs.value = data.data.filter(accReq => accReq.id === id.value).map(accReq => ({
-  //   ...accReq,
-  //   system: Array.isArray(accReq.system) ? accReq.system : [accReq.system]
-  // }))
   approvedInformation.value = accReqs.value[0]?.approved || []
   information.value = accReqs.value.map(accReq => {
     return {
@@ -352,35 +421,8 @@ onMounted(async () => {
   approval.value =
     approvedInformation.value.find(approved => approved.status === 'Pending') ||
     null
+  isShowStep.value = new Array(approvedInformation.value.length).fill(false)
 })
-
-const req_types = ref<string[]>([
-  'New',
-  'Terminate',
-  'Reset password',
-  'Change',
-])
-const service_types = ref<string[]>([
-  'Operating system',
-  'Database',
-  'Report',
-  'CBS',
-  'CCC',
-  'OCSSS',
-])
-const user_types = ref<string[]>([
-  'Maintenance',
-  'Admin User',
-  'Developer',
-  'System Configuration',
-  'Application Support',
-  'Log & Report',
-  'Vendor 3rd Party',
-  'Planing',
-  'Marketing',
-  'MVNO',
-  'Support',
-])
 
 const options = ref({
   penColor: 'rgb(0,0,0)',
@@ -388,20 +430,41 @@ const options = ref({
   maxWidth: 2,
   minWidth: 2,
 })
-const signature = ref<CanvasSignatureRef>()
-const signature_approved = ref<string>()
+const signature_approved = ref<string>('')
+const signatureRefs = ref<(CanvasSignatureRef | null)[]>([])
 
-const signature_approvedSave = () => {
-  signature_approved.value =
-    (signature.value?.saveSignature && signature.value.saveSignature()) || ''
+const signature_approvedSave = async (
+  index: number,
+  approved: approval_type,
+) => {
+  const signature = signatureRefs.value[index]
+  if (signature) {
+    signature_approved.value =
+      (signature.saveSignature && signature.saveSignature()) || ''
+  }
+
+  try {
+    // const result = signature_approved.value.split(',')[1]
+    const data: approved = {
+      acc_req_id: approved.acc_req_id,
+      name: approved.name,
+      email: approved.email,
+      status: status_type.approved,
+      signature: signature_approved.value,
+      remark: approved.remark,
+      date: new Date().toISOString(),
+    }
+
+    await approveAccReq(data)
+    location.reload()
+  } catch (error) {
+    console.error(error)
+  }
 }
 
-const isShowStep = ref<boolean>(false)
-const handleShowStep = (status: string) => {
-  if (status === 'Approved' || status === 'Reject') {
-    isShowStep.value = !isShowStep.value
-  }
-  return isShowStep.value
+const isShowStep = ref<boolean[]>([])
+const handleShowStep = (index: number) => {
+  isShowStep.value[index] = !isShowStep.value[index]
 }
 </script>
 

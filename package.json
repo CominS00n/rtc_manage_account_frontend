@@ -15,9 +15,12 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@selemondev/vue3-signature-pad": "^1.1.0",
+    "@types/jwt-decode": "^3.1.0",
     "@vueup/vue-quill": "^1.2.0",
     "axios": "^1.7.7",
     "daisyui": "^4.12.14",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "pinia": "^2.2.4",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5",

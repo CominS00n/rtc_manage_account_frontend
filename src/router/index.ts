@@ -32,10 +32,15 @@ const routes = [
         name: 'Role Management',
         component: () => import('../views/RoleManageView.vue'),
       },
+      {
+        path: 'test',
+        name: 'Test',
+        component: () => import('../views/testView.vue'),
+      }
     ],
   },
   {
-    path: '/approval/:id',
+    path: '/approval/:token',
     name: 'Approval',
     component: () => import('../views/ApproveView.vue'),
   },

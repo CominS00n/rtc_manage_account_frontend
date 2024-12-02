@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import type { AccReq } from '@/types/accReqs'
-import type { sendReq } from '@/types/sendReq'
+import type { sendReq, approved } from '@/types/sendReq'
 
 axios.defaults.baseURL = 'http://localhost:8000/api/v2'
 
@@ -29,5 +29,18 @@ export const useAccReqApi = () => {
       console.log(error)
     }
   }
-  return { accReqs, getAccReqs, postAccReq }
+
+  const approveAccReq = async (data: approved) => {
+    try {
+      const response = await axios({
+        method: 'put',
+        url: '/account_request',
+        data: data,
+      })
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  return { accReqs, getAccReqs, postAccReq, approveAccReq }
 }
