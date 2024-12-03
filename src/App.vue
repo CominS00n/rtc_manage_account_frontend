@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-// import navigationBar from '@/components/layouts/navigationBar.vue'
 </script>
 
 <style lang="css">
@@ -38,72 +37,32 @@ import { RouterView } from 'vue-router'
 #app {
   display: block;
   margin: 0;
-  border: .5rem solid red;
-  /* height: 100vh; */
+  /* border: .5rem solid red; */
+  height: 100vh;
   overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
-
 }
 .main-layout {
-  /* border: 5rem solid red;
   height: 100vh;
-  width: 100vw; */
-  /* overflow: hidden;
-  @apply flex; */
-  /* overflow: hidden; */
+  width: 100vw;
+  overflow: hidden;
+  @apply flex;
 }
 
-/* aside {
+aside {
   @apply hidden md:block w-[280px] h-screen bg-white p-5;
 }
 main {
   @apply flex-1 p-6 h-screen;
-} */
-</style>
-<!-- <template>
-  <main>
-    <router-view v-slot="{ Component }" name="LeftSidebar">
-      <aside>
-        <Component :is="Component" :key="$route.path" />
-      </aside>
-    </router-view>
-    <router-view v-slot="{ Component }" class="main-view">
-      <transition name="fade" mode="out-in">
-        <component :is="Component" :key="$route.path"></component>
-      </transition>
-    </router-view>
-  </main>
-</template>
-
-<script setup lang="ts">
-import { RouterView } from 'vue-router'
-</script> -->
-
-<!-- <style lang="css">
-
-:root {
-  --scrollbar-thumb: #363636;
-  --scrollbar-track: #f1f1f1;
-}
-
-#app {
-  @apply grid grid-cols-5 h-screen;
-}
-;
-aside {
-  @apply hidden md:block col-span-1 bg-white p-5;
-}
-
-main {
-  @apply col-span-full md:col-span-4 p-5 h-screen overflow-hidden;
 }
 
 .content-body {
-  scrollbar-width: thin;
+  scrollbar-width: none;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+
+  ::-webkit-scrollbar {
+    width: 0;
+  }
 }
-
-
-
-</style> -->
+</style>
