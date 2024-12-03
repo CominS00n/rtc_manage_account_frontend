@@ -3,35 +3,38 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'main',
-    component: () => import('../views/MainView.vue'),
-    alias: '/',
+    name: 'Home',
+    alias: '/home',
+    components: {
+      default: () => import('../components/layouts/mainLayout.vue'),
+      LeftSidebar: () => import('../components/layouts/navigationBar.vue'),
+    },
     children: [
       {
-        path: '/',
-        name: 'Home',
+        path: '',
+        name: 'Default Home',
         component: () => import('../views/HomeView.vue'),
       },
       {
-        path: '/user-management',
+        path: 'user-management',
         name: 'User Management',
         component: () => import('../views/userManageView.vue'),
       },
       {
-        path: '/request-account',
+        path: 'request-account',
         name: 'Request Account',
         component: () => import('../views/RequestAccView.vue'),
       },
       {
-        path: '/activity-log',
+        path: 'activity-log',
         name: 'Activity Log',
         component: () => import('../views/ActivityLogView.vue'),
       },
       {
-        path: '/roles',
+        path: 'roles',
         name: 'Role Management',
         component: () => import('../views/RoleManageView.vue'),
-      }
+      },
     ],
   },
   {
