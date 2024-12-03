@@ -10,7 +10,11 @@ body {
   width: 100svw;
   display: block;
   background-color: #f1f1f1;
-  /* border: 1px solid black; */
   font-family: 'Inter', sans-serif;
-  overflow-y: hidden;
+  overflow: hidden;
+  scrollbar-width: none;
+}
+
+* {
+  scrollbar-width: none;
 }

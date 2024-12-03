@@ -34,15 +34,6 @@ import { RouterView } from 'vue-router'
   --scrollbar-track: #f1f1f1;
 }
 
-#app {
-  display: block;
-  margin: 0;
-  /* border: .5rem solid red; */
-  height: 100vh;
-  overflow: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 .main-layout {
   height: 100vh;
   width: 100vw;
@@ -55,14 +46,5 @@ aside {
 }
 main {
   @apply flex-1 p-6 h-screen;
-}
-
-.content-body {
-  scrollbar-width: none;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-
-  ::-webkit-scrollbar {
-    width: 0;
-  }
 }
 </style>
