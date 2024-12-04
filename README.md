@@ -38,5 +38,3 @@ yarn build
 yarn lint
 ```
 "# rtc_template_frontend"
-
-test
