@@ -24,14 +24,9 @@ export const menuList = [
     link: "/roles",
     icon: "shield-check"
   },
-  // {
-  //   title: "test data",
-  //   link: "/test-data/10",
-  //   icon: "file-text"
-  // },
-  // {
-  //   title: "approval",
-  //   link: "/approval/10",
-  //   icon: "check-circle"
-  // },
+  {
+    title: "user audit",
+    link: "/user-audit",
+    icon: "document-text"
+  },
 ]
