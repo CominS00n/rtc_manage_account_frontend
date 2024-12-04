@@ -14,6 +14,9 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
+import Toast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
+
 const vuetify = createVuetify({
   components,
   directives,
@@ -26,8 +29,14 @@ const vuetify = createVuetify({
   },
 })
 
+const toastOptions = {
+  transition: "Vue-Toastification__fade",
+  timeout: 3000,
+}
+
 app.use(vuetify)
 app.use(createPinia())
 app.use(router)
+app.use(Toast, toastOptions)
 
 app.mount('#app')

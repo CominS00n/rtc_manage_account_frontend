@@ -1,32 +1,32 @@
 export const menuList = [
   {
-    title: 'home',
+    title: 'request account',
     link: '/',
-    icon: 'home'
+    icon: 'user-plus',
+    role: 'guest'
   },
   {
     title: 'user management',
     link: '/user-management',
-    icon: 'user-group'
-  },
-  {
-    title: 'request account',
-    link: '/request-account',
-    icon: 'user-plus'
+    icon: 'user-group',
+    role: 'admin'
   },
   {
     title: "activity logs",
     link: "/activity-log",
-    icon: "document-text"
+    icon: "document-text",
+    role: 'admin'
   },
   {
     title: "roles",
     link: "/roles",
-    icon: "shield-check"
+    icon: "shield-check",
+    role: 'admin'
   },
   {
     title: "user audit",
     link: "/user-audit",
-    icon: "document-text"
+    icon: "command-line",
+    role: 'admin'
   },
 ]
