@@ -1,7 +1,13 @@
 export const menuList = [
   {
-    title: 'request account',
+    title: 'home',
     link: '/',
+    icon: 'home',
+    role: 'guest'
+  },
+  {
+    title: 'request account',
+    link: '/request-account',
     icon: 'user-plus',
     role: 'guest'
   },

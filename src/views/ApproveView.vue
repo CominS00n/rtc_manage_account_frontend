@@ -415,9 +415,10 @@ onMounted(async () => {
       status: accReq.status,
     }
   })
+  console.log(approvedInformation.value)
   selectedServiceTypes.value = information.value[0]?.service_type || []
   selectedUserTypes.value = information.value[0]?.user_type || []
-  approvedInformation.value.sort((a, b) => a.id - b.id)
+  approvedInformation.value.sort((a, b) => a.created_at.localeCompare(b.created_at))
   approval.value =
     approvedInformation.value.find(approved => approved.status === 'Pending') ||
     null

@@ -6,7 +6,7 @@
     >
       <template v-if="LeftSidebarComponent">
         <aside>
-          <transition name="fade" mode="out-in">
+          <transition>
             <component :is="LeftSidebarComponent" :key="$route.path" />
           </transition>
         </aside>
@@ -15,7 +15,7 @@
     <main>
       <div class="content-body h-full overflow-y-auto rounded-md">
         <router-view v-slot="{ Component }" class="main-view">
-          <transition name="fade" mode="out-in">
+          <transition name="slide-fade" mode="out-in">
             <component :is="Component" :key="$route.path"></component>
           </transition>
         </router-view>
@@ -44,7 +44,23 @@ import { RouterView } from 'vue-router'
 aside {
   @apply hidden md:block w-[280px] h-screen bg-white p-5;
 }
+
 main {
   @apply flex-1 p-6 h-screen;
+}
+
+
+/* Slide and fade transition */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
 }
 </style>

@@ -1,7 +1,12 @@
 <template>
   <div class="container mx-auto flex flex-col gap-y-4">
     <h1 class="font-bold text-2xl py-3">RTC Request Account</h1>
-    <v-form @submit.prevent v-model="valid" class="flex flex-col gap-y-4">
+    <v-form
+      @submit.prevent="sendRequest"
+      v-model="valid"
+      ref="formRef"
+      class="flex flex-col gap-y-4"
+    >
       <v-card>
         <v-card-title class="font-weight-bold m-2"
           >User Information</v-card-title
@@ -75,9 +80,7 @@
                   :value="type"
                   v-model="request_type"
                 />
-                <span class="capitalize">
-                  {{ type }}
-                </span>
+                <span class="capitalize">{{ type }}</span>
               </label>
             </div>
             <div>
@@ -150,9 +153,7 @@
                   v-model="service_type"
                   :value="type"
                 />
-                <span class="capitalize">
-                  {{ type }}
-                </span>
+                <span class="capitalize">{{ type }}</span>
               </label>
               <label class="flex items-center space-x-2">
                 <input
@@ -188,9 +189,7 @@
                   v-model="user_type"
                   :value="type"
                 />
-                <span class="capitalize">
-                  {{ type }}
-                </span>
+                <span class="capitalize">{{ type }}</span>
               </label>
             </div>
           </div>
@@ -261,14 +260,13 @@
           </div>
         </v-card-text>
       </v-card>
+      <div class="flex w-full gap-x-2">
+        <v-btn color="#facc15" class="flex-1 text-white" type="submit"
+          >Submit</v-btn
+        >
+        <v-btn variant="outlined">Cancel</v-btn>
+      </div>
     </v-form>
-
-    <div class="flex w-full gap-x-2">
-      <v-btn color="#facc15" class="flex-1 text-white" @click="sendRequest">
-        Submit
-      </v-btn>
-      <v-btn variant="outlined">Cancel</v-btn>
-    </div>
   </div>
 </template>
 
@@ -281,6 +279,7 @@ import {
   dateRules,
   comboboxRules,
 } from '@/rules/inputRules'
+import { useToast } from 'vue-toastification'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
 import { useAccReqApi } from '@/composable/accReqApi'
@@ -289,8 +288,10 @@ import type { approvedInformation, sendReq } from '@/types/sendReq'
 
 const { postAccReq } = useAccReqApi()
 const initialCount = ref(1)
+const toast = useToast()
 
 const valid = ref<boolean>(false)
+const formRef = ref()
 
 // Data variable user information
 const name = ref<string>('')
@@ -339,6 +340,11 @@ const headOfReq = ref<{ name: string; type: string; email: string }[]>([])
 const implementor = ref<string | null>(null)
 
 const sendRequest = async () => {
+  if(!formRef.value.validate()){
+    toast.error('Please fill in all required fields')
+    return
+  }
+
   const account_request = reactive({
     full_name: name.value,
     position: position.value,
@@ -364,7 +370,6 @@ const sendRequest = async () => {
   const implementor_name = ref<string>(
     implementor.value?.split('(')[1].replace(')', '') || '',
   )
-  console.log(implementor_name.value)
   const implementor_type = ref<string>('Implementor')
   const implementor_result: approvedInformation[] = [
     {
@@ -389,8 +394,31 @@ const sendRequest = async () => {
     approved_result,
   }
 
-  await postAccReq(last_result)
-  location.reload()
+  try {
+    await postAccReq(last_result)
+    toast.success('Request has been sent')
+    // Reset all form
+    name.value = ''
+    position.value = ''
+    company.value = ''
+    division.value = ''
+    telephone.value = ''
+    email.value = ''
+    request_type.value = []
+    request_date.value = null
+    system.value = null
+    selected_type.value = null
+    expire_date.value = null
+    service_type.value = []
+    user_type.value = []
+    otherService.value = false
+    otherServiceType.value = []
+    headOfReq.value = []
+    implementor.value = null
+  } catch (error) {
+    console.error(error)
+    toast.error('Failed to send request')
+  }
 }
 
 function addHeadOfReq() {
@@ -411,7 +439,9 @@ onMounted(() => {
   }
 })
 
-const implementorItems = ref<string[]>(['spuckpooforwork@gmail.com (CominS00n)'])
+const implementorItems = ref<string[]>([
+  'spuckpooforwork@gmail.com (CominS00n)',
+])
 
 const req_types = ref<string[]>([
   'New Account',

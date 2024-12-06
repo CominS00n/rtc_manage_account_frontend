@@ -4,7 +4,8 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    alias: '/request-account',
+    alias: '/home',
+    // redirect: '/request-account',
     components: {
       default: () => import('../components/layouts/mainLayout.vue'),
       LeftSidebar: () => import('../components/layouts/navigationBar.vue'),
@@ -12,6 +13,11 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'Default',
+        component: () => import('../views/HomeView.vue'),
+      },
+      {
+        path: '/request-account',
         name: 'request-account',
         component: () => import('../views/RequestAccView.vue'),
       },
@@ -34,7 +40,7 @@ const routes = [
         path: 'user-audit',
         name: 'User Audit',
         component: () => import('../views/UserAuditView.vue'),
-      }
+      },
     ],
   },
   {
@@ -46,6 +52,19 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/LoginView.vue'),
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    alias: '/test',
+    component: () => import('../views/testView.vue'),
+    children: [
+      {
+        path: '/request',
+        name: 'request-test',
+        component: () => import('../views/RequestAccView.vue'),
+      },
+    ],
   },
 
   {
