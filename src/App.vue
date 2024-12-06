@@ -28,7 +28,7 @@
 import { RouterView } from 'vue-router'
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 :root {
   --scrollbar-thumb: #363636;
   --scrollbar-track: #f1f1f1;
@@ -42,13 +42,24 @@ import { RouterView } from 'vue-router'
 }
 
 aside {
-  @apply hidden md:block w-[280px] h-screen bg-white p-5;
+  min-width: 280px;
+  height: 100%;
+  background: white;
+  padding: 1rem;
+  @apply hidden md:block;
+}
+
+.content-body {
+  scrollbar-width: none;
 }
 
 main {
-  @apply flex-1 p-6 h-screen;
+  flex: 1;
+  padding: 1rem;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
 }
-
 
 /* Slide and fade transition */
 .slide-fade-enter-active,

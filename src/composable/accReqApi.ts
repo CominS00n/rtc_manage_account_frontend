@@ -6,7 +6,16 @@ import type { sendReq, approved } from '@/types/sendReq'
 axios.defaults.baseURL = 'http://localhost:8000/api/v2'
 
 export const useAccReqApi = () => {
+  const allAccReqs = ref<AccReq[]>([])
   const accReqs = ref<AccReq[]>([])
+  const getAllAccReqs = async () => {
+    try {
+      const response = await axios.get('/account_request')
+      allAccReqs.value = response.data.data
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const getAccReqs = async (id: number) => {
     try {
       const response = await axios.get('/account_request/' + id)
@@ -42,5 +51,12 @@ export const useAccReqApi = () => {
       console.log(error)
     }
   }
-  return { accReqs, getAccReqs, postAccReq, approveAccReq }
+  return {
+    accReqs,
+    getAccReqs,
+    postAccReq,
+    approveAccReq,
+    getAllAccReqs,
+    allAccReqs,
+  }
 }
