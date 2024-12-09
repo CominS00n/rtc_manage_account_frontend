@@ -46,7 +46,7 @@ aside {
   height: 100%;
   background: white;
   padding: 1rem;
-  @apply hidden md:block;
+  @apply hidden xl:block;
 }
 
 .content-body {
@@ -58,7 +58,7 @@ main {
   padding: 1rem;
   height: 100vh;
   overflow: hidden;
-  display: flex;
+  /* display: flex; */
 }
 
 /* Slide and fade transition */

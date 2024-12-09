@@ -17,9 +17,14 @@ const routes = [
         component: () => import('../views/HomeView.vue'),
       },
       {
-        path: '/request-account',
+        path: 'request-account',
         name: 'request-account',
         component: () => import('../views/RequestAccView.vue'),
+      },
+      {
+        path: 'request-account/view-request/:id',
+        name: 'ViewRequest',
+        component: () => import('../components/pdf/exportPdf.vue'),
       },
       {
         path: 'user-management',
@@ -40,7 +45,7 @@ const routes = [
         path: 'user-audit',
         name: 'User Audit',
         component: () => import('../views/UserAuditView.vue'),
-      },
+      }
     ],
   },
   {

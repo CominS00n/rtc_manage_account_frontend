@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section >
     <h1 class="font-bold text-2xl py-3">Role Management</h1>
     <v-card>
       <v-card-text>

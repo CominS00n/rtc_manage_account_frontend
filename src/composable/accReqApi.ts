@@ -7,7 +7,7 @@ axios.defaults.baseURL = 'http://localhost:8000/api/v2'
 
 export const useAccReqApi = () => {
   const allAccReqs = ref<AccReq[]>([])
-  const accReqs = ref<AccReq[]>([])
+  const accReq = ref<AccReq[]>([])
   const getAllAccReqs = async () => {
     try {
       const response = await axios.get('/account_request')
@@ -16,10 +16,10 @@ export const useAccReqApi = () => {
       console.log(error)
     }
   }
-  const getAccReqs = async (id: number) => {
+  const getAccReq = async (id: string) => {
     try {
       const response = await axios.get('/account_request/' + id)
-      accReqs.value = response.data.data
+      accReq.value = response.data.data
     } catch (error) {
       console.log(error)
     }
@@ -52,8 +52,8 @@ export const useAccReqApi = () => {
     }
   }
   return {
-    accReqs,
-    getAccReqs,
+    accReq,
+    getAccReq,
     postAccReq,
     approveAccReq,
     getAllAccReqs,

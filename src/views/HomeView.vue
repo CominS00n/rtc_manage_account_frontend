@@ -19,7 +19,12 @@
               </template>
             </v-text-field>
           </div>
-          <v-data-table :items="allAccReqs" :headers="headers" :search="search" class="data-table">
+          <v-data-table
+            :items="allAccReqs"
+            :headers="headers"
+            :search="search"
+            class="data-table"
+          >
             <template v-slot:item="{ item }">
               <tr>
                 <td>{{ item.full_name }}</td>
@@ -32,6 +37,13 @@
                 <td>{{ item.account_type }}</td>
                 <td>{{ item.user_type.join(', ') }}</td>
                 <td>{{ item.status }}</td>
+                <td>
+                  <router-link
+                    :to="{ name: 'ViewRequest', params: { id: item.id } }"
+                  >
+                    View</router-link
+                  >
+                </td>
               </tr>
             </template>
           </v-data-table>
@@ -43,6 +55,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useAccReqApi } from '@/composable/accReqApi'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
@@ -61,6 +74,7 @@ const headers = ref([
   { key: 'account_type', title: 'Account Type' },
   { key: 'user_type', title: 'User Type' },
   { key: 'status', title: 'Status' },
+  { key: 'actions', title: 'Actions' },
 ])
 
 onMounted(async () => {

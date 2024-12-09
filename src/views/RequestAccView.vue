@@ -267,11 +267,14 @@
         <v-btn variant="outlined">Cancel</v-btn>
       </div>
     </v-form>
+
+    <router-view />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch, reactive } from 'vue'
+import { RouterView } from 'vue-router'
 import { VDateInput } from 'vuetify/labs/VDateInput'
 import {
   inputDefaultRules,

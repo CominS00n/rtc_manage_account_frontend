@@ -2,6 +2,7 @@
   <div class="flex flex-col justify-between h-full">
     <nav>
       <ul class="space-y-2">
+        <li class="flex justify-center my-6"><img src="/ntlogo.png" alt="" class="h-24"></li>
         <li
           v-for="menu in menuList"
           :key="menu.title"
@@ -39,6 +40,6 @@ const router = useRouter()
 
 <style scoped>
 .menu-activate {
-  @apply bg-yellow-400 rounded-md text-white;
+  @apply bg-yellow-400 rounded-md;
 }
 </style>
