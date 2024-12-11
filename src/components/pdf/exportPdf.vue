@@ -5,7 +5,7 @@
       <div ref="pdfContent" class="pdf-content">
         <div class="content">
           <div class="detail flex justify-between items-center">
-            <img src="/ntlogo.png" alt="nt_logo" class="h-12" />
+            <img src="/src/assets/logo/ntlogo.png" alt="nt_logo" class="h-12" />
             <h1 class="text-xl font-bold">RTC Account Request (RTCAR)</h1>
           </div>
           <p class="sub-text px-3 py-2">

@@ -2,7 +2,7 @@
   <div class="flex flex-col justify-between h-full">
     <nav>
       <ul class="space-y-2">
-        <li class="flex justify-center my-6"><img src="/ntlogo.png" alt="" class="h-24"></li>
+        <li class="flex justify-center my-6"><img src="/src/assets/logo/ntlogo.png" alt="" class="h-24"></li>
         <li
           v-for="menu in menuList"
           :key="menu.title"

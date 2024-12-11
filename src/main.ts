@@ -34,6 +34,12 @@ const toastOptions = {
   timeout: 3000,
 }
 
+router.beforeEach((to, from, next) => {
+  const defaultTitle = 'Account Management';
+  document.title = typeof to.meta.title === 'string' ? to.meta.title : defaultTitle;
+  next();
+});
+
 app.use(vuetify)
 app.use(createPinia())
 app.use(router)
