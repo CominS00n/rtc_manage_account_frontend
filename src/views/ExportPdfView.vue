@@ -1,11 +1,32 @@
 <template>
-  <v-card>
-    <v-btn @click="generatePdf">Download PDF</v-btn>
-    <v-card-text class="flex items-center justify-center">
-      <div ref="pdfContent" class="pdf-content">
+  <v-btn>
+    <template #prepend>
+      <nt_icon icon="arrow-left" />
+    </template>
+    <router-link to="/">Back</router-link>
+  </v-btn>
+  <v-card class="mt-4 relative">
+    <div class="p-4">
+      <v-btn @click="generatePdf" rounded>
+        <!-- color="#facc15" -->
+        <template #prepend>
+          <document-download />
+        </template>
+        <template #default>
+          <p class="capitalize">Download PDF</p>
+        </template>
+      </v-btn>
+    </div>
+    <v-card-text class="flex flex-col items-center justify-center">
+      <div ref="pdfContent" class="pdf-content relative">
         <div class="content">
           <div class="detail flex justify-between items-center">
-            <img src="/src/assets/logo/ntlogo.png" alt="nt_logo" class="h-12" />
+            <img
+              src="/src/assets/logo/ntlogo.png"
+              alt="nt_logo"
+              class="h-12"
+              crossorigin="anonymous"
+            />
             <h1 class="text-xl font-bold">RTC Account Request (RTCAR)</h1>
           </div>
           <p class="sub-text px-3 py-2">
@@ -116,6 +137,7 @@
                       <img
                         :src="item.signature || ''"
                         alt=""
+                        crossorigin="anonymous"
                         class="signature h-12"
                       />
                       <p>({{ item.name }})</p>
@@ -145,6 +167,7 @@
                       <img
                         :src="item.signature || ''"
                         alt=""
+                        crossorigin="anonymous"
                         class="signature h-12"
                       />
                       <p>({{ item.name }})</p>
@@ -166,9 +189,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router'
 import html2canvas from 'html2canvas-pro'
 import jsPDF from 'jspdf'
+
+import nt_icon from '@/components/icon/nt_icon.vue'
+import documentDownload from '@/assets/logo/icons/documentDownload.vue'
 
 import { useAccReqApi } from '@/composable/accReqApi'
 import type { AccReq } from '@/types/accReqs'
@@ -186,40 +212,44 @@ onMounted(async () => {
   if (accReq.value && accReq.value.length > 0) {
     data.value = accReq.value[0]
   }
-  // generatePdf()
 })
-const generatePdf = () => {
+
+const generatePdf = async () => {
   const element = pdfContent.value
-  html2canvas(element as HTMLElement, { scale: 3 }).then(canvas => {
-    const pdf = new jsPDF('p', 'mm', 'a4')
-    const pdfWidth = pdf.internal.pageSize.getWidth()
-    const pdfHeight = pdf.internal.pageSize.getHeight()
-    const padding = 10 // กำหนด padding
-    const contentWidth = pdfWidth - padding * 2
-    const contentHeight = pdfHeight - padding * 2
-    const imgData = canvas.toDataURL('image/png')
-    const imgHeight = (canvas.height * contentWidth) / canvas.width
+  try {
+    await html2canvas(element as HTMLElement, { scale: 3 }).then(canvas => {
+      const pdf = new jsPDF('p', 'mm', 'a4')
+      const pdfWidth = pdf.internal.pageSize.getWidth()
+      const pdfHeight = pdf.internal.pageSize.getHeight()
+      const padding = 10 // กำหนด padding
+      const contentWidth = pdfWidth - padding * 2
+      const contentHeight = pdfHeight - padding * 2
+      const imgData = canvas.toDataURL('image/png')
+      const imgHeight = (canvas.height * contentWidth) / canvas.width
 
-    if (imgHeight <= contentHeight) {
-      pdf.addImage(imgData, 'PNG', padding, padding, contentWidth, imgHeight)
-    } else {
-      let yOffset = 0
-      while (yOffset < imgHeight) {
-        pdf.addImage(
-          imgData,
-          'PNG',
-          padding,
-          padding - yOffset,
-          contentWidth,
-          imgHeight,
-        )
-        yOffset += contentHeight
-        if (yOffset < imgHeight) pdf.addPage()
+      if (imgHeight <= contentHeight) {
+        pdf.addImage(imgData, 'PNG', padding, padding, contentWidth, imgHeight)
+      } else {
+        let yOffset = 0
+        while (yOffset < imgHeight) {
+          pdf.addImage(
+            imgData,
+            'PNG',
+            padding,
+            padding - yOffset,
+            contentWidth,
+            imgHeight,
+          )
+          yOffset += contentHeight
+          if (yOffset < imgHeight) pdf.addPage()
+        }
       }
-    }
 
-    pdf.save('download.pdf')
-  })
+      pdf.save('download.pdf')
+    })
+  } catch (error) {
+    console.error(error)
+  }
 }
 </script>
 
@@ -256,5 +286,9 @@ p {
 
 h2 {
   font-size: 16px;
+}
+
+.hidden {
+  display: none;
 }
 </style>

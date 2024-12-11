@@ -349,8 +349,9 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAccReqApi } from '@/composable/accReqApi'
-import nt_icon from '@/components/icon/nt_icon.vue'
 import { jwtDecode } from 'jwt-decode'
+
+import nt_icon from '@/components/icon/nt_icon.vue'
 
 import type { ApprovedInformation, AccReq } from '@/types/accReqs'
 import type { approved } from '@/types/sendReq'
@@ -384,9 +385,9 @@ try {
   console.error('Invalid token:', error)
 }
 
-const id = ref(decodedToken ? decodedToken.id : 0)
+const id = ref<string>(decodedToken ? String(decodedToken.id) : '')
 
-const { getAccReqs, accReqs, approveAccReq } = useAccReqApi()
+const { getAccReq, accReq, approveAccReq } = useAccReqApi()
 const information = ref<AccReq[]>([])
 const approvedInformation = ref<ApprovedInformation[]>([])
 const selectedServiceTypes = ref<string[]>([])
@@ -394,9 +395,9 @@ const selectedUserTypes = ref<string[]>([])
 const approval = ref<ApprovedInformation | null>(null)
 
 onMounted(async () => {
-  await getAccReqs(id.value)
-  approvedInformation.value = accReqs.value[0]?.approved || []
-  information.value = accReqs.value.map(accReq => {
+  await getAccReq(id.value)
+  approvedInformation.value = accReq.value[0]?.approved || []
+  information.value = accReq.value.map(accReq => {
     return {
       id: accReq.id,
       full_name: accReq.full_name,

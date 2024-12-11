@@ -38,15 +38,16 @@ import { RouterView } from 'vue-router'
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  @apply flex;
+  /* border: 1px solid red; */
+  @apply flex flex-col xl:flex-row;
 }
 
 aside {
   min-width: 280px;
-  height: 100%;
+  /* height: 100%; */
   background: white;
   padding: 1rem;
-  @apply hidden xl:block;
+  /* @apply hidden xl:block ; */
 }
 
 .content-body {
@@ -58,7 +59,8 @@ main {
   padding: 1rem;
   height: 100vh;
   overflow: hidden;
-  /* display: flex; */
+  /* border: 2px solid blue; */
+  @apply xl:overflow-hidden;
 }
 
 /* Slide and fade transition */

@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    alias: '/',
+    alias: '/home',
     components: {
       default: () => import('../components/layouts/mainLayout.vue'),
       LeftSidebar: () => import('../components/layouts/navigationBar.vue'),
@@ -29,7 +29,7 @@ const routes = [
       {
         path: 'request-account/view-request/:id',
         name: 'ViewRequest',
-        component: () => import('../components/pdf/exportPdf.vue'),
+        component: () => import('../views/ExportPdfView.vue'),
         meta: {
           title: 'View Request',
         },

@@ -140,7 +140,7 @@
                 :rules="dateRules"
               ></v-date-input>
             </div>
-            <div class="flex gap-4 flex-wrap items-center">
+            <div class="flex gap-4 flex-wrap items-center content-start">
               <p class="w-full">Service Type :</p>
               <label
                 class="flex gap-2"
@@ -227,18 +227,12 @@
                     hide-details
                     :rules="emailRules"
                   ></v-text-field>
-                  <v-btn
-                    size="x-small"
-                    icon=""
-                    @click="removeHeadOfReqCount(i)"
-                    class="ml-2"
-                    color="#f87171"
-                  >
-                    <nt_icon icon="minus" />
+                  <v-btn variant="text" size="small" icon @click="removeHeadOfReqCount(i)">
+                    <trash-icon color="red" />
                   </v-btn>
                 </div>
                 <div class="divider divider-neutral mt-4">
-                  <v-btn size="x-small" icon="" @click="addHeadOfReq">
+                  <v-btn size="small" icon @click="addHeadOfReq">
                     <nt_icon icon="plus" />
                   </v-btn>
                 </div>
@@ -283,6 +277,8 @@ import {
   comboboxRules,
 } from '@/rules/inputRules'
 import { useToast } from 'vue-toastification'
+
+import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
 import { useAccReqApi } from '@/composable/accReqApi'
@@ -343,7 +339,7 @@ const headOfReq = ref<{ name: string; type: string; email: string }[]>([])
 const implementor = ref<string | null>(null)
 
 const sendRequest = async () => {
-  if(!formRef.value.validate()){
+  if (!formRef.value.validate()) {
     toast.error('Please fill in all required fields')
     return
   }

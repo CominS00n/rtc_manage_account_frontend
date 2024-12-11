@@ -1,4 +1,5 @@
 import './assets/index.css'
+import '@mdi/font/css/materialdesignicons.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -30,15 +31,16 @@ const vuetify = createVuetify({
 })
 
 const toastOptions = {
-  transition: "Vue-Toastification__fade",
+  transition: 'Vue-Toastification__fade',
   timeout: 3000,
 }
 
 router.beforeEach((to, from, next) => {
-  const defaultTitle = 'Account Management';
-  document.title = typeof to.meta.title === 'string' ? to.meta.title : defaultTitle;
-  next();
-});
+  const defaultTitle = 'Account Management'
+  document.title =
+    typeof to.meta.title === 'string' ? to.meta.title : defaultTitle
+  next()
+})
 
 app.use(vuetify)
 app.use(createPinia())
