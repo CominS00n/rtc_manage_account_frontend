@@ -1,9 +1,9 @@
 <template>
-  <v-btn>
+  <v-btn to="/">
     <template #prepend>
       <nt_icon icon="arrow-left" />
     </template>
-    <router-link to="/">Back</router-link>
+    Back
   </v-btn>
   <v-card class="mt-4 relative">
     <div class="p-4">
@@ -189,7 +189,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute } from 'vue-router'
 import html2canvas from 'html2canvas-pro'
 import jsPDF from 'jspdf'
 
