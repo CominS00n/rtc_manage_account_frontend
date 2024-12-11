@@ -1,8 +1,8 @@
 <template>
   <nav class="hidden xl:flex flex-col justify-between h-full">
     <ul class="space-y-2">
-      <li class="flex justify-center mt-6 mb-12">
-        <img src="/src/assets/logo/ntlogo.png" alt="" class="h-24" />
+      <li class="flex justify-center mt-6 mb-10">
+        <img src="/src/assets/logo/ntlogo.png" alt="" class="h-16" />
       </li>
       <li
         v-for="menu in menuList"

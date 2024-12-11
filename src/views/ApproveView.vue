@@ -1,8 +1,8 @@
 <template>
-  <div class="container mx-auto px-4 h-screen overflow-y-auto">
+  <div class="px-4 h-screen overflow-y-auto">
     <h1 class="font-bold text-2xl py-3 px-4">Approve RTC Request Account</h1>
     <div
-      class="flex gap-x-6 overflow-y-auto"
+      class="flex flex-col xl:flex-row gap-x-6 gap-y-6 overflow-y-auto"
       v-for="item in information"
       :key="item.id"
     >
@@ -133,7 +133,6 @@
                 variant="underlined"
                 hide-details
                 readonly
-                clearable
               ></v-text-field>
               <div>
                 <v-text-field
@@ -179,7 +178,7 @@
                 </label> -->
               </div>
               <div class="flex gap-4 items-start">
-                <div class="inline-flex items-center gap-x-4 flex-wrap">
+                <div class="inline-flex items-center gap-x-4 gap-y-3 flex-wrap">
                   <p>User Type :</p>
                   <v-chip
                     class="capitalize"
@@ -273,13 +272,15 @@
                   <v-stepper-window
                     direction="vertical"
                     v-show="
-                      approved.name === approval?.name || isShowStep[index]
+                      (approved.name === approval?.name &&
+                        approved.email === emailToken) ||
+                      isShowStep[index]
                     "
                   >
                     <v-stepper-window-item :value="index + 1">
                       <p>{{ approved.type }}</p>
                       <div class="border border-gray-300 w-fit">
-                        <VueSignaturePad
+                        <!-- <VueSignaturePad
                           :ref="
                             el =>
                               (signatureRefs[index] = el as CanvasSignatureRef)
@@ -292,9 +293,14 @@
                             penColor: options.penColor,
                             backgroundColor: options.backgroundColor,
                           }"
-                          :disabled="approved.name !== approval?.name"
+                          disabled
                           v-if="approved.signature === null"
-                        />
+                        /> -->
+                        <!-- :disabled="approved.name !== approval?.name" -->
+                        <div
+                          class="h-[150px] w-[350px]"
+                          v-if="approved.signature === null"
+                        ></div>
                         <img
                           :src="approved.signature"
                           alt="signature"
@@ -311,7 +317,8 @@
                         density="compact"
                         v-model="approved.remark"
                         hide-details
-                        :readonly="approved.signature !== null"
+                        readonly
+                        v-if="approved.remark !== null"
                       ></v-text-field>
                       <div
                         class="flex w-full gap-2 mt-4"
@@ -321,7 +328,7 @@
                           color="#facc15"
                           class="text-white flex-1"
                           size="small"
-                          @click="signature_approvedSave(index, approved)"
+                          @click="setIsOpen(index, approved)"
                         >
                           Approval
                         </v-btn>
@@ -343,13 +350,97 @@
       </div>
     </div>
   </div>
+
+  <TransitionRoot appear :show="isOpen" as="template">
+    <Dialog as="div" @close="closeModal" class="relative z-10">
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black/25" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 overflow-y-auto">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center"
+        >
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+            >
+              <DialogTitle
+                as="h3"
+                class="text-lg font-medium leading-6 text-gray-900"
+              >
+                Signature Approval
+              </DialogTitle>
+              <div class="mt-2 space-y-4">
+                <div class="border">
+                  <VueSignaturePad
+                    :ref="
+                      el =>
+                        (signatureRefs[approvalIndex] =
+                          el as CanvasSignatureRef)
+                    "
+                    height="150px"
+                    width="350px"
+                    :max-width="options.maxWidth"
+                    :min-width="options.minWidth"
+                    :options="{
+                      penColor: options.penColor,
+                      backgroundColor: options.backgroundColor,
+                    }"
+                  />
+                </div>
+                <v-text-field
+                  label="Remark"
+                  prepend-icon=""
+                  variant="outlined"
+                  density="compact"
+                  v-model="computedRemark"
+                  hide-details
+                ></v-text-field>
+              </div>
+
+              <div class="mt-4">
+                <v-btn @click="approvalSubmit" class="w-full">
+                  <span class="capitalize">Approval</span>
+                </v-btn>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAccReqApi } from '@/composable/accReqApi'
 import { jwtDecode } from 'jwt-decode'
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/vue'
+import { useToast } from 'vue-toastification'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
 
@@ -359,6 +450,45 @@ import { status_type } from '@/types/sendReq'
 
 import { VueSignaturePad } from '@selemondev/vue3-signature-pad'
 import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
+
+const toast = useToast()
+
+const isOpen = ref<boolean>(false)
+const approvalIndex = ref<number>(0)
+const approvalValue = ref<approval_type | null>(null)
+const setIsOpen = (index: number, approved: approval_type) => {
+  approvalIndex.value = index
+  approvalValue.value = approved
+  isOpen.value = !isOpen.value
+}
+const closeModal = () => {
+  isOpen.value = false
+}
+const computedRemark = computed({
+  get() {
+    return approvalValue.value?.remark || ''
+  },
+  set(value) {
+    if (approvalValue.value) {
+      approvalValue.value.remark = value
+    }
+  },
+})
+
+const approvalSubmit = () => {
+  try {
+    if (!approvalValue.value) {
+      toast.error('Approval value is not set')
+    } else {
+      signature_approvedSave(approvalIndex.value, approvalValue.value)
+    }
+  } catch (error) {
+    console.error(error)
+    toast.error('Failed to approve request')
+  } finally {
+    closeModal()
+  }
+}
 
 interface approval_type {
   id?: number
@@ -377,15 +507,16 @@ interface approval_type {
 const route = useRoute()
 
 const token = ref(route.params.token as string)
-let decodedToken: { id: number } | null = null
+let decodedToken: { id: string; email: string } | null = null
 
 try {
-  decodedToken = jwtDecode<{ id: number }>(token.value)
+  decodedToken = jwtDecode<{ id: string; email: string }>(token.value)
 } catch (error) {
   console.error('Invalid token:', error)
 }
 
-const id = ref<string>(decodedToken ? String(decodedToken.id) : '')
+const id = ref<string>(decodedToken ? decodedToken.id : '')
+const emailToken = ref<string>(decodedToken ? decodedToken.email : '')
 
 const { getAccReq, accReq, approveAccReq } = useAccReqApi()
 const information = ref<AccReq[]>([])
@@ -419,7 +550,9 @@ onMounted(async () => {
   console.log(approvedInformation.value)
   selectedServiceTypes.value = information.value[0]?.service_type || []
   selectedUserTypes.value = information.value[0]?.user_type || []
-  approvedInformation.value.sort((a, b) => a.created_at.localeCompare(b.created_at))
+  approvedInformation.value.sort((a, b) =>
+    a.created_at.localeCompare(b.created_at),
+  )
   approval.value =
     approvedInformation.value.find(approved => approved.status === 'Pending') ||
     null
@@ -446,7 +579,6 @@ const signature_approvedSave = async (
   }
 
   try {
-    // const result = signature_approved.value.split(',')[1]
     const data: approved = {
       acc_req_id: approved.acc_req_id,
       name: approved.name,
@@ -458,7 +590,8 @@ const signature_approvedSave = async (
     }
 
     await approveAccReq(data)
-    location.reload()
+    // location.reload()
+    toast.success('Request approved')
   } catch (error) {
     console.error(error)
   }

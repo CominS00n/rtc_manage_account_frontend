@@ -22,15 +22,16 @@
           :items="allAccReqs"
           :headers="headers"
           :search="search"
-          class="data-table"
+          class="data-table text-nowrap"
+          :sort-by="[{ key: 'req_date', order: 'desc' }]"
         >
           <template v-slot:item="{ item }">
             <tr>
-              <td class="text-nowrap">{{ item.full_name }}</td>
+              <td>{{ item.full_name }}</td>
               <td>{{ item.position }}</td>
               <td>{{ item.company }}</td>
               <td>{{ item.email }}</td>
-              <td class="text-nowrap">{{ item.req_type }}</td>
+              <td>{{ item.req_type }}</td>
               <td>{{ item.system.join(', ') }}</td>
               <td>{{ item.req_date }}</td>
               <td>{{ item.account_type }}</td>

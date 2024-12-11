@@ -71,7 +71,7 @@
         >
         <v-card-text>
           <div class="grid grid-cols-2 gap-x-6 gap-y-3">
-            <div class="flex gap-2 flex-wrap">
+            <div class="flex gap-2 flex-wrap content-start">
               Request Type :
               <label class="flex gap-2" v-for="type in req_types" :key="type">
                 <input
@@ -176,7 +176,7 @@
                 ></v-combobox>
               </label>
             </div>
-            <div class="flex gap-4 flex-wrap">
+            <div class="flex gap-4 flex-wrap content-start">
               <p class="w-full">User Type :</p>
               <label
                 class="flex items-center gap-2"
@@ -227,7 +227,12 @@
                     hide-details
                     :rules="emailRules"
                   ></v-text-field>
-                  <v-btn variant="text" size="small" icon @click="removeHeadOfReqCount(i)">
+                  <v-btn
+                    variant="text"
+                    size="small"
+                    icon
+                    @click="removeHeadOfReqCount(i)"
+                  >
                     <trash-icon color="red" />
                   </v-btn>
                 </div>

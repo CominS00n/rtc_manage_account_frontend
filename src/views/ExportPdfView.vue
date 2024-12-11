@@ -1,5 +1,6 @@
 <template>
-  <v-btn to="/">
+
+  <v-btn @click="router.go(-1)">
     <template #prepend>
       <nt_icon icon="arrow-left" />
     </template>
@@ -198,6 +199,7 @@ import documentDownload from '@/assets/logo/icons/documentDownload.vue'
 
 import { useAccReqApi } from '@/composable/accReqApi'
 import type { AccReq } from '@/types/accReqs'
+import router from '@/router'
 
 const { params } = useRoute()
 const { getAccReq, accReq } = useAccReqApi()
