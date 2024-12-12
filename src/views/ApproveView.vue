@@ -70,17 +70,6 @@
                 <v-chip class="capitalize" color="primary" text-color="white">
                   {{ item.req_type }}
                 </v-chip>
-                <!-- <label class="flex gap-2" v-for="type in req_types" :key="type">
-                  <input
-                    type="checkbox"
-                    class="checkbox checkbox-sm border"
-                    :checked="type === item.req_type"
-                    disabled
-                  />
-                  <span class="capitalize">
-                    {{ type }}
-                  </span>
-                </label> -->
               </div>
               <div>
                 <div class="inline-flex items-center gap-x-4 flex-wrap">
@@ -95,14 +84,6 @@
                     {{ system }}
                   </v-chip>
                 </div>
-                <!-- <v-text-field
-                  label="System"
-                  variant="underlined"
-                  density="compact"
-                  hide-details
-                  v-model="item.system"
-                  readonly
-                ></v-text-field> -->
               </div>
 
               <v-text-field
@@ -160,22 +141,6 @@
                     {{ type }}
                   </v-chip>
                 </div>
-                <!-- <label
-                  class="flex gap-2"
-                  v-for="type in service_types"
-                  :key="type"
-                >
-                  <input
-                    type="checkbox"
-                    class="checkbox checkbox-sm border"
-                    :value="type"
-                    v-model="selectedServiceTypes"
-                    disabled
-                  />
-                  <span class="capitalize">
-                    {{ type }}
-                  </span>
-                </label> -->
               </div>
               <div class="flex gap-4 items-start">
                 <div class="inline-flex items-center gap-x-4 gap-y-3 flex-wrap">
@@ -190,22 +155,6 @@
                     {{ type }}
                   </v-chip>
                 </div>
-                <!-- <label
-                  class="flex items-center gap-2"
-                  v-for="type in user_types"
-                  :key="type"
-                >
-                  <input
-                    type="checkbox"
-                    class="checkbox checkbox-sm border"
-                    v-model="selectedUserTypes"
-                    :value="type"
-                    disabled
-                  />
-                  <span class="capitalize">
-                    {{ type }}
-                  </span>
-                </label> -->
               </div>
             </div>
           </v-card-text>
@@ -219,19 +168,16 @@
             <div
               v-for="(approved, index) in approvedInformation"
               :key="approved.id"
-              class="capitalize border"
+              class="capitalize"
             >
               <v-stepper>
                 <v-stepper-header
                   @click="handleShowStep(index)"
-                  class="relative"
+                  class="cursor-pointer"
                 >
-                  <div class="absolute right-6">
-                    <nt_icon icon="chevron-down" />
-                  </div>
                   <v-stepper-item
                     :value="index + 1"
-                    class="capitalize"
+                    class="capitalize cursor-pointer"
                     :color="
                       approved.status === 'Approved'
                         ? 'green'
@@ -259,11 +205,17 @@
                         :icon="
                           approved.status === 'Approved'
                             ? 'check'
-                            : approved.status === 'Reject'
+                            : approved.status === 'Rejected'
                               ? 'x-mark'
                               : '?'
                         "
-                        :color="approved.status === 'Approved' ? 'green' : ''"
+                        :color="
+                          approved.status === 'Approved'
+                            ? 'green'
+                            : approved.status === 'Rejected'
+                              ? 'red'
+                              : ''
+                        "
                       />
                     </template>
                   </v-stepper-item>
@@ -280,26 +232,12 @@
                     <v-stepper-window-item :value="index + 1">
                       <p>{{ approved.type }}</p>
                       <div class="border border-gray-300 w-fit">
-                        <!-- <VueSignaturePad
-                          :ref="
-                            el =>
-                              (signatureRefs[index] = el as CanvasSignatureRef)
-                          "
-                          height="150px"
-                          width="350px"
-                          :max-width="options.maxWidth"
-                          :min-width="options.minWidth"
-                          :options="{
-                            penColor: options.penColor,
-                            backgroundColor: options.backgroundColor,
-                          }"
-                          disabled
-                          v-if="approved.signature === null"
-                        /> -->
-                        <!-- :disabled="approved.name !== approval?.name" -->
                         <div
                           class="h-[150px] w-[350px]"
-                          v-if="approved.signature === null"
+                          v-if="
+                            approved.signature === null ||
+                            approved.status === 'Rejected'
+                          "
                         ></div>
                         <img
                           :src="approved.signature"
@@ -322,20 +260,25 @@
                       ></v-text-field>
                       <div
                         class="flex w-full gap-2 mt-4"
-                        v-show="approved.signature === null"
+                        v-show="
+                          approved.signature === null &&
+                          approval?.status !== 'Rejected'
+                        "
                       >
                         <v-btn
                           color="#facc15"
                           class="text-white flex-1"
                           size="small"
                           @click="setIsOpen(index, approved)"
+                          v-if="approved.email === emailToken"
                         >
                           Approval
                         </v-btn>
                         <v-btn
                           size="small"
                           variant="outlined"
-                          :disabled="approved.name !== approval?.name"
+                          @click="rejectApproved"
+                          v-if="approved.email === emailToken"
                         >
                           Reject
                         </v-btn>
@@ -518,7 +461,7 @@ try {
 const id = ref<string>(decodedToken ? decodedToken.id : '')
 const emailToken = ref<string>(decodedToken ? decodedToken.email : '')
 
-const { getAccReq, accReq, approveAccReq } = useAccReqApi()
+const { getAccReq, accReq, approveAccReq, resMessage } = useAccReqApi()
 const information = ref<AccReq[]>([])
 const approvedInformation = ref<ApprovedInformation[]>([])
 const selectedServiceTypes = ref<string[]>([])
@@ -590,8 +533,26 @@ const signature_approvedSave = async (
     }
 
     await approveAccReq(data)
-    // location.reload()
-    toast.success('Request approved')
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const rejectApproved = async () => {
+  try {
+    const data: approved = {
+      acc_req_id: approvedInformation.value[approvalIndex.value].acc_req_id,
+      name: approvedInformation.value[approvalIndex.value].name,
+      email: approvedInformation.value[approvalIndex.value].email,
+      status: status_type.rejected,
+      signature: '',
+      remark: '',
+      date: new Date().toISOString(),
+    }
+
+    await approveAccReq(data).then(() => {
+      toast.success(resMessage)
+    })
   } catch (error) {
     console.error(error)
   }

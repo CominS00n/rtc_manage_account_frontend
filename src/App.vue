@@ -7,25 +7,31 @@
       <template v-if="LeftSidebarComponent">
         <aside>
           <transition>
-            <component :is="LeftSidebarComponent" :key="$route.path" />
+            <component :is="LeftSidebarComponent" :key="route.path" />
           </transition>
         </aside>
       </template>
     </router-view>
     <main>
-      <div class="content-body h-full overflow-y-auto rounded-md">
-        <router-view v-slot="{ Component }" class="main-view">
-          <transition name="slide-fade" mode="out-in">
-            <component :is="Component" :key="$route.path"></component>
-          </transition>
-        </router-view>
-      </div>
+      <v-container class="content-body h-full overflow-y-auto rounded-md">
+        <v-col>
+          <div >
+            <router-view v-slot="{ Component }" class="main-view">
+              <transition name="slide-fade" mode="out-in">
+                <component :is="Component" :key="route.path"></component>
+              </transition>
+            </router-view>
+          </div>
+        </v-col>
+      </v-container>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
+
+const route = useRoute()
 </script>
 
 <style lang="css" scoped>
@@ -46,7 +52,10 @@ aside {
   min-width: 280px;
   /* height: 100%; */
   background: white;
+  /* border-right: 2px solid black; */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 1rem;
+  z-index: 100;
   /* @apply hidden xl:block ; */
 }
 
@@ -56,7 +65,7 @@ aside {
 
 main {
   flex: 1;
-  padding: 1rem;
+  /* padding: 1rem; */
   height: 100vh;
   overflow: hidden;
   /* border: 2px solid blue; */

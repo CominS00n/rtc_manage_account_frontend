@@ -48,7 +48,7 @@
                   >{{ item.status }}</v-chip
                 >
               </td>
-              <td>
+              <td class="fixed-column">
                 <router-link
                   :to="{ name: 'ViewRequest', params: { id: item.id } }"
                 >
@@ -85,10 +85,20 @@ const headers = ref([
   { key: 'account_type', title: 'Account Type' },
   { key: 'user_type', title: 'User Type' },
   { key: 'status', title: 'Status' },
-  { key: 'actions', title: 'Actions' },
+  // { key: 'actions', title: 'Actions' },
 ])
 
 onMounted(async () => {
   await getAllAccReqs()
 })
 </script>
+
+<style scoped>
+.fixed-column {
+  position: sticky;
+  right: 0;
+  z-index: 10;
+  width: 3rem;
+  background-color: white;
+}
+</style>

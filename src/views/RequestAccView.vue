@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto flex flex-col gap-y-4">
+  <div class="flex flex-col">
     <h1 class="font-bold text-2xl py-3">RTC Request Account</h1>
     <v-form
       @submit.prevent="sendRequest"

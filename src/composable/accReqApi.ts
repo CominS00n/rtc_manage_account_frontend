@@ -8,6 +8,7 @@ axios.defaults.baseURL = 'http://localhost:8000/api/v2'
 export const useAccReqApi = () => {
   const allAccReqs = ref<AccReq[]>([])
   const accReq = ref<AccReq[]>([])
+  const resMessage = ref<string>('')
   const getAllAccReqs = async () => {
     try {
       const response = await axios.get('/account_request')
@@ -41,12 +42,14 @@ export const useAccReqApi = () => {
 
   const approveAccReq = async (data: approved) => {
     try {
-      const response = await axios({
+      const res = await axios({
         method: 'put',
         url: '/account_request',
         data: data,
       })
-      console.log(response)
+      resMessage.value = res.data.message
+      location.reload()
+      // console.log(response)
     } catch (error) {
       console.log(error)
     }
@@ -58,5 +61,6 @@ export const useAccReqApi = () => {
     approveAccReq,
     getAllAccReqs,
     allAccReqs,
+    resMessage
   }
 }
