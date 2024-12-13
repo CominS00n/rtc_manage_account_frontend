@@ -1,18 +1,19 @@
-import axios from 'axios'
+// import axios from 'axios'
+import api from '.'
 
 export default function useLoginApi() {
   const login = async (username: string, password: string) => {
     // console.log(username, password)
     try {
-      await axios.post(
-        'http://localhost:8000/api/v2/login',
+      await api.post(
+        '/login',
         {
           username: username,
           password: password,
         },
         {
           withCredentials: true,
-          
+
         },
       )
     } catch (error) {

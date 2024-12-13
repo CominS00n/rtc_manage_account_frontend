@@ -1,9 +1,8 @@
-import axios from 'axios'
+// import axios from 'axios'
+import api from '.'
 import { ref } from 'vue'
 import type { AccReq } from '@/types/accReqs'
 import type { sendReq, approved } from '@/types/sendReq'
-
-axios.defaults.baseURL = 'http://localhost:8000/api/v2'
 
 export const useAccReqApi = () => {
   const allAccReqs = ref<AccReq[]>([])
@@ -11,7 +10,7 @@ export const useAccReqApi = () => {
   const resMessage = ref<string>('')
   const getAllAccReqs = async () => {
     try {
-      const response = await axios.get('/account_request')
+      const response = await api.get('/account_request')
       allAccReqs.value = response.data.data
     } catch (error) {
       console.log(error)
@@ -19,7 +18,7 @@ export const useAccReqApi = () => {
   }
   const getAccReq = async (id: string) => {
     try {
-      const response = await axios.get('/account_request/' + id)
+      const response = await api.get('/account_request/' + id)
       accReq.value = response.data.data
     } catch (error) {
       console.log(error)
@@ -29,7 +28,7 @@ export const useAccReqApi = () => {
   const postAccReq = async (result: sendReq) => {
     try {
       console.log(result)
-      const response = await axios({
+      const response = await api({
         method: 'post',
         url: '/account_request/',
         data: result,
@@ -42,7 +41,7 @@ export const useAccReqApi = () => {
 
   const approveAccReq = async (data: approved) => {
     try {
-      const res = await axios({
+      const res = await api({
         method: 'put',
         url: '/account_request',
         data: data,
@@ -61,6 +60,6 @@ export const useAccReqApi = () => {
     approveAccReq,
     getAllAccReqs,
     allAccReqs,
-    resMessage
+    resMessage,
   }
 }

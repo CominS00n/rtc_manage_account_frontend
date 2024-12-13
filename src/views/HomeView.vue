@@ -2,7 +2,7 @@
   <div>
     <h1 class="font-bold text-2xl py-3">Account Requests</h1>
     <v-card>
-      <v-card-text>
+      <v-card-text class="hidden md:block">
         <div class="flex justify-end">
           <v-text-field
             v-model="search"
@@ -52,12 +52,64 @@
                 <router-link
                   :to="{ name: 'ViewRequest', params: { id: item.id } }"
                 >
-                  <eye-icon />
+                  <document-download />
                 </router-link>
               </td>
             </tr>
           </template>
         </v-data-table>
+      </v-card-text>
+
+      <v-card-text class="block md:hidden">
+        <v-list lines="one" :items="allAccReqs">
+          <v-list-item v-for="listItem in allAccReqs" :key="listItem.id">
+            <template #prepend>
+              <v-list-item-avatar class="mr-4">
+                <document-icon
+                  :color="
+                    listItem.status === 'Approved'
+                      ? 'green'
+                      : listItem.status === 'Rejected'
+                        ? 'red'
+                        : ''
+                  "
+                />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ listItem.full_name }}</v-list-item-title>
+                <v-list-item-subtitle>
+                  <v-chip
+                    :color="
+                      listItem.status === 'Approved'
+                        ? 'green'
+                        : listItem.status === 'Rejected'
+                          ? 'red'
+                          : ''
+                    "
+                    size="x-small"
+                  >
+                    {{ listItem.status }}
+                  </v-chip>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle
+                  >{{ listItem.position }}
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  server: {{ listItem.system.join(', ') }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+            <template #append>
+              <v-list-item-action>
+                <router-link
+                  :to="{ name: 'ViewRequest', params: { id: listItem.id } }"
+                >
+                  <document-download />
+                </router-link>
+              </v-list-item-action>
+            </template>
+          </v-list-item>
+        </v-list>
       </v-card-text>
     </v-card>
   </div>
@@ -68,7 +120,8 @@ import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAccReqApi } from '@/composable/accReqApi'
 import nt_icon from '@/components/icon/nt_icon.vue'
-import eyeIcon from '@/assets/logo/icons/eyeIcon.vue'
+import documentDownload from '@/assets/logo/icons/documents/documentDownload.vue'
+import documentIcon from '@/assets/logo/icons/documents/documentIcon.vue'
 
 const { getAllAccReqs, allAccReqs } = useAccReqApi()
 

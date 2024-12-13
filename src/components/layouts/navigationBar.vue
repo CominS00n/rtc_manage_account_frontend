@@ -54,7 +54,7 @@
   </nav>
   <transition name="slide-fade" mode="out-in">
     <div
-      class="grid grid-cols-4 gap-y-2 h-[360px] overflow-hidden"
+      class="grid grid-cols-2 sm:grid-cols-4 gap-y-2 h-[400px] overflow-hidden"
       v-if="isOpen"
     >
       <ul

@@ -18,8 +18,8 @@
           </template>
         </v-btn>
       </div>
-      <v-card-text class="flex flex-col items-center justify-center">
-        <div ref="pdfContent" class="pdf-content">
+      <v-card-text class="flex flex-col items-center">
+        <div ref="pdfContent" class="pdf-content scale-50 sm:scale-75 md:scale-100" >
           <div class="content">
             <div class="detail flex justify-between items-center">
               <img
@@ -216,7 +216,7 @@ import html2canvas from 'html2canvas-pro'
 import jsPDF from 'jspdf'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
-import documentDownload from '@/assets/logo/icons/documentDownload.vue'
+import documentDownload from '@/assets/logo/icons/documents/documentDownload.vue'
 
 import { useAccReqApi } from '@/composable/accReqApi'
 import type { AccReq } from '@/types/accReqs'
