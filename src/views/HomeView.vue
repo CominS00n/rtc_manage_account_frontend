@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1 class="font-bold text-2xl py-3">Account Requests</h1>
+
     <v-card>
       <v-card-text class="hidden md:block">
         <div class="flex justify-end">
@@ -49,11 +50,18 @@
                 >
               </td>
               <td class="fixed-column">
-                <router-link
-                  :to="{ name: 'ViewRequest', params: { id: item.id } }"
-                >
-                  <document-download />
-                </router-link>
+                <div class="flex justify-center gap-x-2">
+                  <router-link
+                    :to="{ name: 'ViewRequest', params: { id: item.id } }"
+                  >
+                    <document-text />
+                  </router-link>
+                  <router-link
+                    :to="{ name: 'ViewRequest', params: { id: item.id } }"
+                  >
+                    <document-download />
+                  </router-link>
+                </div>
               </td>
             </tr>
           </template>
@@ -122,6 +130,7 @@ import { useAccReqApi } from '@/composable/accReqApi'
 import nt_icon from '@/components/icon/nt_icon.vue'
 import documentDownload from '@/assets/logo/icons/documents/documentDownload.vue'
 import documentIcon from '@/assets/logo/icons/documents/documentIcon.vue'
+import documentText from '@/assets/logo/icons/documents/documentText.vue'
 
 const { getAllAccReqs, allAccReqs } = useAccReqApi()
 

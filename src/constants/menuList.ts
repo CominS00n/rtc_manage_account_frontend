@@ -35,4 +35,10 @@ export const menuList = [
     icon: "command-line",
     role: 'admin'
   },
+  {
+    title: "settings",
+    link: "/settings",
+    icon: "cog-6-tooth",
+    role: 'admin'
+  },
 ]

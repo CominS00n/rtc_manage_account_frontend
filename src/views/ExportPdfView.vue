@@ -9,7 +9,6 @@
     <v-card>
       <div class="p-4">
         <v-btn @click="generatePdf" rounded>
-          <!-- color="#facc15" -->
           <template #prepend>
             <document-download />
           </template>
@@ -19,7 +18,10 @@
         </v-btn>
       </div>
       <v-card-text class="flex flex-col items-center">
-        <div ref="pdfContent" class="pdf-content scale-50 sm:scale-75 md:scale-100" >
+        <div
+          ref="pdfContent"
+          class="pdf-content scale-50 sm:scale-75 md:scale-100"
+        >
           <div class="content">
             <div class="detail flex justify-between items-center">
               <img
@@ -67,7 +69,7 @@
               <div class="grid grid-cols-2 gap-y-2">
                 <label class="flex items-center gap-2">
                   <span class="font-bold">Request type: </span>
-                  <input type="checkbox" class="border" checked disabled />
+                  <tick-icon />
                   <p class="capitalize">{{ data?.req_type }}</p>
                 </label>
                 <p>
@@ -99,12 +101,14 @@
                   <ul class="ml-2">
                     <li v-for="item in data?.service_type" :key="item">
                       <span class="inline-flex gap-2">
-                        <input
+                        <!-- <input
                           type="checkbox"
                           class="border"
                           checked
                           disabled
-                        />
+                        /> -->
+                        <tick-icon />
+
                         <p class="capitalize">{{ item }}</p>
                       </span>
                     </li>
@@ -115,12 +119,7 @@
                   <ul class="ml-2">
                     <li v-for="item in data?.user_type" :key="item">
                       <span class="inline-flex gap-2">
-                        <input
-                          type="checkbox"
-                          class="border"
-                          checked
-                          disabled
-                        />
+                        <tick-icon />
                         <p class="capitalize">{{ item }}</p>
                       </span>
                     </li>
@@ -217,6 +216,7 @@ import jsPDF from 'jspdf'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
 import documentDownload from '@/assets/logo/icons/documents/documentDownload.vue'
+import tickIcon from '@/assets/logo/icons/tickIcon.vue'
 
 import { useAccReqApi } from '@/composable/accReqApi'
 import type { AccReq } from '@/types/accReqs'
