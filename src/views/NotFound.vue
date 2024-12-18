@@ -14,5 +14,5 @@ import { useRouter } from 'vue-router'
 import icon from '@/components/icon/nt_icon.vue'
 
 const router = useRouter()
-const back = () => router.go(-1)
+const back = () => router.push({ name: 'Default'})
 </script>

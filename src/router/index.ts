@@ -66,6 +66,14 @@ const routes = [
           title: 'User Audit',
         },
       },
+      {
+        path: '/settings',
+        name: 'Settings',
+        component: () => import('../views/settingView.vue'),
+        meta: {
+          title: 'Settings',
+        },
+      },
     ],
   },
   {
@@ -87,7 +95,7 @@ const routes = [
 
   {
     path: '/:catchAll(.*)',
-    name: '404 Not Found',
+    name: 'NotFound',
     component: () => import('@/views/NotFound.vue'),
     meta: {
       title: '404 Not Found',

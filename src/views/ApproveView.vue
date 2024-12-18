@@ -1,5 +1,17 @@
 <template>
-  <div class="px-4 h-screen overflow-y-auto">
+  <div
+    v-show="information.length <= 0"
+    class="flex items-center justify-center fixed h-screen w-screen top-0 left-0"
+  >
+    <v-card class="h-[200px] w-[400px] flex content-center">
+      <v-card-text class="flex flex-col items-center justify-center">
+        <img src="/info-circle.svg" class="w-12 h-12" />
+        <h1 class="font-bold text-2xl">Oops!</h1>
+        <p>Not Found Item</p>
+      </v-card-text>
+    </v-card>
+  </div>
+  <div class="px-4 h-screen overflow-y-auto" v-show="information.length > 0">
     <h1 class="font-bold text-2xl py-3 px-4">Approve RTC Request Account</h1>
     <div
       class="flex flex-col xl:flex-row gap-x-6 gap-y-6 overflow-y-auto"
@@ -395,6 +407,7 @@ import { VueSignaturePad } from '@selemondev/vue3-signature-pad'
 import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
 
 const toast = useToast()
+const route = useRoute()
 
 const isOpen = ref<boolean>(false)
 const approvalIndex = ref<number>(0)
@@ -447,8 +460,6 @@ interface approval_type {
   updated_at?: string
 }
 
-const route = useRoute()
-
 const token = ref(route.params.token as string)
 let decodedToken: { id: string; email: string } | null = null
 
@@ -490,7 +501,6 @@ onMounted(async () => {
       status: accReq.status,
     }
   })
-  console.log(approvedInformation.value)
   selectedServiceTypes.value = information.value[0]?.service_type || []
   selectedUserTypes.value = information.value[0]?.user_type || []
   approvedInformation.value.sort((a, b) =>
