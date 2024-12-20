@@ -3,7 +3,6 @@ import api from '.'
 
 export default function useLoginApi() {
   const login = async (username: string, password: string) => {
-    // console.log(username, password)
     try {
       await api.post(
         '/login',
@@ -13,7 +12,6 @@ export default function useLoginApi() {
         },
         {
           withCredentials: true,
-
         },
       )
     } catch (error) {

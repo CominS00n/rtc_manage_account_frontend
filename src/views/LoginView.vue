@@ -21,7 +21,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-// import useLoginApi from '@/composable/loginApi'
+import useLoginApi from '@/composable/loginApi'
 
 import nt_card from '@/components/cards/nt_card.vue'
 
@@ -30,11 +30,11 @@ const router = useRouter()
 const username = ref<string>('')
 const password = ref<string>('')
 
-// const { login } = useLoginApi()
+const { login } = useLoginApi()
 
 const handleLogin = async () => {
   // console.log(username, password)
-  // await login(username.value, password.value)
+  await login(username.value, password.value)
   alert('Login success')
   router.push('/')
 }
