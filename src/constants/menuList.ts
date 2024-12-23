@@ -3,7 +3,7 @@ export const menuList = [
     title: 'home',
     link: '/',
     icon: 'home',
-    role: 'guest'
+    role: 'reqAccountRead'
   },
   {
     title: 'request account',
@@ -15,30 +15,30 @@ export const menuList = [
     title: 'user management',
     link: '/user-management',
     icon: 'user-group',
-    role: 'admin'
+    role: 'userRead'
   },
   {
     title: "activity logs",
     link: "/activity-log",
     icon: "document-text",
-    role: 'admin'
+    role: 'logRead'
   },
   {
     title: "roles",
     link: "/roles",
     icon: "shield-check",
-    role: 'admin'
+    role: 'roleRead'
   },
   {
     title: "user audit",
     link: "/user-audit",
     icon: "command-line",
-    role: 'admin'
+    role: 'userUpdate'
   },
   {
     title: "settings",
     link: "/settings",
     icon: "cog-6-tooth",
-    role: 'admin'
+    role: 'allowAll'
   },
 ]

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="font-bold text-2xl py-3">Account Requests</h1>
-
+    Test: {{ tt }}
     <v-card>
       <v-card-text class="hidden md:block">
         <div class="flex justify-end">
@@ -124,7 +124,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAccReqApi } from '@/composable/accReqApi'
 import nt_icon from '@/components/icon/nt_icon.vue'
@@ -149,6 +149,8 @@ const headers = ref([
   { key: 'status', title: 'Status' },
   // { key: 'actions', title: 'Actions' },
 ])
+
+const tt = computed(() => localStorage.getItem('user-store'))
 
 onMounted(async () => {
   await getAllAccReqs()

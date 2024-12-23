@@ -20,12 +20,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 import useLoginApi from '@/composable/loginApi'
 
 import nt_card from '@/components/cards/nt_card.vue'
 
 const router = useRouter()
+const userStore = useUserStore()
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -33,9 +35,13 @@ const password = ref<string>('')
 const { login } = useLoginApi()
 
 const handleLogin = async () => {
-  // console.log(username, password)
-  await login(username.value, password.value)
-  alert('Login success')
+  await login(username.value, password.value).then(res => {
+    if (res) {
+      console.log(res.permissions)
+      userStore.setPermissions(res.permissions)
+      userStore.setUser(res.user)
+    }
+  })
   router.push('/')
 }
 

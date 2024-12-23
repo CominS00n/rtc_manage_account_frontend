@@ -4,7 +4,7 @@ import api from '.'
 export default function useLoginApi() {
   const login = async (username: string, password: string) => {
     try {
-      await api.post(
+      const response = await api.post(
         '/login',
         {
           username: username,
@@ -14,30 +14,28 @@ export default function useLoginApi() {
           withCredentials: true,
         },
       )
+      // console.log(response.data)
+      return response.data.data
     } catch (error) {
       console.log(error)
       return error
     }
   }
-  return { login }
-}
 
-// const handleLogin = async () => {
-//   try {
-//     const response = await axios.post(
-//       'http://localhost:8000/api/v1/login',
-//       {
-//         username: username.value,
-//         password: password.value,
-//       },
-//       { withCredentials: true },
-//     ).then((res) => {
-//       console.log(res)
-//     })
-//     console.log(response.data)
-//     alert('Login Success' + response.data.message)
-//   } catch (error) {
-//     alert('Error' + error)
-//     console.log(error)
-//   }
-// }
+  const logout = async () => {
+    try {
+      await api.post(
+        '/logout',
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      // console.log(response.data)
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+  return { login, logout }
+}

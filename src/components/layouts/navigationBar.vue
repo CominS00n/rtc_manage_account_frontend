@@ -5,7 +5,7 @@
         <img src="/src/assets/logo/ntlogo.png" alt="" class="h-16" />
       </li>
       <li
-        v-for="menu in menuList"
+        v-for="menu in filteredMenuList"
         :key="menu.title"
         :class="
           router.currentRoute.value.path === menu.link
@@ -22,7 +22,10 @@
         </router-link>
       </li>
     </ul>
-    <router-link to="/login">Login </router-link>
+    <div>
+      <router-link to="/login" v-if="userInfo === ''">Login </router-link>
+      <button v-else @click="headleLogout">logout</button>
+    </div>
   </nav>
 
   <nav class="mobile-menu xl:hidden">
@@ -58,7 +61,7 @@
       v-if="isOpen"
     >
       <ul
-        v-for="(group, index) in splitMenuList(menuList, 5)"
+        v-for="(group, index) in splitMenuList(filteredMenuList, 5)"
         :key="index"
         class="space-y-1 block mt-6"
       >
@@ -93,33 +96,51 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { menuList } from '@/constants/menuList'
+import { useUserStore } from '@/stores/user'
+import useLoginApi from '@/composable/loginApi'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
 
 const router = useRouter()
 const isOpen = ref(false)
+const { logout } = useLoginApi()
 
-interface Menu {
-  title: string
-  link: string
-  icon: string
-}
+// Get user's role from the store
+const userStore = useUserStore()
+const userPermissions = ref(userStore.permissions)
+const userInfo = ref(userStore.user)
 
-const splitMenuList = (list: Menu[], size: number): Menu[][] => {
-  const result: Menu[][] = []
+// Filter the menu list based on the user's role
+const filteredMenuList = computed(() =>
+  menuList.filter(
+    menu =>
+      userPermissions.value.includes(menu.role) ||
+      menu.role === 'guest' ||
+      userPermissions.value.includes('allowAll'),
+  ),
+)
+
+const splitMenuList = (list: typeof menuList, size: number) => {
+  const result: (typeof menuList)[] = []
   for (let i = 0; i < list.length; i += size) {
     result.push(list.slice(i, i + size))
   }
   return result
 }
+
+const headleLogout = async () => {
+  userStore.setPermissions([])
+  await logout
+  location.reload()
+}
 </script>
 
 <style scoped>
 .menu-activate {
-  background-color:  #facc15;
+  background-color: #facc15;
   border-radius: 6px;
   /* @apply bg-yellow-400 rounded-md; */
 }
