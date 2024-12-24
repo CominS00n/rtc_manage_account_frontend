@@ -29,6 +29,7 @@
               variant="outlined"
               density="compact"
               :rules="inputDefaultRules"
+              validate-on="submit"
             ></v-text-field>
             <v-text-field
               v-model="company"
@@ -37,6 +38,7 @@
               variant="outlined"
               density="compact"
               :rules="inputDefaultRules"
+              validate-on="submit"
             ></v-text-field>
             <v-text-field
               v-model="division"
@@ -45,6 +47,7 @@
               variant="outlined"
               density="compact"
               :rules="inputDefaultRules"
+              validate-on="submit"
             ></v-text-field>
             <v-text-field
               v-model="telephone"
@@ -53,6 +56,7 @@
               variant="outlined"
               density="compact"
               :rules="inputDefaultRules"
+              validate-on="submit"
             ></v-text-field>
             <v-text-field
               v-model="email"
@@ -61,6 +65,7 @@
               variant="outlined"
               density="compact"
               :rules="emailRules"
+              validate-on="submit"
             ></v-text-field>
           </div>
         </v-card-text>
@@ -108,6 +113,7 @@
                 persistent-placeholder
                 :rules="dateRules"
                 v-model="request_date"
+                validate-on="submit"
               ></v-date-input>
             </div>
             <div>
@@ -120,6 +126,7 @@
                 chips
                 multiple
                 :rules="comboboxRules"
+                validate-on="submit"
               ></v-combobox>
             </div>
           </div>
@@ -155,6 +162,7 @@
                 placeholder="DD/MM/YYYY"
                 persistent-placeholder
                 :rules="dateRules"
+                validate-on="submit"
               ></v-date-input>
             </div>
             <div id="service_type">
@@ -196,6 +204,7 @@
                     :disabled="!otherService"
                     :hidden="!otherService"
                     class="ml-3 min-w-[200px] max-w-[400px]"
+                    validate-on="submit"
                   ></v-combobox>
                 </label>
               </div>
@@ -260,6 +269,7 @@
                     density="compact"
                     hide-details
                     :rules="inputDefaultRules"
+                    validate-on="submit"
                   ></v-text-field>
                   <hr class="bg-gray-400 h-10 border mx-2" />
                   <v-text-field
@@ -269,7 +279,9 @@
                     variant="outlined"
                     density="compact"
                     hide-details
+                    type="email"
                     :rules="emailRules"
+                    validate-on="submit"
                   ></v-text-field>
                   <v-btn
                     variant="text"
@@ -390,31 +402,29 @@ const implementor = ref<string | null>(null)
 
 const error = ref(false)
 
+// Scroll to error
+const scrollToError = (id: string) => {
+  const element = document.getElementById(id)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' })
+    toast.error('Please fill in all required fields')
+  }
+}
+
 const validateSelection = () => {
   if (request_type.value.length === 0) {
     error.value = true
-    const requestTypeElement = document.getElementById('request_type')
-    const requestHeaderElement = document.getElementById('request-header')
-    if (requestTypeElement) {
-      requestTypeElement.scrollIntoView({ behavior: 'smooth' })
-      requestHeaderElement?.style.setProperty('color', '#b00020')
-    }
+    scrollToError('request_type')
     return false
   }
   if (service_type.value.length === 0) {
     error.value = true
-    const serviceTypeElement = document.getElementById('service_type')
-    if (serviceTypeElement) {
-      serviceTypeElement.scrollIntoView({ behavior: 'smooth' })
-    }
+    scrollToError('service_type')
     return false
   }
   if (user_type.value.length === 0) {
     error.value = true
-    const userTypeElement = document.getElementById('user_type')
-    if (userTypeElement) {
-      userTypeElement.scrollIntoView({ behavior: 'smooth' })
-    }
+    scrollToError('user_type')
     return false
   }
 

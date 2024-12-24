@@ -112,10 +112,11 @@ const handleLogout = async () => {
 } */
 
 aside {
-  min-width: 280px;
+  min-width: 100px;
   /* height: 100%; */
   background: white;
   /* border-right: 2px solid black; */
+  /* background: #222; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   z-index: 100;

@@ -1,7 +1,7 @@
 <template>
-  <nav class="hidden xl:flex flex-col justify-between h-full w-[280px]">
+  <nav class="hidden xl:flex flex-col justify-between h-full w-[230px] bg-inherit">
     <ul class="space-y-2">
-      <li class="flex justify-center mt-6 mb-10">
+      <li class="flex justify-center mt-6 mb-10 ">
         <img src="/ntlogo.ico" alt="" class="h-16" />
       </li>
       <li
