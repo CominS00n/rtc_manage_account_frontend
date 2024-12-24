@@ -8,9 +8,9 @@
       class="flex flex-col gap-y-4"
     >
       <v-card>
-        <v-card-title class="font-weight-bold m-2"
-          >User Information</v-card-title
-        >
+        <v-card-title class="font-weight-bold m-2">
+          User Information <span class="text-red-500">*</span>
+        </v-card-title>
         <v-card-text>
           <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6 items-center">
             <v-text-field
@@ -20,6 +20,7 @@
               variant="outlined"
               density="compact"
               :rules="inputDefaultRules"
+              validate-on="submit"
             ></v-text-field>
             <v-text-field
               v-model="position"
@@ -65,23 +66,36 @@
         </v-card-text>
       </v-card>
 
-      <v-card>
-        <v-card-title class="font-weight-bold m-2"
-          >Request Information</v-card-title
-        >
+      <v-card id="request_type">
+        <v-card-title class="font-weight-bold m-2">
+          Request Information <span class="text-red-500">*</span>
+        </v-card-title>
         <v-card-text>
           <div class="grid grid-cols-2 gap-x-6 gap-y-3">
-            <div class="flex gap-2 flex-wrap content-start">
-              Request Type :
-              <label class="flex gap-2" v-for="type in req_types" :key="type">
-                <input
-                  type="checkbox"
-                  class="checkbox checkbox-sm border"
-                  :value="type"
-                  v-model="request_type"
-                />
-                <span class="capitalize">{{ type }}</span>
-              </label>
+            <div id="request_type">
+              <div
+                class="flex gap-2 flex-wrap content-start"
+                :class="
+                  error && request_type.length === 0 ? 'text-[#b00020]' : ''
+                "
+              >
+                <p>Request Type :</p>
+                <label class="flex gap-2" v-for="type in req_types" :key="type">
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-sm border"
+                    :value="type"
+                    v-model="request_type"
+                  />
+                  <span class="capitalize">{{ type }}</span>
+                </label>
+              </div>
+              <span
+                v-if="error && request_type.length === 0"
+                class="text-[#b00020] text-xs"
+              >
+                Please select at least one request type.
+              </span>
             </div>
             <div>
               <v-date-input
@@ -113,9 +127,10 @@
       </v-card>
 
       <v-card>
-        <v-card-title class="font-weight-bold m-2"
-          >Requisition Information</v-card-title
-        >
+        <v-card-title class="font-weight-bold m-2">
+          Requisition Information
+          <span class="text-red-500">*</span>
+        </v-card-title>
         <v-card-text>
           <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6 mb-3">
             <v-select
@@ -125,6 +140,8 @@
               density="compact"
               variant="outlined"
               clearable
+              :rules="[v => !!v || 'You must select an account type']"
+              validate-on="submit"
             ></v-select>
             <div>
               <v-date-input
@@ -140,64 +157,91 @@
                 :rules="dateRules"
               ></v-date-input>
             </div>
-            <div class="flex gap-4 flex-wrap items-center content-start">
-              <p class="w-full">Service Type :</p>
-              <label
-                class="flex gap-2"
-                v-for="type in service_types"
-                :key="type"
+            <div id="service_type">
+              <div
+                class="flex gap-4 flex-wrap items-center content-start m-2"
+                :class="
+                  error && service_type.length === 0 ? 'text-[#b00020]' : ''
+                "
               >
-                <input
-                  type="checkbox"
-                  class="checkbox checkbox-sm border"
-                  v-model="service_type"
-                  :value="type"
-                />
-                <span class="capitalize">{{ type }}</span>
-              </label>
-              <label class="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  class="checkbox checkbox-sm border"
-                  v-model="otherService"
-                />
-                <span class="capitalize"> Other </span>
-                <v-combobox
-                  v-model="otherServiceType"
-                  id="otherService"
-                  variant="underlined"
-                  density="compact"
-                  chips
-                  multiple
-                  hide-details
-                  :disabled="!otherService"
-                  :hidden="!otherService"
-                  class="ml-3 min-w-[200px] max-w-[400px]"
-                ></v-combobox>
-              </label>
+                <p class="w-full">Service Type :</p>
+                <label
+                  class="flex gap-2"
+                  v-for="type in service_types"
+                  :key="type"
+                >
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-sm border"
+                    v-model="service_type"
+                    :value="type"
+                  />
+                  <span class="capitalize">{{ type }}</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-sm border"
+                    v-model="otherService"
+                  />
+                  <span class="capitalize"> Other </span>
+                  <v-combobox
+                    v-model="otherServiceType"
+                    id="otherService"
+                    variant="underlined"
+                    density="compact"
+                    chips
+                    multiple
+                    hide-details
+                    :disabled="!otherService"
+                    :hidden="!otherService"
+                    class="ml-3 min-w-[200px] max-w-[400px]"
+                  ></v-combobox>
+                </label>
+              </div>
+              <span
+                v-if="error && service_type.length === 0"
+                class="text-[#b00020] text-xs"
+              >
+                Please select at least one request type.
+              </span>
             </div>
-            <div class="flex gap-4 flex-wrap content-start">
-              <p class="w-full">User Type :</p>
-              <label
-                class="flex items-center gap-2"
-                v-for="type in user_types"
-                :key="type"
+            <div id="user_type">
+              <div
+                class="flex gap-4 flex-wrap content-start"
+                :class="error && user_type.length === 0 ? 'text-[#b00020]' : ''"
               >
-                <input
-                  type="checkbox"
-                  class="checkbox checkbox-sm border"
-                  v-model="user_type"
-                  :value="type"
-                />
-                <span class="capitalize">{{ type }}</span>
-              </label>
+                <p class="w-full">User Type :</p>
+                <label
+                  class="flex items-center gap-2"
+                  v-for="type in user_types"
+                  :key="type"
+                >
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-sm border"
+                    v-model="user_type"
+                    :value="type"
+                  />
+                  <span class="capitalize">{{ type }}</span>
+                </label>
+              </div>
+              <span
+                v-if="error && user_type.length === 0"
+                class="text-[#b00020] text-xs"
+              >
+                Please select at least one request type.
+              </span>
             </div>
           </div>
         </v-card-text>
       </v-card>
 
       <v-card>
-        <v-card-title class="font-weight-bold m-2">Approval</v-card-title>
+        <v-card-title class="font-weight-bold m-2">
+          Approval
+          <span class="text-red-500">*</span>
+        </v-card-title>
         <v-card-text>
           <div class="grid lg:grid-cols-2 gap-y-3 lg:gap-x-6">
             <div>
@@ -253,6 +297,8 @@
                 density="compact"
                 variant="outlined"
                 clearable
+                :rules="[v => !!v || 'You must select an account type']"
+                validate-on="submit"
               >
               </v-select>
             </div>
@@ -266,7 +312,6 @@
         <v-btn variant="outlined">Cancel</v-btn>
       </div>
     </v-form>
-
     <router-view />
   </div>
 </template>
@@ -343,8 +388,51 @@ watch(otherServiceType, (newValue, oldValue) => {
 const headOfReq = ref<{ name: string; type: string; email: string }[]>([])
 const implementor = ref<string | null>(null)
 
+const error = ref(false)
+
+const validateSelection = () => {
+  if (request_type.value.length === 0) {
+    error.value = true
+    const requestTypeElement = document.getElementById('request_type')
+    const requestHeaderElement = document.getElementById('request-header')
+    if (requestTypeElement) {
+      requestTypeElement.scrollIntoView({ behavior: 'smooth' })
+      requestHeaderElement?.style.setProperty('color', '#b00020')
+    }
+    return false
+  }
+  if (service_type.value.length === 0) {
+    error.value = true
+    const serviceTypeElement = document.getElementById('service_type')
+    if (serviceTypeElement) {
+      serviceTypeElement.scrollIntoView({ behavior: 'smooth' })
+    }
+    return false
+  }
+  if (user_type.value.length === 0) {
+    error.value = true
+    const userTypeElement = document.getElementById('user_type')
+    if (userTypeElement) {
+      userTypeElement.scrollIntoView({ behavior: 'smooth' })
+    }
+    return false
+  }
+
+  error.value = false
+  return true
+}
+
 const sendRequest = async () => {
   if (!formRef.value.validate()) {
+    toast.error('Please fill in all required fields')
+    return
+  }
+
+  if (!validateSelection()) {
+    return
+  }
+
+  if (valid.value === false) {
     toast.error('Please fill in all required fields')
     return
   }

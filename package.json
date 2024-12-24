@@ -19,7 +19,7 @@
     "@vueup/vue-quill": "^1.2.0",
     "@vueuse/core": "^12.1.0",
     "axios": "^1.7.7",
-    "daisyui": "^4.12.14",
+    "daisyui": "^4.12.22",
     "html2canvas-pro": "^1.5.8",
     "jsonwebtoken": "^9.0.2",
     "jspdf": "^2.5.2",
