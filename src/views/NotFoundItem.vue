@@ -3,10 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import {  onUnmounted } from 'vue'
+import { onUnmounted } from 'vue'
 
 onUnmounted(() => {
   alert('Unmounted')
 })
-
 </script>

@@ -35,17 +35,19 @@ const password = ref<string>('')
 const { login } = useLoginApi()
 
 const handleLogin = async () => {
-  await login(username.value, password.value).then(res => {
-    if (res) {
-      console.log(res.permissions)
-      userStore.setPermissions(res.permissions)
-      userStore.setUser(res.name)
-    }
-  })
-  router.push('/').then(() => {
-    location.reload()
-  })
-
+  try {
+    await login(username.value, password.value).then(res => {
+      if (res) {
+        userStore.setPermissions(res.permissions)
+        userStore.setUser(res.name)
+      }
+    })
+    router.push('/').then(() => {
+      location.reload()
+    })
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 const handleBack = () => router.go(-1)

@@ -48,5 +48,3 @@ app.use(router)
 app.use(Toast, toastOptions)
 
 app.mount('#app')
-
-
