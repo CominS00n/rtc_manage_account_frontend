@@ -2,7 +2,7 @@
   <nav class="hidden xl:flex flex-col justify-between h-full w-[280px]">
     <ul class="space-y-2">
       <li class="flex justify-center mt-6 mb-10">
-        <img src="/src/assets/logo/ntlogo.png" alt="" class="h-16" />
+        <img src="/ntlogo.ico" alt="" class="h-16" />
       </li>
       <li
         v-for="menu in filteredMenuList"
@@ -22,10 +22,10 @@
         </router-link>
       </li>
     </ul>
-    <div>
+    <!-- <div>
       <router-link to="/login" v-if="userInfo === ''">Login </router-link>
-      <button v-else @click="headleLogout">logout</button>
-    </div>
+      <button v-else @click="handleLogout">logout</button>
+    </div> -->
   </nav>
 
   <nav class="mobile-menu xl:hidden">
@@ -100,18 +100,18 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { menuList } from '@/constants/menuList'
 import { useUserStore } from '@/stores/user'
-import useLoginApi from '@/composable/loginApi'
+// import useLoginApi from '@/composable/loginApi'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
 
 const router = useRouter()
 const isOpen = ref(false)
-const { logout } = useLoginApi()
+// const { logout } = useLoginApi()
 
 // Get user's role from the store
 const userStore = useUserStore()
 const userPermissions = ref(userStore.permissions)
-const userInfo = ref(userStore.user)
+// const userInfo = ref(userStore.user)
 
 // Filter the menu list based on the user's role
 const filteredMenuList = computed(() =>
@@ -131,11 +131,11 @@ const splitMenuList = (list: typeof menuList, size: number) => {
   return result
 }
 
-const headleLogout = async () => {
-  userStore.setPermissions([])
-  await logout
-  location.reload()
-}
+// const handleLogout = async () => {
+//   userStore.setPermissions([])
+//   await logout
+//   location.reload()
+// }
 </script>
 
 <style scoped>

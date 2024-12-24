@@ -39,10 +39,13 @@ const handleLogin = async () => {
     if (res) {
       console.log(res.permissions)
       userStore.setPermissions(res.permissions)
-      userStore.setUser(res.user)
+      userStore.setUser(res.name)
     }
   })
-  router.push('/')
+  router.push('/').then(() => {
+    location.reload()
+  })
+
 }
 
 const handleBack = () => router.go(-1)
