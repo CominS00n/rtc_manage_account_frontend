@@ -12,18 +12,19 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'Default',
-        component: () => import('../views/HomeView.vue'),
+        name: 'request-account',
+        component: () => import('../views/RequestAccView.vue'),
         meta: {
           title: 'Home',
         },
       },
       {
-        path: 'request-account',
-        name: 'request-account',
-        component: () => import('../views/RequestAccView.vue'),
+        path: 'account-request',
+        name: 'account-request',
+        component: () => import('../views/AccountView.vue'),
         meta: {
           title: 'Request Account',
+          authentication: true,
         },
       },
       {
@@ -32,6 +33,7 @@ const routes = [
         component: () => import('../views/ExportPdfView.vue'),
         meta: {
           title: 'View Request',
+          authentication: true,
         },
       },
       {
@@ -40,6 +42,7 @@ const routes = [
         component: () => import('../views/userManageView.vue'),
         meta: {
           title: 'User Management',
+          authentication: true,
         },
       },
       {
@@ -48,6 +51,7 @@ const routes = [
         component: () => import('../views/ActivityLogView.vue'),
         meta: {
           title: 'Activity Log',
+          authentication: true,
         },
       },
       {
@@ -56,6 +60,7 @@ const routes = [
         component: () => import('../views/RoleManageView.vue'),
         meta: {
           title: 'Role Management',
+          authentication: true,
         },
       },
       {
@@ -64,6 +69,7 @@ const routes = [
         component: () => import('../views/UserAuditView.vue'),
         meta: {
           title: 'User Audit',
+          authentication: true,
         },
       },
       {
@@ -72,6 +78,7 @@ const routes = [
         component: () => import('../views/settingView.vue'),
         meta: {
           title: 'Settings',
+          authentication: true,
         },
       },
     ],
