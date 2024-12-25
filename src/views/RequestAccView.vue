@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col">
-    <h1 class="font-bold text-2xl py-3">RTC Request Account</h1>
+  <section class="flex flex-col h-full">
+    <h1 class="font-bold text-2xl mb-3">RTC Request Account</h1>
     <v-form
       @submit.prevent="sendRequest"
       v-model="valid"
@@ -325,7 +325,7 @@
       </div>
     </v-form>
     <router-view />
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

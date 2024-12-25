@@ -1,36 +1,40 @@
 <template>
-  <section>
-    <div class="login h-screen flex justify-center items-center">
-      <v-card>
-        <v-card-text>
-          <div class="flex items-center justify-between text-[#53595f]">
-            <img src="/ntlogo.ico" alt="" class="w-12" />
-            <h1 class="text-2xl font-bold">Login</h1>
-          </div>
-          <div class="mt-6">
-            <v-text-field
-              label="Username"
-              variant="outlined"
-              width="480"
-              v-model="username"
-            ></v-text-field
-            ><v-text-field
-              label="Password"
-              variant="outlined"
-              type="password"
-              width="480"
-              v-model="password"
-            ></v-text-field>
-          </div>
-          <div class="flex items-center gap-x-4 mt-6">
-            <v-btn @click="handleLogin" color="#facc15" class="flex-1"
-              >Login</v-btn
-            >
-            <v-btn @click="handleBack">Cancel</v-btn>
-          </div>
-        </v-card-text>
-      </v-card>
-    </div>
+  <section
+    class="flex justify-center items-center absolute inset-0 bg-[#f5f5f5]"
+  >
+    <v-card>
+      <v-card-text>
+        <div class="flex items-center justify-between text-[#53595f]">
+          <img src="/ntlogo.ico" alt="" class="w-12" />
+          <h1 class="text-2xl font-bold">Login</h1>
+        </div>
+        <div class="mt-6">
+          <v-text-field
+            label="Username"
+            variant="outlined"
+            width="480"
+            density="compact"
+            v-model="username"
+          ></v-text-field
+          ><v-text-field
+            :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+            label="Password"
+            variant="outlined"
+            :type="visible ? 'text' : 'password'"
+            width="480"
+            density="compact"
+            v-model="password"
+            @click:append-inner="visible = !visible"
+          ></v-text-field>
+        </div>
+        <div class="flex items-center gap-x-4 mt-6">
+          <v-btn @click="handleLogin" color="#facc15" class="flex-1"
+            >Login</v-btn
+          >
+          <v-btn @click="handleBack">Cancel</v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
   </section>
 </template>
 
@@ -50,6 +54,7 @@ const username = ref<string>('')
 const password = ref<string>('')
 
 const { login } = useLoginApi()
+const visible = ref<boolean>(false)
 
 const handleLogin = async () => {
   if (!username.value || !password.value) {

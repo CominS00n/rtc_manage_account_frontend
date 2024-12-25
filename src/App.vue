@@ -13,10 +13,10 @@
       </template>
     </router-view>
     <main>
-      <div class="content-body h-full overflow-y-auto">
+      <div class="content-body flex flex-col h-screen">
         <router-view v-slot="{ Component }">
           <nav
-            class="w-full bg-white h-16 shadow-md sticky z-[999] top-0 left-0 xl:flex items-center px-4 hidden"
+            class="w-full bg-white h-14 shadow-md sticky z-[999] top-0 left-0 xl:flex items-center px-4 hidden"
             v-show="route.path !== '/login'"
           >
             <v-container>
@@ -30,14 +30,18 @@
                 <img
                   src="/ntlogo.ico"
                   alt=""
-                  class="h-12"
+                  class="h-10"
                   v-show="route.path === '/'"
                 />
-                <v-btn color="#facc15" to="/login" v-if="userInfo === ''">
+                <v-btn
+                  color="#facc15"
+                  to="/login"
+                  v-if="userInfo === ''"
+                >
                   <template #append>
                     <svg
-                      width="24"
-                      height="24"
+                      width="18"
+                      height="18"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -76,10 +80,17 @@
               </div>
             </v-container>
           </nav>
-          <v-container>
-            <transition name="slide-fade" mode="out-in">
-              <component :is="Component" :key="route.path"></component>
-            </transition>
+          <v-container class="overflow-y-auto h-svh">
+            <div>
+              <transition name="slide-fade" mode="out-in">
+                <component :is="Component" :key="route.path"></component>
+              </transition>
+              <div class="mt-4">
+                <p class="text-center text-[#53595f] text-xs">
+                  &copy; 2024 CominS00n. All rights reserved.
+                </p>
+              </div>
+            </div>
           </v-container>
         </router-view>
       </div>
@@ -149,7 +160,7 @@ aside {
 main {
   flex: 1;
   /* padding: 1rem; */
-  height: 100vh;
+  /* height: 100vh; */
   overflow: hidden;
   /* border: 2px solid blue; */
   @apply xl:overflow-hidden;
