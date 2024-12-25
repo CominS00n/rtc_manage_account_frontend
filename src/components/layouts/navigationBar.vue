@@ -8,7 +8,7 @@
         v-for="menu in filteredMenuList"
         :key="menu.title"
         :class="
-          router.currentRoute.value.path === menu.link
+          router.currentRoute.value.name === menu.title
             ? 'menu-activate'
             : 'menu'
         "
@@ -69,7 +69,7 @@
           v-for="menu in group"
           :key="menu.title"
           :class="
-            router.currentRoute.value.path === menu.link
+            router.currentRoute.value.name === menu.title
               ? 'menu-activate'
               : 'menu'
           "

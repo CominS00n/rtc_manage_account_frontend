@@ -1,18 +1,35 @@
 <template>
   <section>
     <div class="login h-screen flex justify-center items-center">
-      <nt_card class="max-w-96">
-        <template #detail>
-          <label for="username">username</label>
-          <input type="text" name="username" v-model="username" />
-          <label for="password">password</label>
-          <input type="password" name="password" v-model="password" />
-        </template>
-        <template #action>
-          <button @click="handleLogin">Login</button>
-          <button @click="handleBack">Cancel</button>
-        </template>
-      </nt_card>
+      <v-card>
+        <v-card-text>
+          <div class="flex items-center justify-between text-[#53595f]">
+            <img src="/ntlogo.ico" alt="" class="w-12" />
+            <h1 class="text-2xl font-bold">Login</h1>
+          </div>
+          <div class="mt-6">
+            <v-text-field
+              label="Username"
+              variant="outlined"
+              width="480"
+              v-model="username"
+            ></v-text-field
+            ><v-text-field
+              label="Password"
+              variant="outlined"
+              type="password"
+              width="480"
+              v-model="password"
+            ></v-text-field>
+          </div>
+          <div class="flex items-center gap-x-4">
+            <v-btn @click="handleLogin" color="#facc15" class="flex-1"
+              >Login</v-btn
+            >
+            <v-btn @click="handleBack">Cancel</v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
     </div>
   </section>
 </template>
@@ -21,13 +38,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { useToast } from 'vue-toastification'
 
 import useLoginApi from '@/composable/loginApi'
 
-import nt_card from '@/components/cards/nt_card.vue'
-
 const router = useRouter()
 const userStore = useUserStore()
+const toast = useToast()
 
 const username = ref<string>('')
 const password = ref<string>('')
@@ -35,9 +52,16 @@ const password = ref<string>('')
 const { login } = useLoginApi()
 
 const handleLogin = async () => {
+  if (!username.value || !password.value) {
+    toast.error('Please enter username and password')
+    return
+  }
   try {
     await login(username.value, password.value).then(res => {
-      if (res) {
+      if (res.status === 401) {
+        toast.error('Invalid username or password')
+        return
+      } else {
         userStore.setPermissions(res.permissions)
         userStore.setUser(res.name)
       }

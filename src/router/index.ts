@@ -3,28 +3,37 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    alias: '/home',
+    name: 'request',
+    component: () => import('../views/RequestAccView.vue'),
+    meta: {
+      title: 'Request Account',
+    },
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    redirect: '/admin/request-account',
     components: {
       default: () => import('../components/layouts/mainLayout.vue'),
       LeftSidebar: () => import('../components/layouts/navigationBar.vue'),
     },
     children: [
       {
-        path: '',
-        name: 'request-account',
+        path: 'request-account',
+        name: 'request account',
         component: () => import('../views/RequestAccView.vue'),
         meta: {
-          title: 'Home',
+          title: 'request account',
+          requiresAuth: true,
         },
       },
       {
         path: 'account-request',
-        name: 'account-request',
+        name: 'account request',
         component: () => import('../views/AccountView.vue'),
         meta: {
           title: 'Request Account',
-          authentication: true,
+          requiresAuth: true,
         },
       },
       {
@@ -33,59 +42,59 @@ const routes = [
         component: () => import('../views/ExportPdfView.vue'),
         meta: {
           title: 'View Request',
-          authentication: true,
+          requiresAuth: true,
         },
       },
       {
         path: 'user-management',
-        name: 'User Management',
+        name: 'user management',
         component: () => import('../views/userManageView.vue'),
         meta: {
           title: 'User Management',
-          authentication: true,
+          requiresAuth: true,
         },
       },
       {
         path: 'activity-log',
-        name: 'Activity Log',
+        name: 'activity logs',
         component: () => import('../views/ActivityLogView.vue'),
         meta: {
           title: 'Activity Log',
-          authentication: true,
+          requiresAuth: true,
         },
       },
       {
         path: 'roles',
-        name: 'Role Management',
+        name: 'roles',
         component: () => import('../views/RoleManageView.vue'),
         meta: {
           title: 'Role Management',
-          authentication: true,
+          requiresAuth: true,
         },
       },
       {
         path: 'user-audit',
-        name: 'User Audit',
+        name: 'user audit',
         component: () => import('../views/UserAuditView.vue'),
         meta: {
           title: 'User Audit',
-          authentication: true,
+          requiresAuth: true,
         },
       },
       {
-        path: '/settings',
-        name: 'Settings',
+        path: 'settings',
+        name: 'settings',
         component: () => import('../views/settingView.vue'),
         meta: {
           title: 'Settings',
-          authentication: true,
+          requiresAuth: true,
         },
       },
     ],
   },
   {
     path: '/approval/:token',
-    name: 'Approval',
+    name: 'approval',
     component: () => import('../views/ApproveView.vue'),
     meta: {
       title: 'Approve Request',
@@ -93,7 +102,7 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: () => import('../views/LoginView.vue'),
     meta: {
       title: 'Login',
@@ -121,7 +130,17 @@ router.beforeEach((to, from, next) => {
     typeof to.meta.title === 'function'
       ? to.meta.title(to)
       : to.meta.title || defaultTitle
-  next()
+
+  const user = localStorage.getItem('user')
+
+  if (to.path === '/' && user) {
+    next({ name: 'admin' })
+  } else if (to.meta.requiresAuth && !user) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
+
 })
 
 export default router

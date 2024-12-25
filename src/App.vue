@@ -72,22 +72,26 @@
 </template>
 
 <script setup lang="ts">
-import { RouterView, useRoute } from 'vue-router'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 import useLoginApi from '@/composable/loginApi'
 import { useUserStore } from '@/stores/user'
 import { ref } from 'vue'
 
 const route = useRoute()
+const router = useRouter()
 const userStore = useUserStore()
 const { logout } = useLoginApi()
 
 const userInfo = ref(userStore.user)
-console.log(userStore)
+
 const handleLogout = async () => {
   userStore.setPermissions([])
   userStore.setUser('')
-  await logout
-  location.reload()
+  await logout()
+  router.push('/').finally(() => {
+    location.reload()
+  })
+
 }
 </script>
 
