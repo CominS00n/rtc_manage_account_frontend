@@ -50,7 +50,7 @@ const handleLogin = async () => {
   }
 }
 
-const handleBack = () => router.push('/login')
+const handleBack = () => router.push('/')
 </script>
 
 <style scoped>
