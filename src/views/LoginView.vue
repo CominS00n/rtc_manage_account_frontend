@@ -22,7 +22,7 @@
               v-model="password"
             ></v-text-field>
           </div>
-          <div class="flex items-center gap-x-4">
+          <div class="flex items-center gap-x-4 mt-6">
             <v-btn @click="handleLogin" color="#facc15" class="flex-1"
               >Login</v-btn
             >
