@@ -42,7 +42,7 @@ const handleLogin = async () => {
         userStore.setUser(res.name)
       }
     })
-    router.push('/')
+    // router.push('/')
     // .then(() => {
     //   location.reload()
     // })
