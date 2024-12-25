@@ -42,16 +42,15 @@ const handleLogin = async () => {
         userStore.setUser(res.name)
       }
     })
-    // router.push('/')
-    // .then(() => {
-    //   location.reload()
-    // })
+    router.push('/').then(() => {
+      location.reload()
+    })
   } catch (error) {
     console.error(error)
   }
 }
 
-const handleBack = () => router.go(-1)
+const handleBack = () => router.push('/login')
 </script>
 
 <style scoped>
