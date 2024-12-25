@@ -97,7 +97,7 @@
               </div>
               <span
                 v-if="error && request_type.length === 0"
-                class="text-[#b00020] text-xs"
+                class="text-[#b00020] text-xs pl-4"
               >
                 Please select at least one request type.
               </span>
@@ -210,7 +210,7 @@
               </div>
               <span
                 v-if="error && service_type.length === 0"
-                class="text-[#b00020] text-xs"
+                class="text-[#b00020] text-xs  pl-4"
               >
                 Please select at least one request type.
               </span>
@@ -237,7 +237,7 @@
               </div>
               <span
                 v-if="error && user_type.length === 0"
-                class="text-[#b00020] text-xs"
+                class="text-[#b00020] text-xs  pl-4"
               >
                 Please select at least one request type.
               </span>
