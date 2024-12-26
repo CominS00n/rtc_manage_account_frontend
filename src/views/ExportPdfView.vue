@@ -30,7 +30,7 @@
                 class="h-12"
                 crossorigin="anonymous"
               />
-              <h1 class="text-xl font-bold">RTC Account Request (RTCAR)</h1>
+              <h1 class="text-xl font-bold">RTC Account Request (RTC)</h1>
             </div>
             <p class="sub-text px-3 py-2">
               แบบฟอร์มขอเข้าใช้ระบบภายใต้ความดูแลของส่วนปฏิบัติการระบบ Real Time
@@ -101,14 +101,7 @@
                   <ul class="ml-2">
                     <li v-for="item in data?.service_type" :key="item">
                       <span class="inline-flex gap-2">
-                        <!-- <input
-                          type="checkbox"
-                          class="border"
-                          checked
-                          disabled
-                        /> -->
                         <tick-icon />
-
                         <p class="capitalize">{{ item }}</p>
                       </span>
                     </li>
@@ -170,7 +163,7 @@
               </div>
             </div>
             <p class="sub-text font-bold px-3 bg-gray-300">Acknowledge</p>
-            <div class="detail border-none">
+            <div class="detail">
               <div>
                 <div v-for="item in data?.approved" :key="item.id">
                   <div
@@ -199,6 +192,12 @@
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <p class="sub-text font-bold px-3 bg-gray-300">Remark Account (RTC)</p>
+            <div class="detail border-none">
+              <div>
+                {{ data?.remarks }}
               </div>
             </div>
           </div>

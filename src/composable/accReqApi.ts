@@ -39,6 +39,20 @@ export const useAccReqApi = () => {
     }
   }
 
+  const putAccReqComment = async (id: string, result: AccReq) => {
+    try {
+      console.log(result)
+      const response = await api({
+        method: 'put',
+        url: '/account_request/' + id,
+        data: result,
+      })
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const approveAccReq = async (data: approved) => {
     try {
       const res = await api({
@@ -48,7 +62,6 @@ export const useAccReqApi = () => {
       })
       resMessage.value = res.data.message
       location.reload()
-      // console.log(response)
     } catch (error) {
       console.log(error)
     }
@@ -61,5 +74,6 @@ export const useAccReqApi = () => {
     getAllAccReqs,
     allAccReqs,
     resMessage,
+    putAccReqComment,
   }
 }
