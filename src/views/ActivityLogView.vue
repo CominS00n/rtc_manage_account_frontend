@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h1 class="font-bold text-2xl py-3">Activity Log</h1>
+    <h1 class="font-bold text-2xl mb-3">Activity Log</h1>
     <nt_card>
       <template #detail>
         <table class="table table-zebra">

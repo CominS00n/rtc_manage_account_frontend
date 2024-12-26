@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1 class="font-bold text-2xl py-3">Account Requests</h1>
+  <section>
+    <h1 class="font-bold text-2xl mb-3">Account Requests</h1>
     <v-card>
       <v-card-text class="hidden md:block">
         <div class="flex justify-end">
@@ -119,7 +119,7 @@
         </v-list>
       </v-card-text>
     </v-card>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

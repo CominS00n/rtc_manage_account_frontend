@@ -210,7 +210,7 @@
               </div>
               <span
                 v-if="error && service_type.length === 0"
-                class="text-[#b00020] text-xs  pl-4"
+                class="text-[#b00020] text-xs pl-4"
               >
                 Please select at least one request type.
               </span>
@@ -237,7 +237,7 @@
               </div>
               <span
                 v-if="error && user_type.length === 0"
-                class="text-[#b00020] text-xs  pl-4"
+                class="text-[#b00020] text-xs pl-4"
               >
                 Please select at least one request type.
               </span>
@@ -304,8 +304,8 @@
               <v-select
                 id="implementor"
                 v-model="implementor"
-                label="Select Implementor"
                 :items="implementorItems"
+                label="Select Implementor"
                 density="compact"
                 variant="outlined"
                 clearable
@@ -344,10 +344,19 @@ import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
 import { useAccReqApi } from '@/composable/accReqApi'
+import { useImplementorApi } from '@/composable/implementorApi'
 
 import type { approvedInformation, sendReq } from '@/types/sendReq'
 
 const { postAccReq } = useAccReqApi()
+const { allImplementors, getAllImplementors } = useImplementorApi()
+const implementorItems = ref<string[]>([])
+
+onMounted(async () => {
+  await getAllImplementors()
+  implementorItems.value = allImplementors.value.map(item => item.email + ' (' + item.name + ')')
+})
+
 const initialCount = ref(1)
 const toast = useToast()
 
@@ -541,9 +550,9 @@ onMounted(() => {
   }
 })
 
-const implementorItems = ref<string[]>([
-  'spuckpooforwork@gmail.com (CominS00n)',
-])
+// const implementorItems = ref<string[]>([
+//   'spuckpooforwork@gmail.com (CominS00n)',
+// ])
 
 const req_types = ref<string[]>([
   'New Account',

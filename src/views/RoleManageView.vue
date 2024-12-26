@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h1 class="font-bold text-2xl py-3">Role Management</h1>
+    <h1 class="font-bold text-2xl mb-3">Role Management</h1>
     <nt_card>
       <template #detail>
         <div class="grid grid-cols-5 gap-x-10">

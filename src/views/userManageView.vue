@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h1 class="font-bold text-2xl py-3">User Management</h1>
+    <h1 class="font-bold text-2xl mb-3">User Management</h1>
     <v-card>
       <v-card-text>
         <v-data-table
