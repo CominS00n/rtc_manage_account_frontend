@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col gap-y-2">
-    <v-btn @click="router.go(-1)" class="w-fit">
+    <v-btn @click="router.go(-1)" class="w-fit" v-show="!props.views_only">
       <template #prepend>
         <nt_icon icon="arrow-left" />
       </template>
       Back
     </v-btn>
     <v-card>
-      <div class="p-4">
+      <div class="p-4" v-show="!props.views_only">
         <v-btn @click="generatePdf" rounded>
           <template #prepend>
             <document-download />
@@ -194,7 +194,9 @@
                 </div>
               </div>
             </div>
-            <p class="sub-text font-bold px-3 bg-gray-300">Remark Account (RTC)</p>
+            <p class="sub-text font-bold px-3 bg-gray-300">
+              Remark Account (RTC)
+            </p>
             <div class="detail border-none">
               <div>
                 {{ data?.remarks }}
@@ -208,7 +210,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
 import { useRoute } from 'vue-router'
 import html2canvas from 'html2canvas-pro'
 import jsPDF from 'jspdf'
@@ -227,6 +229,12 @@ const data = ref<AccReq | null>(null)
 
 const pdfContent = ref<HTMLElement | null>(null)
 
+const props = defineProps({
+  views_only: {
+    type: Boolean,
+    default: false,
+  },
+})
 const id = ref<string>(params.id as string)
 
 onMounted(async () => {

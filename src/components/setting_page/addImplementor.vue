@@ -3,37 +3,14 @@
     <v-card-title>
       <h1 class="font-bold text-xl">Implementor</h1>
     </v-card-title>
-    <v-card-text>
-      <v-list lines="one">
-        <v-list-item
-          v-for="implementor in allImplementors"
-          :key="implementor.id"
-          :title="implementor.name"
-          :subtitle="implementor.email"
-        >
-          <template #append>
-            <div class="flex gap-x-4">
-              <edit-icon
-                class="cursor-pointer"
-                @click="handleEditClick(implementor.id)"
-              />
-              <trash-icon
-                color="red"
-                class="cursor-pointer"
-                @click="handleDeleteClick(implementor.id)"
-              />
-            </div>
-          </template>
-          <v-divider class="border-opacity-100 mt-2"></v-divider>
-        </v-list-item>
-      </v-list>
+    <v-card-text class="grid gap-4 grid-cols-2">
       <v-form
         @submit.prevent="addImplementor"
         v-model="valid"
         ref="implementorRef"
         class="mt-6"
       >
-        <h2 class="text-lg font-bold mb-4">Add Implementor</h2>
+        <!-- <h2 class="text-lg font-bold mb-4">Add Implementor</h2> -->
         <div class="flex gap-x-4">
           <v-text-field
             label="Name"
@@ -53,10 +30,37 @@
             type="email"
           />
         </div>
-        <v-btn type="submit" color="#facc15" width="240px">
-          <p class="capitalize">save</p>
-        </v-btn>
+        <div class="flex justify-end">
+          <v-btn type="submit" color="#facc15" width="240px">
+            <p class="capitalize">save</p>
+          </v-btn>
+        </div>
       </v-form>
+
+      <div class="h-[400px] overflow-y-auto border border-gray-200 rounded-lg">
+        <v-list lines="one">
+          <v-list-item
+            v-for="implementor in allImplementors"
+            :key="implementor.id"
+            :title="implementor.name"
+          >
+            <template #append>
+              <div class="flex gap-x-4">
+                <edit-icon
+                  class="cursor-pointer"
+                  @click="handleEditClick(implementor.id)"
+                />
+                <trash-icon
+                  color="red"
+                  class="cursor-pointer"
+                  @click="handleDeleteClick(implementor.id)"
+                />
+              </div>
+            </template>
+            <v-divider class="border-opacity-100 mt-2"></v-divider>
+          </v-list-item>
+        </v-list>
+      </div>
     </v-card-text>
   </v-card>
 
@@ -201,8 +205,6 @@ const handleEditClick = async (id: string) => {
   await getImplementor(id).finally(() => {
     isOpen.value = true
   })
-
-  // console.log(id)
 }
 const handleDeleteClick = (id: string) => {
   if (confirm('Are you sure you want to delete this implementor?')) {

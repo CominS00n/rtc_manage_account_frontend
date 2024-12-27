@@ -101,6 +101,16 @@ const routes = [
     },
   },
   {
+    path: '/tracking-status/id/:id',
+    name: 'tracking status',
+    component: () => import('../views/trackStatusView.vue'),
+  },
+  {
+    path: '/notfound-item',
+    name: 'notfound item',
+    component: () => import('../views/NotFoundItem.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue'),
@@ -140,7 +150,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-
 })
 
 export default router

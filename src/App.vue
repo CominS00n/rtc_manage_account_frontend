@@ -22,7 +22,7 @@
             <v-container>
               <div
                 :class="
-                  route.path === '/'
+                  route.path === '/' || route.name === 'tracking status'
                     ? 'flex items-center justify-between'
                     : 'flex items-center justify-end'
                 "
@@ -30,14 +30,13 @@
                 <img
                   src="/ntlogo.ico"
                   alt=""
-                  class="h-10"
-                  v-show="route.path === '/'"
+                  class="h-10 cursor-pointer"
+                  v-show="
+                    route.path === '/' || route.name === 'tracking status'
+                  "
+                  @click="router.push('/')"
                 />
-                <v-btn
-                  color="#facc15"
-                  to="/login"
-                  v-if="userInfo === ''"
-                >
+                <v-btn color="#facc15" to="/login" v-if="userInfo === ''">
                   <template #append>
                     <svg
                       width="18"
