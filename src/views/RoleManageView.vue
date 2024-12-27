@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h1 class="font-bold text-2xl mb-3">Role Management</h1>
+    <!-- <h1 class="font-bold text-2xl mb-3">Role Management</h1>
     <nt_card>
       <template #detail>
         <div class="grid grid-cols-5 gap-x-10">
@@ -42,11 +42,11 @@
           </div>
         </div>
       </template>
-    </nt_card>
+    </nt_card> -->
   </section>
 </template>
 
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 // import axios from 'axios'
 import { onMounted, reactive, ref } from 'vue'
 
@@ -278,4 +278,4 @@ onMounted(async () => {
     console.error('Error fetching permissions:', error)
   }
 })
-</script>
+</script> -->
