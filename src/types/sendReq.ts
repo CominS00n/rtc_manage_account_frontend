@@ -19,6 +19,7 @@ export type accountInformation = {
   service_type: string[]
   user_type: string[]
   status: string
+  remarks: string | null
 }
 
 export interface approvedInformation {
@@ -33,7 +34,7 @@ export interface sendReq {
 }
 
 export type approved = {
-  acc_req_id: number
+  acc_req_id: string
   name: string
   email: string
   status: status_type

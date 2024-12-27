@@ -447,8 +447,8 @@ const approvalSubmit = () => {
 }
 
 interface approval_type {
-  id?: number
-  acc_req_id: number
+  id?: string
+  acc_req_id: string
   type?: string
   name: string
   email: string
@@ -499,6 +499,7 @@ onMounted(async () => {
       service_type: accReq.service_type,
       user_type: accReq.user_type,
       status: accReq.status,
+      remarks: accReq.remarks,
     }
   })
   selectedServiceTypes.value = information.value[0]?.service_type || []
