@@ -63,15 +63,15 @@ const routes = [
           requiresAuth: true,
         },
       },
-      {
-        path: 'roles',
-        name: 'roles',
-        component: () => import('../views/RoleManageView.vue'),
-        meta: {
-          title: 'Role Management',
-          requiresAuth: true,
-        },
-      },
+      // {
+      //   path: 'roles',
+      //   name: 'roles',
+      //   component: () => import('../views/RoleManageView.vue'),
+      //   meta: {
+      //     title: 'Role Management',
+      //     requiresAuth: true,
+      //   },
+      // },
       {
         path: 'user-audit',
         name: 'user audit',

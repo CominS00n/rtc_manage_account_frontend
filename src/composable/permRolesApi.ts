@@ -27,5 +27,5 @@ export default function usePermRoleAip() {
     }
   }
 
-  return { getPermission }
+  return { getPermission, createRoles }
 }

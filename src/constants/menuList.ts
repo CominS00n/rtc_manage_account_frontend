@@ -23,12 +23,12 @@ export const menuList = [
     icon: 'document-text',
     role: 'logRead',
   },
-  {
-    title: 'roles',
-    link: 'roles',
-    icon: 'shield-check',
-    role: 'roleRead',
-  },
+  // {
+  //   title: 'roles',
+  //   link: 'roles',
+  //   icon: 'shield-check',
+  //   role: 'roleRead',
+  // },
   {
     title: 'user audit',
     link: 'user-audit',
