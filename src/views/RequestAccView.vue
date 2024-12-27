@@ -475,6 +475,7 @@ const sendRequest = async () => {
     service_type: service_type.value,
     user_type: user_type.value,
     status: 'Pending',
+    remarks: '',
   })
 
   const implementor_email = ref<string>(implementor.value?.split(' ')[0] || '')
