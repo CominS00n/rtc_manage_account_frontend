@@ -1,11 +1,15 @@
 <template>
-  <section class="flex flex-col justify-center items-center h-full">
-    <icon icon="document-magnifying-glass" class="text-5xl" />
-    <h1 class="text-3xl font-bold">404</h1>
-    <p>Page not found</p>
-    <button @click="back">
-      <icon icon="arrow-left" />
-    </button>
+  <section
+    class="flex justify-center items-center absolute inset-0 bg-[#f5f5f5]"
+  >
+    <div class="inline-flex flex-col items-center gap-6">
+      <p class="text-2xl">
+        <span class="font-bold">404</span> | Page not found!
+      </p>
+      <v-btn variant="outlined" class="w-fit" @click="back">
+        <icon icon="arrow-left" />
+      </v-btn>
+    </div>
   </section>
 </template>
 
@@ -14,5 +18,5 @@ import { useRouter } from 'vue-router'
 import icon from '@/components/icon/nt_icon.vue'
 
 const router = useRouter()
-const back = () => router.push({ name: 'Default' })
+const back = () => router.push('/').then(() => location.reload())
 </script>
