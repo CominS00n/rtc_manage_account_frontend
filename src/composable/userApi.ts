@@ -18,5 +18,14 @@ export default function useUserApi() {
     }
   }
 
-  return { users, getUsers }
+  const getUserGroups = async (groupId: string) => {
+    try {
+      const response = await api.get(`/users/group/${groupId}`)
+      users.value = response.data.data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return { users, getUsers, getUserGroups }
 }

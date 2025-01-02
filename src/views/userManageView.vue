@@ -6,10 +6,9 @@
         <v-data-table
           :items="users"
           :headers="headers"
-          class="text-nowrap"
+          class="text-nowrap max-h-[720px]"
           :items-per-page-options="[10, 25, 50]"
           :items-per-page="10"
-          height="720"
           fixed-header
         >
           <template v-slot:item="{ item }">
@@ -40,13 +39,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import useUserApi from '@/composable/userApi'
-// import nt_card from '@/components/cards/nt_card.vue'
+import useGroupApi from '@/composable/groupApi'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
-const { getUsers, users } = useUserApi()
+const { getUsers, users, getUserGroups } = useUserApi()
+const { group, getGroupID } = useGroupApi()
 
 const headers = [
   { key: 'Name', title: 'user_name' },
@@ -57,6 +57,16 @@ const headers = [
 ]
 
 onMounted(async () => {
-  await getUsers()
+  const groupID = ref(sessionStorage.getItem('group'))
+  if (groupID.value) {
+    await getGroupID(groupID.value)
+    if (group.value?.name === 'admin') {
+      await getUsers()
+    } else {
+      await getUserGroups(groupID.value)
+    }
+  } else {
+    console.error('Group ID is null')
+  }
 })
 </script>

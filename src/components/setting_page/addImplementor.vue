@@ -30,17 +30,16 @@
             type="email"
           />
         </div>
-        <div class="flex justify-end">
-          <v-btn type="submit" color="#facc15" width="240px">
-            <p class="capitalize">save</p>
-          </v-btn>
-        </div>
+
+        <v-btn type="submit" color="#facc15" class="w-full">
+          <p class="capitalize">save</p>
+        </v-btn>
       </v-form>
 
-      <div>
+      <div class="flex flex-col h-full">
         <p class="text-md font-bold">View all implementors</p>
         <div
-          class="h-[400px] overflow-y-auto border border-gray-200 rounded-lg"
+          class="h-full max-h-[400px] overflow-y-auto border border-gray-200 rounded-lg"
         >
           <v-list lines="one">
             <v-list-item

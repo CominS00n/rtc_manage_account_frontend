@@ -8,7 +8,7 @@
         @submit.prevent="submit_createRoles"
         v-model="valid"
         ref="roleRef"
-        class="mt-6"
+        class="mt-6 space-y-2"
       >
         <v-text-field
           v-model="roleName"
@@ -27,6 +27,7 @@
           no-resize
           :rules="inputDefaultRules"
         ></v-textarea>
+        <h1 class="font-bold text-lg">Permission</h1>
         <div v-for="group in perm_group" :key="group.title" class="">
           <h2 class="font-bold capitalize py-4">{{ group.title }}</h2>
           <div
@@ -50,15 +51,14 @@
             </label>
           </div>
         </div>
-        <div class="flex justify-end">
-          <v-btn type="submit" color="#facc15" width="240px">
-            <p class="capitalize">Create</p>
-          </v-btn>
-        </div>
+
+        <v-btn type="submit" color="#facc15" class="w-full mt-4">
+          <p class="capitalize">Create</p>
+        </v-btn>
       </v-form>
-      <div>
+      <div class="flex flex-col h-full">
         <p class="text-md font-bold">View all roles</p>
-        <div class="h-[550px] overflow-y-auto border border-gray-200 rounded-lg">
+        <div class="h-full max-h-[600px] overflow-y-auto border border-gray-200 rounded-lg">
           <v-list lines="one">
             <v-list-item
               v-for="role in roles"
@@ -114,19 +114,19 @@ const toast = useToast()
 
 const perm_group = reactive({
   user: {
-    title: 'User Permissions',
+    title: 'User',
     perm: <Role[]>[],
   },
   role: {
-    title: 'Role Permissions',
+    title: 'Role',
     perm: <Role[]>[],
   },
   req: {
-    title: 'Request Permissions',
+    title: 'Request Account',
     perm: <Role[]>[],
   },
   log: {
-    title: 'Log Permissions',
+    title: 'Log',
     perm: <Role[]>[],
   },
 })

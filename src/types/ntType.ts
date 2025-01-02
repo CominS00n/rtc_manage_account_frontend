@@ -9,6 +9,17 @@ export type User = {
   }[]
 }
 
+export type UserRegister = {
+  username: string
+  password: string
+  name: string
+  position: string
+  company: string
+  division: string
+  email: string
+  phone: string
+}
+
 export type ActivityLog = {
   id: string
   activityUser: string
@@ -37,6 +48,14 @@ export type RolePermission = {
   name: string
   description: string
   permission: Permission[]
+  created_at: string
+  updated_at: string | null
+}
+
+export type Group = {
+  id: string
+  name: string
+  description: string
   created_at: string
   updated_at: string | null
 }

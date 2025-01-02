@@ -69,6 +69,7 @@ const handleLogin = async () => {
       } else {
         userStore.setPermissions(res.permissions)
         userStore.setUser(res.name)
+        sessionStorage.setItem('group', res.groups)
       }
     })
     router.push('/').then(() => {
