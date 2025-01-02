@@ -29,5 +29,14 @@ export type Role = {
   name: string
   description: string
   created_at: string
-  updated_at: string
+  updated_at: string | null
+}
+
+export type RolePermission = {
+  id: string
+  name: string
+  description: string
+  permission: Permission[]
+  created_at: string
+  updated_at: string | null
 }

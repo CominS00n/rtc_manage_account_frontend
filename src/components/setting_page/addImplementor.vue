@@ -37,29 +37,35 @@
         </div>
       </v-form>
 
-      <div class="h-[400px] overflow-y-auto border border-gray-200 rounded-lg">
-        <v-list lines="one">
-          <v-list-item
-            v-for="implementor in allImplementors"
-            :key="implementor.id"
-            :title="implementor.name"
-          >
-            <template #append>
-              <div class="flex gap-x-4">
-                <edit-icon
-                  class="cursor-pointer"
-                  @click="handleEditClick(implementor.id)"
-                />
-                <trash-icon
-                  color="red"
-                  class="cursor-pointer"
-                  @click="handleDeleteClick(implementor.id)"
-                />
-              </div>
-            </template>
-            <v-divider class="border-opacity-100 mt-2"></v-divider>
-          </v-list-item>
-        </v-list>
+      <div>
+        <p class="text-md font-bold">View all implementors</p>
+        <div
+          class="h-[400px] overflow-y-auto border border-gray-200 rounded-lg"
+        >
+          <v-list lines="one">
+            <v-list-item
+              v-for="implementor in allImplementors"
+              :key="implementor.id"
+              :title="implementor.name"
+              :subtitle="implementor.email"
+            >
+              <template #append>
+                <div class="flex gap-x-4">
+                  <edit-icon
+                    class="cursor-pointer"
+                    @click="handleEditClick(implementor.id)"
+                  />
+                  <trash-icon
+                    color="red"
+                    class="cursor-pointer"
+                    @click="handleDeleteClick(implementor.id)"
+                  />
+                </div>
+              </template>
+              <v-divider class="border-opacity-100 mt-2"></v-divider>
+            </v-list-item>
+          </v-list>
+        </div>
       </div>
     </v-card-text>
   </v-card>
