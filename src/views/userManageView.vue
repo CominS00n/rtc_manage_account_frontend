@@ -62,7 +62,7 @@ const headers = [
 
 const getGroupNames = async (groupID: string) => {
   await getGroupID(groupID)
-  return group.value?.name
+  return group.value[0].name
 }
 const group_name = ref<string[]>([])
 
