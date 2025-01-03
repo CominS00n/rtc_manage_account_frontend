@@ -39,7 +39,8 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watchEffect } from 'vue'
+import { useUserStore } from '@/stores/user'
 
 import useUserApi from '@/composable/userApi'
 import useGroupApi from '@/composable/groupApi'
@@ -47,6 +48,9 @@ import nt_icon from '@/components/icon/nt_icon.vue'
 
 const { getUsers, users, getUserGroups } = useUserApi()
 const { group, getGroupID } = useGroupApi()
+
+const userStore = useUserStore()
+const groupID = ref(userStore.groups)
 
 const headers = [
   { key: 'Name', title: 'user_name' },
@@ -56,17 +60,29 @@ const headers = [
   { key: 'Status', title: 'status' },
 ]
 
+const getGroupNames = async (groupID: string) => {
+  await getGroupID(groupID)
+  return group.value?.name
+}
+const group_name = ref<string[]>([])
+
 onMounted(async () => {
-  const groupID = ref(sessionStorage.getItem('group'))
-  if (groupID.value) {
-    await getGroupID(groupID.value)
-    if (group.value?.name === 'admin') {
-      await getUsers()
-    } else {
-      await getUserGroups(groupID.value)
+  groupID.value.forEach(async (id: string) => {
+    const response = await getGroupNames(id)
+    if (response) {
+      group_name.value.push(response.toString())
     }
+  })
+})
+
+const isAdmin = computed(() => group_name.value.includes('super_admin'))
+watchEffect(async () => {
+  if (isAdmin.value) {
+    await getUsers()
   } else {
-    console.error('Group ID is null')
+    for (const name of group_name.value) {
+      await getUserGroups(name)
+    }
   }
 })
 </script>

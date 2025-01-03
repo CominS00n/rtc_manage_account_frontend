@@ -5,6 +5,7 @@ import type { RolePermission } from '@/types/ntType'
 
 export default function usePermRoleAip() {
   const roles = ref<RolePermission[]>([])
+  const role = ref<RolePermission[]>([])
   const getPermission = async () => {
     try {
       const response = await api.get('/permissions')
@@ -48,6 +49,17 @@ export default function usePermRoleAip() {
     }
   }
 
+  const getRole = async (id: string) => {
+    try {
+      const response = await api.get(`/role-perm/${id}`)
+      role.value = response.data.data
+      return response.data.data
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
   const deleteRole = async (id: string) => {
     try {
       const response = await api.delete(`/roles/${id}`)
@@ -60,19 +72,20 @@ export default function usePermRoleAip() {
 
   const updateRole = async (
     id: string,
-    roleName: string,
-    description: string,
-    permissions: string[],
+    data: {
+      name: string
+      description: string
+      permissions: string[]
+    },
   ) => {
     try {
       const response = await api({
         method: 'PUT',
-        url: '/roles',
-        params: { id },
+        url: '/roles/' + id,
         data: {
-          name: roleName,
-          description,
-          permissions,
+          name: data.name,
+          description: data.description,
+          permissions: data.permissions,
         },
       })
       return response.data.data
@@ -81,5 +94,14 @@ export default function usePermRoleAip() {
       return
     }
   }
-  return { getPermission, createRoles, getRoles, roles, deleteRole, updateRole }
+  return {
+    getPermission,
+    createRoles,
+    getRoles,
+    roles,
+    deleteRole,
+    updateRole,
+    getRole,
+    role,
+  }
 }

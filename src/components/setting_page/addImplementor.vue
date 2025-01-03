@@ -189,12 +189,19 @@ onMounted(async () => {
 const addImplementor = () => {
   if (!implementorRef.value.validate()) {
     toast.error('Please fill in all required fields')
-    return
+    return false
   }
+
   if (name.value === '' || email.value === '') {
     toast.error('Please fill in all required fields')
-    return
+    return false
   }
+
+  if (valid.value === false) {
+    toast.error('Please fill in all required fields')
+    return false
+  }
+
   const result = {
     name: name.value,
     email: email.value,
@@ -204,6 +211,7 @@ const addImplementor = () => {
     toast.success('Implementor added successfully')
     name.value = ''
     email.value = ''
+
   })
 }
 const handleEditClick = async (id: string) => {
@@ -218,7 +226,7 @@ const handleDeleteClick = (id: string) => {
       toast.success('Implementor deleted successfully')
     })
   } else {
-    return
+    return false
   }
 }
 
