@@ -16,3 +16,5 @@ export const passwordRules = [
 export const dateRules = [(v: string) => !!v || 'Date is required']
 
 export const comboboxRules = [(v: string) => !!v || 'Field is required']
+
+export const multipleComboboxRules = [(v: string[]) => !!v.length || 'Field is required']

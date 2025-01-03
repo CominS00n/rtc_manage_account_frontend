@@ -3,8 +3,13 @@
     <v-card-title>
       <h1 class="font-bold text-xl">Add Users</h1>
     </v-card-title>
-    <v-card-text >
-      <v-form ref="form" v-model="valid" @submit.prevent="submitForm" class="grid gap-4 grid-cols-2">
+    <v-card-text>
+      <v-form
+        ref="form"
+        v-model="valid"
+        @submit.prevent="submitForm"
+        class="grid gap-4 grid-cols-2"
+      >
         <v-text-field
           v-model="userData.username"
           label="Username"
@@ -78,7 +83,9 @@
           density="compact"
           variant="outlined"
           clearable
-          :rules="[v => !!v || 'You must select an account type']"
+          multiple
+          chips
+          :rules="multipleComboboxRules"
           validate-on="submit"
         >
         </v-select>
@@ -91,13 +98,18 @@
           density="compact"
           variant="outlined"
           clearable
-          :rules="[v => !!v || 'You must select an account type']"
+          multiple
+          chips
+          :rules="multipleComboboxRules"
           validate-on="submit"
         >
         </v-select>
-        <v-btn type="submit" color="#facc15">
-          <p class="capitalize">Submit</p>
-        </v-btn>
+        <div class="col-span-2 flex gap-2">
+          <v-btn type="submit" color="#facc15" class="flex-1">
+            <p class="capitalize">Submit</p>
+          </v-btn>
+          <v-btn variant="outlined" @click="handleCancel">Cancel</v-btn>
+        </div>
       </v-form>
     </v-card-text>
   </v-card>
@@ -106,11 +118,16 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import type { UserRegister } from '@/types/ntType'
+import { multipleComboboxRules } from '@/rules/inputRules'
+import { useToast } from 'vue-toastification'
+
 import usePermRoleApi from '@/composable/permRolesApi'
 import useGroupApi from '@/composable/groupApi'
 
 const { getRoles, roles } = usePermRoleApi()
 const { getGroups, groups } = useGroupApi()
+
+const toast = useToast()
 // const group = ref(sessionStorage.getItem('group'))
 
 onMounted(async () => {
@@ -128,16 +145,31 @@ const userData = reactive<UserRegister>({
   email: '',
   phone: '',
 })
-const roleId = ref<string | undefined>(undefined)
-const groupId = ref<string | undefined>(undefined)
+const roleId = ref<string[]>([])
+const groupId = ref<string[]>([])
 const valid = ref<boolean>(false)
 const form = ref()
 
 const submitForm = () => {
-  if (form.value.validate()) {
-    console.log('Form is valid', userData, roleId.value)
-  } else {
-    console.log('Form is invalid')
-  }
+  if (form.value.validate())
+    return toast.error('Please fill all required fields')
+  if (valid.value === false)
+    return toast.error('Please fill all required fields')
+  userData.name = userData.name.toLowerCase()
+  console.log('Form is valid', userData, roleId.value, groupId.value)
+  handleCancel()
+}
+
+const handleCancel = () => {
+  userData.username = ''
+  userData.password = ''
+  userData.name = ''
+  userData.position = ''
+  userData.company = ''
+  userData.division = ''
+  userData.email = ''
+  userData.phone = ''
+  roleId.value = []
+  groupId.value = []
 }
 </script>
