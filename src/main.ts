@@ -18,6 +18,9 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 const vuetify = createVuetify({
   components,
   directives,
@@ -46,5 +49,6 @@ app.use(vuetify)
 app.use(createPinia())
 app.use(router)
 app.use(Toast, toastOptions)
+app.use(VueSweetalert2)
 
 app.mount('#app')

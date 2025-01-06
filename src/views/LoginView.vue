@@ -70,6 +70,7 @@ const handleLogin = async () => {
         userStore.setPermissions(res.permissions)
         userStore.setUser(res.name)
         userStore.setGroups(res.groups)
+        userStore.setUserId(res.id)
       }
     })
     router.push('/').then(() => {

@@ -2,10 +2,22 @@ export type User = {
   user_id: string
   user_name: string
   user_username: string
+  user_password: string
   user_email: string
+  user_phone: string
+  user_position: string
+  user_company: string
+  user_division: string
+  user_status: string
+  user_created_at: string
+  user_updated_at: string | null
   roles: {
     role_id: string
     role_name: string
+  }[]
+  groups: {
+    group_id: string
+    group_name: string
   }[]
 }
 

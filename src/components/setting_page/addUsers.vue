@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text>
       <v-form
-        ref="form"
+        ref="formAddUser"
         v-model="valid"
         @submit.prevent="submitForm"
         class="grid gap-4 grid-cols-2"
@@ -116,16 +116,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
 import type { UserRegister } from '@/types/ntType'
+
+import { onMounted, reactive, ref } from 'vue'
 import { multipleComboboxRules } from '@/rules/inputRules'
 import { useToast } from 'vue-toastification'
 
 import usePermRoleApi from '@/composable/permRolesApi'
 import useGroupApi from '@/composable/groupApi'
+import useUserApi from '@/composable/userApi'
 
 const { getRoles, roles } = usePermRoleApi()
 const { getGroups, groups } = useGroupApi()
+const { postUser } = useUserApi()
 
 const toast = useToast()
 // const group = ref(sessionStorage.getItem('group'))
@@ -136,27 +139,28 @@ onMounted(async () => {
 })
 
 const userData = reactive<UserRegister>({
-  username: '',
-  password: '',
-  name: '',
-  position: '',
-  company: '',
-  division: '',
-  email: '',
-  phone: '',
+  username: 'comins00n',
+  password: '!admin1234',
+  name: 'sitthichai',
+  position: 'test',
+  company: 'test',
+  division: 'test',
+  email: 'gamesxbow@gmail.com',
+  phone: '095xxxxxxx',
 })
 const roleId = ref<string[]>([])
 const groupId = ref<string[]>([])
 const valid = ref<boolean>(false)
-const form = ref()
+const formAddUser = ref()
 
-const submitForm = () => {
-  if (form.value.validate())
+const submitForm = async () => {
+  console.log('Form is valid', userData)
+  if (!formAddUser.value.validate())
     return toast.error('Please fill all required fields')
   if (valid.value === false)
     return toast.error('Please fill all required fields')
   userData.name = userData.name.toLowerCase()
-  console.log('Form is valid', userData, roleId.value, groupId.value)
+  await postUser(userData, roleId.value, groupId.value)
   handleCancel()
 }
 

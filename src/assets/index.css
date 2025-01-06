@@ -32,3 +32,22 @@ body {
 * {
   scrollbar-width: none;
 }
+
+.custom-confirm-button {
+  background-color: #facc15 !important; /* สีเหลือง */
+  color: black !important; /* ข้อความสีดำ */
+  border: none !important;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  box-shadow: none !important;
+}
+
+.custom-cancel-button {
+  background-color: #333 !important; /* สีดำ */
+  color: white !important; /* ข้อความสีขาว */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+}

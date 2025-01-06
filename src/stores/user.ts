@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', {
     ]) as unknown as string[],
     user: useStorage('user', '') as unknown as string,
     groups: useStorage('user-groups', []) as unknown as string[],
+    user_id: useStorage('user-id', '') as unknown as string,
   }),
   actions: {
     setPermissions(permissions: string[]) {
@@ -18,6 +19,9 @@ export const useUserStore = defineStore('user', {
     },
     setGroups(groups: string[]) {
       this.groups = groups
+    },
+    setUserId(user_id: string) {
+      this.user_id = user_id
     },
   },
 })

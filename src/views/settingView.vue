@@ -11,7 +11,7 @@
         <a href="#group" @click.prevent="scrollToSection('group')">#Group</a>
       </nav>
       <v-divider vertical class="border-black border-opacity-50"></v-divider>
-      <div class="flex flex-col gap-4">
+      <div class="flex-1 flex flex-col gap-4">
         <div id="users">
           <add-users />
         </div>
