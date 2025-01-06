@@ -6,7 +6,6 @@
     <v-card-text class="grid gap-4 lg:grid-cols-2">
       <v-form
         @submit.prevent="submit_createGroup"
-        v-model="valid"
         ref="groupRef"
         class="mt-6 space-y-2"
       >
@@ -104,8 +103,7 @@
               <v-form
                 class="mt-6"
                 @submit.prevent="editSubmit"
-                v-model="valid"
-                ref="roleRef"
+                ref="editGroupRef"
               >
                 <v-text-field
                   v-model="groupNameEdit"
@@ -157,8 +155,15 @@ import useGroupApi from '@/composable/groupApi'
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import editIcon from '@/assets/logo/icons/editIcon.vue'
 
-const { getGroups, groups, createGroup, deleteGroup, getGroupID, group, updateGroup } =
-  useGroupApi()
+const {
+  getGroups,
+  groups,
+  createGroup,
+  deleteGroup,
+  getGroupID,
+  group,
+  updateGroup,
+} = useGroupApi()
 const toast = useToast()
 
 onMounted(async () => {
@@ -167,17 +172,19 @@ onMounted(async () => {
 
 const groupName = ref('')
 const groupDescription = ref('')
-const valid = ref(false)
+
 const groupRef = ref()
+const editGroupRef = ref()
 const isOpen = ref(false)
 
 const groupNameEdit = ref<string>('')
 const groupDescriptionEdit = ref<string>('')
 
 const submit_createGroup = async () => {
-  if (!groupRef.value.validate()) {
+  const isValid = await groupRef.value.validate()
+  if (!isValid.valid) {
     toast.error('Please fill in all required fields')
-    return
+    return false
   }
 
   if (!groupName.value || !groupDescription.value) {
@@ -191,7 +198,6 @@ const submit_createGroup = async () => {
   await createGroup(data).finally(() => {
     groupName.value = ''
     groupDescription.value = ''
-    valid.value = false
     toast.success('Group created successfully')
   })
 
@@ -206,6 +212,11 @@ const handleDeleteGroup = async (id: string) => {
 }
 
 const handleEditGroup = async (id: string) => {
+  const isValid = await editGroupRef.value.validate()
+  if (!isValid.valid) {
+    toast.error('Please fill in all required fields')
+    return false
+  }
   await getGroupID(id)
   isOpen.value = true
   if (group.value) {
@@ -224,9 +235,7 @@ const editSubmit = async () => {
     description: groupDescriptionEdit.value,
   }
   await updateGroup(group.value[0].id, data).finally(() => {
-    groupNameEdit.value = ''
-    groupDescriptionEdit.value = ''
-    valid.value = false
+    editGroupRef.value.reset()
     toast.success('Group updated successfully')
   })
 
