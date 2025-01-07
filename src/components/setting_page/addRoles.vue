@@ -212,6 +212,7 @@ import usePermRoleApi from '@/composable/permRolesApi'
 import useActivityLogApi from '@/composable/activityLogApi'
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import editIcon from '@/assets/logo/icons/editIcon.vue'
+import Swal from 'sweetalert2'
 
 const {
   getPermission,
@@ -300,7 +301,6 @@ const editSubmit = async () => {
     // clear data
     await roleRef.value.reset()
     error.value = false
-
     toast.success('Role updated successfully')
   })
   await getRoles()
@@ -308,16 +308,30 @@ const editSubmit = async () => {
 }
 
 const handleDeleteClick = async (id: string) => {
-  await deleteRole(id).finally(async () => {
-    await postActivityLog(
-      'DELETE-ROLE-' + new Date().getTime(),
-      localStorage.getItem('user') || '',
-      'Delete role',
-      `Delete role [${id}]`,
-    )
-    toast.success('Role deleted successfully')
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    customClass: {
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button',
+    },
+  }).then(async result => {
+    if (result.isConfirmed) {
+      await deleteRole(id).finally(async () => {
+        await postActivityLog(
+          'DELETE-ROLE-' + new Date().getTime(),
+          localStorage.getItem('user') || '',
+          'Delete role',
+          `Delete role [${id}]`,
+        )
+        toast.success('Role deleted successfully')
+      })
+      await getRoles()
+    }
   })
-  await getRoles()
 }
 
 const addRoles = async () => {

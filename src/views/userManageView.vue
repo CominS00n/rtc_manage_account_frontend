@@ -386,15 +386,7 @@ const handleDeleteClick = (id: string) => {
   }).then(async result => {
     if (result.isConfirmed) {
       await deleteUser(id) // Delete user
-      Swal.fire({
-        title: 'Deleted!',
-        text: 'Your file has been deleted.',
-        customClass: {
-          confirmButton: 'custom-confirm-button',
-        },
-        icon: 'success',
-      })
-
+      toast.success('Group deleted successfully')
       await getUsers()
     }
   })

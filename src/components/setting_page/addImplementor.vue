@@ -166,6 +166,7 @@ import useActivityLogApi from '@/composable/activityLogApi'
 
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import editIcon from '@/assets/logo/icons/editIcon.vue'
+import Swal from 'sweetalert2'
 
 const toast = useToast()
 const {
@@ -208,8 +209,7 @@ const addImplementor = async () => {
     )
     getAllImplementors()
     toast.success('Implementor added successfully')
-    name.value = ''
-    email.value = ''
+    await implementorRef.value.reset()
   })
 }
 const handleEditClick = async (id: string) => {
@@ -218,20 +218,30 @@ const handleEditClick = async (id: string) => {
   })
 }
 const handleDeleteClick = (id: string) => {
-  if (confirm('Are you sure you want to delete this implementor?')) {
-    deleteImplementor(id).finally(async () => {
-      getAllImplementors()
-      await postActivityLog(
-        'DELETE-IMPLEMENTOR' + new Date().getTime(),
-        localStorage.getItem('user') || '',
-        'Delete Implementor',
-        `Delete implementor with id: ${id}`,
-      )
-      toast.success('Implementor deleted successfully')
-    })
-  } else {
-    return false
-  }
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    customClass: {
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button',
+    },
+  }).then(async result => {
+    if (result.isConfirmed) {
+      await deleteImplementor(id).finally(async () => {
+        await postActivityLog(
+          'DELETE-IMPLEMENTOR-' + new Date().getTime(),
+          localStorage.getItem('user') || '',
+          'Delete Implementor',
+          `Delete implementor with id: ${id}`,
+        )
+        toast.success('Implementor deleted successfully')
+      })
+      await getAllImplementors()
+    }
+  })
 }
 
 const saveData = async (id: string, name: string, email: string) => {

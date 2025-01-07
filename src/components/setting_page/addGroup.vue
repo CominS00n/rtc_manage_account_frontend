@@ -155,6 +155,7 @@ import useGroupApi from '@/composable/groupApi'
 import useActivityLogApi from '@/composable/activityLogApi'
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import editIcon from '@/assets/logo/icons/editIcon.vue'
+import Swal from 'sweetalert2'
 
 const {
   getGroups,
@@ -213,32 +214,34 @@ const submit_createGroup = async () => {
 }
 
 const handleDeleteGroup = async (id: string) => {
-  await deleteGroup(id).finally(async () => {
-    await postActivityLog(
-      'DELETE-GROUP-' + new Date().getTime(),
-      localStorage.getItem('user') || '',
-      'Delete group',
-      `Delete group [${id}]`,
-    )
-    toast.success('Group deleted successfully')
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    customClass: {
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button',
+    },
+  }).then(async result => {
+    if (result.isConfirmed) {
+      await deleteGroup(id).finally(async () => {
+        await postActivityLog(
+          'DELETE-GROUP-' + new Date().getTime(),
+          localStorage.getItem('user') || '',
+          'Delete group',
+          `Delete group [${id}]`,
+        )
+        toast.success('Group deleted successfully')
+      })
+      await getGroups()
+    }
   })
-  await getGroups()
 }
 
 const handleEditGroup = async (id: string) => {
-  const isValid = await editGroupRef.value.validate()
-  if (!isValid.valid) {
-    toast.error('Please fill in all required fields')
-    return false
-  }
-  await getGroupID(id).finally(async () => {
-    await postActivityLog(
-      'UPDATE-GROUP-' + new Date().getTime(),
-      localStorage.getItem('user') || '',
-      'Edit group',
-      `Edit group [${id}]`,
-    )
-  })
+  await getGroupID(id)
   isOpen.value = true
   if (group.value) {
     groupNameEdit.value = group.value[0].name
@@ -247,17 +250,23 @@ const handleEditGroup = async (id: string) => {
 }
 
 const editSubmit = async () => {
-  if (!groupNameEdit.value || !groupDescriptionEdit.value) {
+  const isValid = await editGroupRef.value.validate()
+  if (!isValid.valid) {
     toast.error('Please fill in all required fields')
-    return
+    return false
   }
   const data = {
     name: groupNameEdit.value,
     description: groupDescriptionEdit.value,
   }
-  await updateGroup(group.value[0].id, data).finally(() => {
+  await updateGroup(group.value[0].id, data).finally(async () => {
+    await postActivityLog(
+      'UPDATE-GROUP-' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Edit group',
+      `Edit group [${data.name}]`,
+    )
     editGroupRef.value.reset()
-    toast.success('Group updated successfully')
   })
 
   await getGroups()
