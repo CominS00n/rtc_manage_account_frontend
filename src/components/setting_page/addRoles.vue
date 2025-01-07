@@ -209,6 +209,7 @@ import type { Role } from '@/types/ntType'
 import { inputDefaultRules } from '@/rules/inputRules'
 
 import usePermRoleApi from '@/composable/permRolesApi'
+import useActivityLogApi from '@/composable/activityLogApi'
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import editIcon from '@/assets/logo/icons/editIcon.vue'
 
@@ -222,6 +223,7 @@ const {
   role,
   updateRole,
 } = usePermRoleApi()
+const { postActivityLog } = useActivityLogApi()
 const toast = useToast()
 
 const perm_group = reactive({
@@ -289,6 +291,12 @@ const editSubmit = async () => {
   }
 
   await updateRole(role.value[0].id, data).finally(async () => {
+    await postActivityLog(
+      'UPDATE-ROLE-' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Edit role',
+      `Edit role [${role.value[0].id}]`,
+    )
     // clear data
     await roleRef.value.reset()
     error.value = false
@@ -300,7 +308,13 @@ const editSubmit = async () => {
 }
 
 const handleDeleteClick = async (id: string) => {
-  await deleteRole(id).then(() => {
+  await deleteRole(id).finally(async () => {
+    await postActivityLog(
+      'DELETE-ROLE-' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Delete role',
+      `Delete role [${id}]`,
+    )
     toast.success('Role deleted successfully')
   })
   await getRoles()
@@ -323,11 +337,17 @@ const addRoles = async () => {
     roleName.value,
     roleDescription.value,
     permSelected.value,
-  ).finally(() => {
+  ).finally(async () => {
     roleName.value = ''
     roleDescription.value = ''
     permSelected.value = []
     error.value = false
+    await postActivityLog(
+      'CREATE-ROLE-' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Create New Role',
+      `Create role with name: ${roleName.value}`,
+    )
 
     toast.success('Role created successfully')
   })

@@ -292,7 +292,6 @@ const headers = ref([
   { key: 'account_type', title: 'Account Type' },
   { key: 'user_type', title: 'User Type' },
   { key: 'status', title: 'Status' },
-  // { key: 'actions', title: 'Actions' },
 ])
 
 onMounted(async () => {

@@ -27,8 +27,8 @@
               width="480"
               density="compact"
               v-model="password"
-              :rules="passwordRules"
               validate-on="submit"
+              :rules="passwordRules"
               @click:append-inner="visible = !visible"
             ></v-text-field>
             <div class="flex items-center gap-x-4 mt-6">
@@ -50,16 +50,19 @@ import { useToast } from 'vue-toastification'
 import { passwordRules } from '@/rules/inputRules'
 
 import useLoginApi from '@/composable/loginApi'
+import useActivityLogApi from '@/composable/activityLogApi'
 
 const router = useRouter()
 const userStore = useUserStore()
 const toast = useToast()
 
 const loginForm = ref()
-const username = ref<string>('')
-const password = ref<string>('')
+const username = ref<string>('administration')
+const password = ref<string>('qZvy42]eDo42Di.')
 
 const { login } = useLoginApi()
+const { postActivityLog } = useActivityLogApi()
+
 const visible = ref<boolean>(false)
 
 const handleLogin = async () => {
@@ -69,22 +72,31 @@ const handleLogin = async () => {
     return false
   }
   try {
-    await login(username.value, password.value).then(res => {
-      if (res.status === 401) {
-        toast.error('Invalid username or password')
-        return
-      } else {
-        userStore.setPermissions(res.permissions)
-        userStore.setUser(res.name)
-        userStore.setGroups(res.groups)
-        userStore.setUserId(res.id)
-      }
-    })
-    router.push('/').then(() => {
-      location.reload()
-      toast.success('Login successful')
-    })
+    const res = await login(username.value, password.value)
+    if (res && res.data.status !== 200) {
+      toast.error('Invalid username or password')
+      password.value = ''
+      return
+    }
+    if (res && res.data) {
+      userStore.setPermissions(res.data.data.permissions)
+      userStore.setUser(res.data.data.name)
+      userStore.setGroups(res.data.data.groups)
+      userStore.setUserId(res.data.data.id)
+      await postActivityLog(
+        'AUTH-LOGIN-' + new Date().getTime(),
+        res.data.data.name,
+        'Login',
+        'User logged in',
+      )
+
+      router.push('/').then(() => {
+        location.reload()
+        toast.success('Login successful')
+      })
+    }
   } catch (error) {
+    password.value = ''
     console.error(error)
   }
 }

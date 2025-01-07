@@ -1,21 +1,40 @@
-// import axios from "axios";
 import api from '.'
 import { ref } from 'vue'
-// import type { User } from "@/types/user";
-
-// axios.defaults.baseURL = "http://localhost:8000/api/v2";
-// axios.defaults.withCredentials = true;
+import type { ActivityLog } from '../types/ntType'
 
 export default function useActivityLogApi() {
-  const activityLogs = ref([])
+  const activityLogs = ref<ActivityLog[]>([])
   const getActivityLogs = async () => {
     try {
       const response = await api.get('/log_activity')
       activityLogs.value = response.data.data
-      console.log(activityLogs.value)
     } catch (error) {
       console.log(error)
     }
   }
-  return { activityLogs, getActivityLogs }
+
+  const postActivityLog = async (
+    code: string,
+    username: string,
+    action: string,
+    details: string,
+  ) => {
+    try {
+      const response = await api({
+        method: 'post',
+        url: '/log_activity',
+        data: {
+          code,
+          name: username,
+          action,
+          details,
+        },
+      })
+      console.log(response)
+      return true
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  return { activityLogs, getActivityLogs, postActivityLog }
 }

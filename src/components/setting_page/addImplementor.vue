@@ -162,6 +162,8 @@ import { useToast } from 'vue-toastification'
 import { inputDefaultRules, emailRules } from '@/rules/inputRules'
 import { useImplementorApi } from '@/composable/implementorApi'
 
+import useActivityLogApi from '@/composable/activityLogApi'
+
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import editIcon from '@/assets/logo/icons/editIcon.vue'
 
@@ -175,6 +177,7 @@ const {
   deleteImplementor,
   postImplementor,
 } = useImplementorApi()
+const { postActivityLog } = useActivityLogApi()
 
 const name = ref<string>('')
 const email = ref<string>('')
@@ -196,7 +199,13 @@ const addImplementor = async () => {
     name: name.value,
     email: email.value,
   }
-  postImplementor(result).finally(() => {
+  postImplementor(result).finally(async () => {
+    await postActivityLog(
+      'CREATE-IMPLEMENTOR' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Create New Implementor',
+      `Create new implementor with name: ${name.value} and email: ${email.value}`,
+    )
     getAllImplementors()
     toast.success('Implementor added successfully')
     name.value = ''
@@ -210,8 +219,14 @@ const handleEditClick = async (id: string) => {
 }
 const handleDeleteClick = (id: string) => {
   if (confirm('Are you sure you want to delete this implementor?')) {
-    deleteImplementor(id).finally(() => {
+    deleteImplementor(id).finally(async () => {
       getAllImplementors()
+      await postActivityLog(
+        'DELETE-IMPLEMENTOR' + new Date().getTime(),
+        localStorage.getItem('user') || '',
+        'Delete Implementor',
+        `Delete implementor with id: ${id}`,
+      )
       toast.success('Implementor deleted successfully')
     })
   } else {
@@ -230,8 +245,14 @@ const saveData = async (id: string, name: string, email: string) => {
     name,
     email,
   }
-  await updateImplementor(result).finally(() => {
+  await updateImplementor(result).finally(async () => {
     isOpen.value = false
+    await postActivityLog(
+      'UPDATE-IMPLEMENTOR' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Update Implementor',
+      `Update implementor with id: ${id}`,
+    )
     getAllImplementors()
     toast.success('Implementor updated successfully')
   })

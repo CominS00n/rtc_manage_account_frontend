@@ -134,7 +134,10 @@
                   variant="outlined"
                   density="compact"
                   validate-on="submit"
-                  type="password"
+                  :type="visible ? 'text' : 'password'"
+                  :rules="passwordRules"
+                  :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                  @click:append-inner="visible = !visible"
                 />
                 <v-text-field
                   v-model="userData.name"
@@ -174,7 +177,7 @@
                   variant="outlined"
                   density="compact"
                   validate-on="submit"
-                  :rules="[v => !!v || 'Email is required']"
+                  :rules="emailRules"
                 />
                 <v-text-field
                   v-model="userData.phone"
@@ -243,6 +246,7 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import { useToast } from 'vue-toastification'
+import { passwordRules, emailRules } from '@/rules/inputRules'
 
 import useUserApi from '@/composable/userApi'
 import useGroupApi from '@/composable/groupApi'
@@ -253,16 +257,23 @@ import nt_icon from '@/components/icon/nt_icon.vue'
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import editIcon from '@/assets/logo/icons/editIcon.vue'
 
-const { getUsers, users, getUserGroups, deleteUser, getUser, user } =
-  useUserApi()
+const {
+  getUsers,
+  users,
+  getUserGroups,
+  deleteUser,
+  getUser,
+  user,
+  updateUser,
+} = useUserApi()
 const { group, getGroupID, getGroups, groups } = useGroupApi()
 const { getRoles, roles } = usePermRoleApi()
 
 const toast = useToast()
 const userStore = useUserStore()
 const groupID = ref(userStore.groups)
-// const valid = ref(false)
 const isOpen = ref(false)
+const visible = ref<boolean>(false)
 const userData = reactive<UserRegister>({
   username: '',
   password: '',
@@ -321,11 +332,11 @@ const handleEditClick = async (id: string) => {
 }
 
 const headers = [
-  { key: 'full_name', title: 'Full Name' },
-  { key: 'position', title: 'Position' },
-  { key: 'email', title: 'Email' },
-  { key: 'phone', title: 'Phone' },
-  { key: 'username', title: 'Username' },
+  { key: 'user_name', title: 'Full Name' },
+  { key: 'user_position', title: 'Position' },
+  { key: 'user_email', title: 'Email' },
+  { key: 'user_phone', title: 'Phone' },
+  { key: 'user_username', title: 'Username' },
   { key: 'roles', title: 'Roles' },
   { key: 'groups', title: 'Groups' },
   { key: 'actions', title: 'Actions' },
@@ -410,10 +421,10 @@ const editSubmit = async () => {
     return false
   }
 
-
   // Update user data here
-  // await updateUser(userData, roleId.value, groupId.value)
-
+  const userId = user.value[0].user_id
+  await updateUser(userData, userId, roleId.value, groupId.value)
+  await getUsers()
   toast.success('User has been updated')
   closeModal()
 }

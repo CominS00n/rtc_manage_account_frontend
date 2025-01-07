@@ -342,6 +342,7 @@ import { useToast } from 'vue-toastification'
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
+import useActivityLogApi from '@/composable/activityLogApi'
 import { useAccReqApi } from '@/composable/accReqApi'
 import { useImplementorApi } from '@/composable/implementorApi'
 
@@ -349,6 +350,7 @@ import type { approvedInformation, sendReq } from '@/types/sendReq'
 
 const { postAccReq } = useAccReqApi()
 const { allImplementors, getAllImplementors } = useImplementorApi()
+const { postActivityLog } = useActivityLogApi()
 const implementorItems = ref<string[]>([])
 
 onMounted(async () => {
@@ -503,7 +505,14 @@ const sendRequest = async () => {
   }
 
   try {
-    await postAccReq(last_result)
+    await postAccReq(last_result).finally(async () => {
+      await postActivityLog(
+        'REQ-ACC-' + new Date().getTime(),
+        name.value,
+        'Request Account',
+        'User request account',
+      )
+    })
     toast.success('Request has been sent')
     // Reset all form
     await reqAccRef.value.reset()

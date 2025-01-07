@@ -66,7 +66,7 @@
           variant="outlined"
           density="compact"
           validate-on="submit"
-          :rules="[v => !!v || 'Email is required']"
+          :rules="emailRules"
         />
         <v-text-field
           v-model="userData.phone"
@@ -121,7 +121,11 @@
 import type { UserRegister } from '@/types/ntType'
 
 import { onMounted, reactive, ref } from 'vue'
-import { multipleComboboxRules, passwordRules } from '@/rules/inputRules'
+import {
+  multipleComboboxRules,
+  passwordRules,
+  emailRules,
+} from '@/rules/inputRules'
 import { useToast } from 'vue-toastification'
 
 import usePermRoleApi from '@/composable/permRolesApi'
@@ -134,7 +138,6 @@ const { postUser } = useUserApi()
 
 const toast = useToast()
 const visible = ref<boolean>(false)
-// const group = ref(sessionStorage.getItem('group'))
 
 onMounted(async () => {
   await getRoles()
@@ -166,6 +169,7 @@ const submitForm = async () => {
   userData.name = userData.name.toLowerCase()
   await postUser(userData, roleId.value, groupId.value).finally(async () => {
     await addUserRef.value.reset()
+    userData.password = ''
     toast.success('User added successfully')
     handleCancel()
   })

@@ -397,6 +397,8 @@ import {
 } from '@headlessui/vue'
 import { useToast } from 'vue-toastification'
 
+import useActivityLogApi from '@/composable/activityLogApi'
+
 import nt_icon from '@/components/icon/nt_icon.vue'
 
 import type { ApprovedInformation, AccReq } from '@/types/accReqs'
@@ -408,6 +410,7 @@ import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
 
 const toast = useToast()
 const route = useRoute()
+const { postActivityLog } = useActivityLogApi()
 
 const isOpen = ref<boolean>(false)
 const approvalIndex = ref<number>(0)
@@ -543,7 +546,15 @@ const signature_approvedSave = async (
       date: new Date().toISOString(),
     }
 
-    await approveAccReq(data)
+    await approveAccReq(data).finally(async () => {
+      await postActivityLog(
+        'APPROVE-' + new Date().getTime(),
+        approved.name,
+        'Approve',
+        'User approved request',
+      )
+      toast.success(resMessage)
+    })
   } catch (error) {
     console.error(error)
   }
@@ -561,7 +572,13 @@ const rejectApproved = async () => {
       date: new Date().toISOString(),
     }
 
-    await approveAccReq(data).then(() => {
+    await approveAccReq(data).finally(async () => {
+      await postActivityLog(
+        'REJECT-' + new Date().getTime(),
+        data.name,
+        'Reject',
+        'User rejected request',
+      )
       toast.success(resMessage)
     })
   } catch (error) {

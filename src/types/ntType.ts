@@ -34,9 +34,14 @@ export type UserRegister = {
 
 export type ActivityLog = {
   id: string
+  activityCode: string
   activityUser: string
+  activityAction: string
   activityDetails: string
-  activityDate: Date
+  activityDate: string
+  created_at: string
+  updated_at: string | null
+  deleted_at: string | null
 }
 
 export type Permission = {

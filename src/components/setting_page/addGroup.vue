@@ -152,6 +152,7 @@ import {
 } from '@headlessui/vue'
 
 import useGroupApi from '@/composable/groupApi'
+import useActivityLogApi from '@/composable/activityLogApi'
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import editIcon from '@/assets/logo/icons/editIcon.vue'
 
@@ -164,6 +165,7 @@ const {
   group,
   updateGroup,
 } = useGroupApi()
+const { postActivityLog } = useActivityLogApi()
 const toast = useToast()
 
 onMounted(async () => {
@@ -195,9 +197,15 @@ const submit_createGroup = async () => {
     name: groupName.value,
     description: groupDescription.value,
   }
-  await createGroup(data).finally(() => {
+  await createGroup(data).finally(async () => {
     groupName.value = ''
     groupDescription.value = ''
+    await postActivityLog(
+      'CREATE-GROUP-' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Create New group',
+      `Create group [${data.name}]`,
+    )
     toast.success('Group created successfully')
   })
 
@@ -205,7 +213,13 @@ const submit_createGroup = async () => {
 }
 
 const handleDeleteGroup = async (id: string) => {
-  await deleteGroup(id).finally(() => {
+  await deleteGroup(id).finally(async () => {
+    await postActivityLog(
+      'DELETE-GROUP-' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Delete group',
+      `Delete group [${id}]`,
+    )
     toast.success('Group deleted successfully')
   })
   await getGroups()
@@ -217,7 +231,14 @@ const handleEditGroup = async (id: string) => {
     toast.error('Please fill in all required fields')
     return false
   }
-  await getGroupID(id)
+  await getGroupID(id).finally(async () => {
+    await postActivityLog(
+      'UPDATE-GROUP-' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Edit group',
+      `Edit group [${id}]`,
+    )
+  })
   isOpen.value = true
   if (group.value) {
     groupNameEdit.value = group.value[0].name

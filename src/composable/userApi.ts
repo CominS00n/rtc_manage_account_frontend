@@ -68,5 +68,40 @@ export default function useUserApi() {
     }
   }
 
-  return { users, getUsers, getUserGroups, postUser, deleteUser, getUser, user }
+  const updateUser = async (
+    userData: UserRegister,
+    userId: string,
+    roleId: string[],
+    groupId: string[],
+  ) => {
+    try {
+      const user_data = {
+        username: userData.username,
+        password: userData.password,
+        name: userData.name,
+        position: userData.position,
+        company: userData.company,
+        division: userData.division,
+        email: userData.email,
+        phone: userData.phone,
+        role_id: roleId,
+        group_id: groupId,
+      }
+      const response = await api.put(`/users/${userId}`, user_data)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return {
+    users,
+    getUsers,
+    getUserGroups,
+    postUser,
+    deleteUser,
+    getUser,
+    user,
+    updateUser,
+  }
 }
