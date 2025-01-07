@@ -6,7 +6,6 @@
     <v-card-text class="grid gap-4 grid-cols-2">
       <v-form
         @submit.prevent="addImplementor"
-        v-model="valid"
         ref="implementorRef"
         class="mt-6"
       >
@@ -106,7 +105,17 @@
                 Update Implementor
               </DialogTitle>
               <div class="mt-6">
-                <p class="text-sm text-gray-500">
+                <v-form
+                  ref="editImplementRef"
+                  @submit.prevent="
+                    saveData(
+                      implementor[0].id,
+                      implementor[0].name,
+                      implementor[0].email,
+                    )
+                  "
+                  class="text-sm text-gray-500"
+                >
                   <v-text-field
                     label="Name"
                     v-model="implementor[0].name"
@@ -124,20 +133,11 @@
                     :rules="emailRules"
                     type="email"
                   />
-                </p>
+                </v-form>
               </div>
 
               <div class="mt-4">
-                <v-btn
-                  color="#facc15"
-                  @click="
-                    saveData(
-                      implementor[0].id,
-                      implementor[0].name,
-                      implementor[0].email,
-                    )
-                  "
-                >
+                <v-btn color="#facc15">
                   <p class="capitalize">Submit</p>
                 </v-btn>
               </div>
@@ -178,30 +178,20 @@ const {
 
 const name = ref<string>('')
 const email = ref<string>('')
-const valid = ref<boolean>(false)
 const implementorRef = ref()
+const editImplementRef = ref()
 const isOpen = ref(false)
 
 onMounted(async () => {
   await getAllImplementors()
 })
 
-const addImplementor = () => {
-  if (!implementorRef.value.validate()) {
+const addImplementor = async () => {
+  const isValid = await implementorRef.value.validate()
+  if (!isValid.valid) {
     toast.error('Please fill in all required fields')
     return false
   }
-
-  if (name.value === '' || email.value === '') {
-    toast.error('Please fill in all required fields')
-    return false
-  }
-
-  if (valid.value === false) {
-    toast.error('Please fill in all required fields')
-    return false
-  }
-
   const result = {
     name: name.value,
     email: email.value,
@@ -211,7 +201,6 @@ const addImplementor = () => {
     toast.success('Implementor added successfully')
     name.value = ''
     email.value = ''
-
   })
 }
 const handleEditClick = async (id: string) => {
@@ -231,9 +220,10 @@ const handleDeleteClick = (id: string) => {
 }
 
 const saveData = async (id: string, name: string, email: string) => {
-  if (name === '' || email === '') {
+  const isValid = await editImplementRef.value.validate()
+  if (!isValid.valid) {
     toast.error('Please fill in all required fields')
-    return
+    return false
   }
   const result = {
     id,

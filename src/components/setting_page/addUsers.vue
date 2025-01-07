@@ -5,8 +5,7 @@
     </v-card-title>
     <v-card-text>
       <v-form
-        ref="formAddUser"
-        v-model="valid"
+        ref="addUserRef"
         @submit.prevent="submitForm"
         class="grid gap-4 grid-cols-2"
       >
@@ -24,7 +23,10 @@
           variant="outlined"
           density="compact"
           validate-on="submit"
-          :rules="[v => !!v || 'Password is required']"
+          :type="visible ? 'text' : 'password'"
+          :rules="passwordRules"
+          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+          @click:append-inner="visible = !visible"
         />
         <v-text-field
           v-model="userData.name"
@@ -119,7 +121,7 @@
 import type { UserRegister } from '@/types/ntType'
 
 import { onMounted, reactive, ref } from 'vue'
-import { multipleComboboxRules } from '@/rules/inputRules'
+import { multipleComboboxRules, passwordRules } from '@/rules/inputRules'
 import { useToast } from 'vue-toastification'
 
 import usePermRoleApi from '@/composable/permRolesApi'
@@ -131,6 +133,7 @@ const { getGroups, groups } = useGroupApi()
 const { postUser } = useUserApi()
 
 const toast = useToast()
+const visible = ref<boolean>(false)
 // const group = ref(sessionStorage.getItem('group'))
 
 onMounted(async () => {
@@ -139,41 +142,36 @@ onMounted(async () => {
 })
 
 const userData = reactive<UserRegister>({
-  username: 'comins00n',
-  password: '!admin1234',
-  name: 'sitthichai',
-  position: 'test',
-  company: 'test',
-  division: 'test',
-  email: 'gamesxbow@gmail.com',
-  phone: '095xxxxxxx',
+  username: '',
+  password: '',
+  name: '',
+  position: '',
+  company: '',
+  division: '',
+  email: '',
+  phone: '',
 })
 const roleId = ref<string[]>([])
 const groupId = ref<string[]>([])
-const valid = ref<boolean>(false)
-const formAddUser = ref()
+const addUserRef = ref()
 
 const submitForm = async () => {
-  console.log('Form is valid', userData)
-  if (!formAddUser.value.validate())
-    return toast.error('Please fill all required fields')
-  if (valid.value === false)
-    return toast.error('Please fill all required fields')
+  const isValid = await addUserRef.value.validate()
+  if (!isValid) {
+    toast.error('Please fill all required fields')
+    return false
+  }
+  if (roleId.value.length === 0 || groupId.value.length === 0)
+    return toast.error('Please select role or group')
   userData.name = userData.name.toLowerCase()
-  await postUser(userData, roleId.value, groupId.value)
-  handleCancel()
+  await postUser(userData, roleId.value, groupId.value).finally(async () => {
+    await addUserRef.value.reset()
+    toast.success('User added successfully')
+    handleCancel()
+  })
 }
 
-const handleCancel = () => {
-  userData.username = ''
-  userData.password = ''
-  userData.name = ''
-  userData.position = ''
-  userData.company = ''
-  userData.division = ''
-  userData.email = ''
-  userData.phone = ''
-  roleId.value = []
-  groupId.value = []
+const handleCancel = async () => {
+  await addUserRef.value.reset()
 }
 </script>

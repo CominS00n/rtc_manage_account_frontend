@@ -9,29 +9,33 @@
           <h1 class="text-2xl font-bold">Login</h1>
         </div>
         <div class="mt-6">
-          <v-text-field
-            label="Username"
-            variant="outlined"
-            width="480"
-            density="compact"
-            v-model="username"
-          ></v-text-field
-          ><v-text-field
-            :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-            label="Password"
-            variant="outlined"
-            :type="visible ? 'text' : 'password'"
-            width="480"
-            density="compact"
-            v-model="password"
-            @click:append-inner="visible = !visible"
-          ></v-text-field>
-        </div>
-        <div class="flex items-center gap-x-4 mt-6">
-          <v-btn @click="handleLogin" color="#facc15" class="flex-1"
-            >Login</v-btn
-          >
-          <v-btn @click="handleBack">Cancel</v-btn>
+          <v-form @submit.prevent="handleLogin" ref="loginForm">
+            <v-text-field
+              label="Username"
+              variant="outlined"
+              width="480"
+              density="compact"
+              v-model="username"
+              :rules="[v => !!v || 'Username is required']"
+              validate-on="submit"
+            ></v-text-field>
+            <v-text-field
+              :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+              label="Password"
+              variant="outlined"
+              :type="visible ? 'text' : 'password'"
+              width="480"
+              density="compact"
+              v-model="password"
+              :rules="passwordRules"
+              validate-on="submit"
+              @click:append-inner="visible = !visible"
+            ></v-text-field>
+            <div class="flex items-center gap-x-4 mt-6">
+              <v-btn type="submit" color="#facc15" class="flex-1">Login</v-btn>
+              <v-btn @click="handleBack">Cancel</v-btn>
+            </div>
+          </v-form>
         </div>
       </v-card-text>
     </v-card>
@@ -43,6 +47,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'vue-toastification'
+import { passwordRules } from '@/rules/inputRules'
 
 import useLoginApi from '@/composable/loginApi'
 
@@ -50,6 +55,7 @@ const router = useRouter()
 const userStore = useUserStore()
 const toast = useToast()
 
+const loginForm = ref()
 const username = ref<string>('')
 const password = ref<string>('')
 
@@ -57,9 +63,10 @@ const { login } = useLoginApi()
 const visible = ref<boolean>(false)
 
 const handleLogin = async () => {
-  if (!username.value || !password.value) {
-    toast.error('Please enter username and password')
-    return
+  const isValid = await loginForm.value.validate()
+  if (!isValid.valid) {
+    toast.error('Please fill in all required fields')
+    return false
   }
   try {
     await login(username.value, password.value).then(res => {
@@ -75,6 +82,7 @@ const handleLogin = async () => {
     })
     router.push('/').then(() => {
       location.reload()
+      toast.success('Login successful')
     })
   } catch (error) {
     console.error(error)

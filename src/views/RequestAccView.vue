@@ -3,8 +3,7 @@
     <h1 class="font-bold text-2xl mb-3">RTC Request Account</h1>
     <v-form
       @submit.prevent="sendRequest"
-      v-model="valid"
-      ref="formRef"
+      ref="reqAccRef"
       class="flex flex-col gap-y-4"
     >
       <v-card>
@@ -354,14 +353,15 @@ const implementorItems = ref<string[]>([])
 
 onMounted(async () => {
   await getAllImplementors()
-  implementorItems.value = allImplementors.value.map(item => item.email + ' (' + item.name + ')')
+  implementorItems.value = allImplementors.value.map(
+    item => item.email + ' (' + item.name + ')',
+  )
 })
 
 const initialCount = ref(1)
 const toast = useToast()
 
-const valid = ref<boolean>(false)
-const formRef = ref()
+const reqAccRef = ref()
 
 // Data variable user information
 const name = ref<string>('')
@@ -442,18 +442,14 @@ const validateSelection = () => {
 }
 
 const sendRequest = async () => {
-  if (!formRef.value.validate()) {
-    toast.error('Please fill in all required fields')
-    return
-  }
-
   if (!validateSelection()) {
     return
   }
 
-  if (valid.value === false) {
+  const isValid = await reqAccRef.value.validate()
+  if (!isValid.valid) {
     toast.error('Please fill in all required fields')
-    return
+    return false
   }
 
   const account_request = reactive({
@@ -510,23 +506,7 @@ const sendRequest = async () => {
     await postAccReq(last_result)
     toast.success('Request has been sent')
     // Reset all form
-    name.value = ''
-    position.value = ''
-    company.value = ''
-    division.value = ''
-    telephone.value = ''
-    email.value = ''
-    request_type.value = []
-    request_date.value = null
-    system.value = null
-    selected_type.value = null
-    expire_date.value = null
-    service_type.value = []
-    user_type.value = []
-    otherService.value = false
-    otherServiceType.value = []
-    headOfReq.value = []
-    implementor.value = null
+    await reqAccRef.value.reset()
   } catch (error) {
     console.error(error)
     toast.error('Failed to send request')
@@ -550,10 +530,6 @@ onMounted(() => {
     addHeadOfReq()
   }
 })
-
-// const implementorItems = ref<string[]>([
-//   'spuckpooforwork@gmail.com (CominS00n)',
-// ])
 
 const req_types = ref<string[]>([
   'New Account',

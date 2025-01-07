@@ -243,7 +243,6 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import { useToast } from 'vue-toastification'
-// import { multipleComboboxRules } from '@/rules/inputRules'
 
 import useUserApi from '@/composable/userApi'
 import useGroupApi from '@/composable/groupApi'
@@ -404,7 +403,7 @@ const editSubmit = async () => {
   if (groupId.value.length === 0) {
     user.value[0].groups = user.value[0].groups
   }
-  
+
   const isValid = await userForm.value.validate()
   if (!isValid.valid) {
     toast.error('Please fill in all required fields')

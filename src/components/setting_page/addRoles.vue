@@ -4,12 +4,7 @@
       <h1 class="font-bold text-xl">Roles</h1>
     </v-card-title>
     <v-card-text class="grid gap-4 lg:grid-cols-2">
-      <v-form
-        @submit.prevent="submit_createRoles"
-        v-model="valid"
-        ref="roleRef"
-        class="mt-6 space-y-2"
-      >
+      <v-form @submit.prevent="addRoles" ref="roleRef" class="mt-6 space-y-2">
         <v-text-field
           v-model="roleName"
           label="Role name"
@@ -136,12 +131,7 @@
               >
                 Update Implementor
               </DialogTitle>
-              <v-form
-                class="mt-6"
-                @submit.prevent="editSubmit"
-                v-model="valid"
-                ref="roleRef"
-              >
+              <v-form class="mt-6" @submit.prevent="editSubmit" ref="roleRef">
                 <div class="text-sm text-gray-500">
                   <v-text-field
                     v-model="editNameRole"
@@ -257,7 +247,6 @@ const response = ref<Role[]>([])
 const roleName = ref<string>('')
 const roleDescription = ref<string>('')
 const permSelected = ref<string[]>([])
-const valid = ref<boolean>(false)
 const error = ref<boolean>(false)
 const roleRef = ref()
 const isOpen = ref(false)
@@ -281,10 +270,10 @@ const handleEditClick = async (id: string) => {
 }
 
 const editSubmit = async () => {
-  isOpen.value = !isOpen.value
-  if (!roleRef.value.validate()) {
+  const isValid = await roleRef.value.validate()
+  if (!isValid.valid) {
     toast.error('Please fill in all required fields')
-    return
+    return false
   }
 
   if (editPermSelected.value.length === 0 || editNameRole.value === '') {
@@ -299,16 +288,15 @@ const editSubmit = async () => {
     permissions: editPermSelected.value,
   }
 
-  await updateRole(role.value[0].id, data).finally(() => {
+  await updateRole(role.value[0].id, data).finally(async () => {
     // clear data
-    editNameRole.value = ''
-    editDescription.value = ''
-    editPermSelected.value = []
+    await roleRef.value.reset()
     error.value = false
 
     toast.success('Role updated successfully')
   })
   await getRoles()
+  closeModal()
 }
 
 const handleDeleteClick = async (id: string) => {
@@ -318,15 +306,17 @@ const handleDeleteClick = async (id: string) => {
   await getRoles()
 }
 
-const submit_createRoles = async () => {
-  if (!roleRef.value.validate()) {
-    toast.error('Please fill in all required fields')
-    return
-  }
+const addRoles = async () => {
   if (permSelected.value.length === 0 || roleName.value === '') {
     error.value = true
     toast.error('Please fill in all required fields')
     return
+  }
+
+  const isValid = await roleRef.value.validate()
+  if (!isValid.valid) {
+    toast.error('Please fill in all required fields')
+    return false
   }
 
   await createRoles(
@@ -334,7 +324,6 @@ const submit_createRoles = async () => {
     roleDescription.value,
     permSelected.value,
   ).finally(() => {
-    // clear data
     roleName.value = ''
     roleDescription.value = ''
     permSelected.value = []
