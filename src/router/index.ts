@@ -64,23 +64,14 @@ const routes = [
         },
       },
       // {
-      //   path: 'roles',
-      //   name: 'roles',
-      //   component: () => import('../views/RoleManageView.vue'),
+      //   path: 'user-audit',
+      //   name: 'user audit',
+      //   component: () => import('../views/UserAuditView.vue'),
       //   meta: {
-      //     title: 'Role Management',
+      //     title: 'User Audit',
       //     requiresAuth: true,
       //   },
       // },
-      {
-        path: 'user-audit',
-        name: 'user audit',
-        component: () => import('../views/UserAuditView.vue'),
-        meta: {
-          title: 'User Audit',
-          requiresAuth: true,
-        },
-      },
       {
         path: 'settings',
         name: 'settings',

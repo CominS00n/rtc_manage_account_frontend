@@ -27,8 +27,8 @@
           :rules="inputDefaultRules"
         ></v-textarea>
 
-        <v-btn type="submit" color="#facc15" class="w-full mt-4">
-          <p class="capitalize">Create</p>
+        <v-btn type="submit" color="#facc15" class="w-full mt-4" :disabled="!checkPermission('groupCreate')">
+          <p class="capitalize">Submit</p>
         </v-btn>
       </v-form>
       <div class="flex flex-col h-full">
@@ -48,11 +48,13 @@
                   <edit-icon
                     class="cursor-pointer"
                     @click="handleEditGroup(group.id)"
+                    v-show="checkPermission('groupUpdate')"
                   />
                   <trash-icon
                     color="red"
                     class="cursor-pointer"
                     @click="handleDeleteGroup(group.id)"
+                    v-show="checkPermission('groupDelete')"
                   />
                 </div>
               </template>
@@ -150,6 +152,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
+import { checkPermission } from '@/constants/checkPermission'
 
 import useGroupApi from '@/composable/groupApi'
 import useActivityLogApi from '@/composable/activityLogApi'

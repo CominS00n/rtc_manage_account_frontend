@@ -30,7 +30,12 @@
           />
         </div>
 
-        <v-btn type="submit" color="#facc15" class="w-full">
+        <v-btn
+          type="submit"
+          color="#facc15"
+          class="w-full"
+          :disabled="!checkPermission('implementorCreate')"
+        >
           <p class="capitalize">save</p>
         </v-btn>
       </v-form>
@@ -52,11 +57,13 @@
                   <edit-icon
                     class="cursor-pointer"
                     @click="handleEditClick(implementor.id)"
+                    v-show="checkPermission('implementorUpdate')"
                   />
                   <trash-icon
                     color="red"
                     class="cursor-pointer"
                     @click="handleDeleteClick(implementor.id)"
+                    v-show="checkPermission('implementorDelete')"
                   />
                 </div>
               </template>
@@ -161,6 +168,7 @@ import {
 import { useToast } from 'vue-toastification'
 import { inputDefaultRules, emailRules } from '@/rules/inputRules'
 import { useImplementorApi } from '@/composable/implementorApi'
+import { checkPermission } from '@/constants/checkPermission'
 
 import useActivityLogApi from '@/composable/activityLogApi'
 

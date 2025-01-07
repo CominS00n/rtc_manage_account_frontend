@@ -56,5 +56,13 @@ export default function useGroupApi() {
     }
   }
 
-  return { groups, getGroups, group, getGroupID, createGroup, updateGroup, deleteGroup }
+  return {
+    groups,
+    getGroups,
+    group,
+    getGroupID,
+    createGroup,
+    updateGroup,
+    deleteGroup,
+  }
 }

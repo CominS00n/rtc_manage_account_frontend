@@ -24,17 +24,11 @@ export const menuList = [
     role: 'logRead',
   },
   // {
-  //   title: 'roles',
-  //   link: 'roles',
-  //   icon: 'shield-check',
-  //   role: 'roleRead',
+  //   title: 'user audit',
+  //   link: 'user-audit',
+  //   icon: 'command-line',
+  //   role: 'userUpdate',
   // },
-  {
-    title: 'user audit',
-    link: 'user-audit',
-    icon: 'command-line',
-    role: 'userUpdate',
-  },
   {
     title: 'settings',
     link: 'settings',

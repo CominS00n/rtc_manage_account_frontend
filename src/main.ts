@@ -18,8 +18,8 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
-import VueSweetalert2 from 'vue-sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+import VueSweetalert2 from 'vue-sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
 
 const vuetify = createVuetify({
   components,

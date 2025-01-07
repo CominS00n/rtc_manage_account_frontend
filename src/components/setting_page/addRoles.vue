@@ -47,11 +47,16 @@
           </div>
         </div>
 
-        <v-btn type="submit" color="#facc15" class="w-full mt-4">
+        <v-btn
+          type="submit"
+          color="#facc15"
+          class="w-full mt-4"
+          :disabled="!checkPermission('roleCreate')"
+        >
           <p class="capitalize">Create</p>
         </v-btn>
       </v-form>
-      <div class="flex flex-col h-full" v-show="checkPermission('roleRead')">
+      <div class="flex flex-col h-full">
         <p class="text-md font-bold">View all roles</p>
         <div
           class="h-full max-h-[600px] overflow-y-auto border border-gray-200 rounded-lg"
@@ -240,6 +245,14 @@ const perm_group = reactive({
     title: 'Request Account',
     perm: <Role[]>[],
   },
+  group: {
+    title: 'Group',
+    perm: <Role[]>[],
+  },
+  implements: {
+    title: 'Implements',
+    perm: <Role[]>[],
+  },
   log: {
     title: 'Log',
     perm: <Role[]>[],
@@ -384,6 +397,14 @@ onMounted(async () => {
 
   perm_group.log.perm = response.value.filter(item => {
     return item.name.includes('log')
+  })
+
+  perm_group.group.perm = response.value.filter(item => {
+    return item.name.includes('group')
+  })
+
+  perm_group.implements.perm = response.value.filter(item => {
+    return item.name.includes('implement')
   })
 
   await getRoles()

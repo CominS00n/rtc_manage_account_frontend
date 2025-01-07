@@ -11,7 +11,7 @@ export default function useLoginApi() {
         password: password,
       })
       if (response.status === 200) {
-        return {data: response.data, status: response.status}
+        return { data: response.data, status: response.status }
       }
     } catch (err) {
       console.log(err)
