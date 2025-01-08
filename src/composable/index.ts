@@ -5,6 +5,8 @@ const api = axios.create({
   withCredentials: true,
 })
 
+console.log(import.meta.env.VITE_API_BASE_URL)
+
 //192.168.127.174 172.17.0.1 172.18.0.1
 
 export default api
