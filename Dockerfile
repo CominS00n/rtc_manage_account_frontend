@@ -1,26 +1,31 @@
-# Use a more recent version of Node.js
-FROM node:20-alpine
-
-# Install curl
-RUN apk add --no-cache curl
-
-# Set working directory inside the container
+# filepath: /D:/rct_user_mangement/frontend/Dockerfile
+# Stage 1: Build
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copy package.json and yarn.lock
-COPY package.json yarn.lock ./
+# ติดตั้ง bash, curl, และ yarn (ตรวจสอบสถานะก่อนติดตั้ง yarn)
+RUN apk add --no-cache bash curl \
+    && curl -o- -L https://yarnpkg.com/install.sh | bash \
+    && export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-# Install dependencies
+# Copy package files และ install dependencies
+COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-# Copy the rest of the application files
+# Build the project
 COPY . .
-
-# Build the application
 RUN yarn build
 
-# Expose the port your app runs on
-EXPOSE 3000
+# Stage 2: Serve with Nginx
+FROM nginx:alpine AS production
+WORKDIR /usr/share/nginx/html
 
-# Command to run the app
-CMD ["sh", "-c", "yarn preview --host 0.0.0.0 --port 3000 & sleep 10 && curl -f http://backend:8000/api/v2 || exit 1"]
+# Copy built files จาก Stage 1
+COPY --from=builder /app/dist .
+
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose Port และ Start Nginx
+EXPOSE 82
+CMD ["nginx", "-g", "daemon off;"]
