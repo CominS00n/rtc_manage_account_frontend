@@ -1,6 +1,7 @@
 <template>
   <nav
-    class="hidden xl:flex flex-col justify-between h-full w-[230px] bg-inherit"
+    class="hidden xl:flex flex-col justify-between h-full w-[230px] bg-inherit p-2"
+    v-if="userInfo !== ''"
   >
     <ul class="space-y-2">
       <li class="flex justify-center mt-6 mb-10">
@@ -24,15 +25,11 @@
         </router-link>
       </li>
     </ul>
-    <!-- <div>
-      <router-link to="/login" v-if="userInfo === ''">Login </router-link>
-      <button v-else @click="handleLogout">logout</button>
-    </div> -->
   </nav>
 
   <nav class="mobile-menu xl:hidden">
     <div class="flex items-center justify-between">
-      <img src="/src/assets/logo/ntlogo.png" alt="" class="h-12" />
+      <img src="/src/assets/logo/ntlogo.png" alt="" class="h-12 p-2" />
       <v-btn variant="text" @click="isOpen = !isOpen">
         <svg
           width="24"
@@ -87,11 +84,41 @@
         </li>
       </ul>
       <div class="col-span-full">
-        <v-btn to="/login" class="w-full mt-2">
-          <template #default>
-            <p class="capitalize">Login</p>
+        <v-btn color="#facc15" to="/login" v-if="userInfo === ''" class="w-full">
+          <template #append>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
+                stroke="#292D32"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M2 12H14.88"
+                stroke="#292D32"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12.65 8.6499L16 11.9999L12.65 15.3499"
+                stroke="#292D32"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </template>
+          Login
         </v-btn>
+        <v-btn v-else color="#facc15" @click="handleLogout" class="w-full"> Logout </v-btn>
       </div>
     </div>
   </transition>
@@ -102,18 +129,18 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { menuList } from '@/constants/menuList'
 import { useUserStore } from '@/stores/user'
-// import useLoginApi from '@/composable/loginApi'
+import useLoginApi from '@/composable/loginApi'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
 
+const { logout } = useLoginApi()
 const router = useRouter()
 const isOpen = ref(false)
-// const { logout } = useLoginApi()
 
 // Get user's role from the store
 const userStore = useUserStore()
 const userPermissions = ref(userStore.permissions)
-// const userInfo = ref(userStore.user)
+const userInfo = ref(userStore.user)
 
 // Filter the menu list based on the user's role
 const filteredMenuList = computed(() =>
@@ -133,18 +160,20 @@ const splitMenuList = (list: typeof menuList, size: number) => {
   return result
 }
 
-// const handleLogout = async () => {
-//   userStore.setPermissions([])
-//   await logout
-//   location.reload()
-// }
+const handleLogout = async () => {
+  userStore.setPermissions([])
+  userStore.setUser('')
+  await logout()
+  router.push('/').finally(() => {
+    location.reload()
+  })
+}
 </script>
 
 <style scoped>
 .menu-activate {
   background-color: #facc15;
   border-radius: 6px;
-  /* @apply bg-yellow-400 rounded-md; */
 }
 
 .slide-fade-enter-active,

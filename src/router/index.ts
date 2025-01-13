@@ -4,7 +4,10 @@ const routes = [
   {
     path: '/',
     name: 'request',
-    component: () => import('../views/RequestAccView.vue'),
+    components: {
+      default: () => import('../views/RequestAccView.vue'),
+      LeftSidebar: () => import('../components/layouts/navigationBar.vue'),
+    },
     meta: {
       title: 'Request Account',
     },

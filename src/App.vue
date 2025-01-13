@@ -26,11 +26,12 @@
                     ? 'flex items-center justify-between'
                     : 'flex items-center justify-end'
                 "
+                class="flex items-center lg:justify-end"
               >
                 <img
                   src="/ntlogo.ico"
                   alt=""
-                  class="h-10 cursor-pointer"
+                  class="h-10 cursor-pointer lg:hidden"
                   v-show="
                     route.path === '/' || route.name === 'tracking status'
                   "
@@ -130,26 +131,15 @@ const handleLogout = async () => {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  /* border: 1px solid red; */
   @apply flex flex-col xl:flex-row;
 }
-/* .main-view {
-  border-right: 5px solid red;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-} */
 
 aside {
-  min-width: 100px;
-  /* height: 100%; */
+  /* min-width: 100px; */
   background: white;
-  /* border-right: 2px solid black; */
-  /* background: #222; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  /* padding: 1rem; */
   z-index: 100;
-  /* @apply hidden xl:block ; */
 }
 
 .content-body {
@@ -158,10 +148,7 @@ aside {
 
 main {
   flex: 1;
-  /* padding: 1rem; */
-  /* height: 100vh; */
   overflow: hidden;
-  /* border: 2px solid blue; */
   @apply xl:overflow-hidden;
 }
 
