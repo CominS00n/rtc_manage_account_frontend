@@ -29,9 +29,6 @@ body {
   opacity: 0;
 }
 
-* {
-  scrollbar-width: none;
-}
 
 .custom-confirm-button {
   background-color: #facc15 !important; /* สีเหลือง */

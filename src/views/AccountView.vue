@@ -51,10 +51,9 @@
               <td class="fixed-column">
                 <v-menu location="left top">
                   <template v-slot:activator="{ props: menu }">
-                    <menu-icon
-                      v-bind="mergeProps(menu)"
-                      class="cursor-pointer"
-                    />
+                    <v-btn icon variant="plain" v-bind="mergeProps(menu)">
+                      <more-icon class="rotate-90" />
+                    </v-btn>
                   </template>
                   <v-list>
                     <v-list-item>
@@ -135,6 +134,7 @@
         </v-list>
       </v-card-text>
     </v-card>
+
     <TransitionRoot appear :show="isOpen" as="template">
       <Dialog as="div" @close="closeModal" class="relative z-[999]">
         <TransitionChild
@@ -273,7 +273,8 @@ import nt_icon from '@/components/icon/nt_icon.vue'
 import documentDownload from '@/assets/logo/icons/documents/documentDownload.vue'
 import documentIcon from '@/assets/logo/icons/documents/documentIcon.vue'
 import documentText from '@/assets/logo/icons/documents/documentText.vue'
-import menuIcon from '@/assets/logo/icons/menuIcon.vue'
+// import menuIcon from '@/assets/logo/icons/menuIcon.vue'
+import moreIcon from '@/assets/logo/icons/moreIcon.vue'
 import tickIcon from '@/assets/logo/icons/tickIcon.vue'
 
 const { getAllAccReqs, allAccReqs, accReq, getAccReq, putAccReqComment } =

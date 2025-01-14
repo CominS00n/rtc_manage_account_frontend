@@ -473,7 +473,7 @@ const sendRequest = async () => {
     status: 'Pending',
     remarks: '',
   })
-  
+
   const implementor_email = ref<string>(implementor.value?.split(' ')[0] || '')
   const implementor_name = ref<string>(
     implementor.value?.split('(')[1].replace(')', '') || '',
@@ -514,6 +514,10 @@ const sendRequest = async () => {
     toast.success('Request has been sent')
     // Reset all form
     await reqAccRef.value.reset()
+    request_type.value = []
+    service_type.value = []
+    user_type.value = []
+    otherServiceType.value = []
   } catch (error) {
     console.error(error)
     toast.error('Failed to send request')
