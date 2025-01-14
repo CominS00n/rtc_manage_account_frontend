@@ -30,7 +30,7 @@ export const useAccReqApi = () => {
       console.log(result)
       const response = await api({
         method: 'post',
-        url: '/account_request/',
+        url: '/account_request',
         data: result,
       })
       console.log(response)

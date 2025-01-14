@@ -160,8 +160,6 @@
                 density="compact"
                 placeholder="DD/MM/YYYY"
                 persistent-placeholder
-                :rules="dateRules"
-                validate-on="submit"
               ></v-date-input>
             </div>
             <div id="service_type">
@@ -475,7 +473,7 @@ const sendRequest = async () => {
     status: 'Pending',
     remarks: '',
   })
-
+  
   const implementor_email = ref<string>(implementor.value?.split(' ')[0] || '')
   const implementor_name = ref<string>(
     implementor.value?.split('(')[1].replace(')', '') || '',
