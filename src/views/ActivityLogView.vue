@@ -23,17 +23,18 @@
           :items="activityLogs"
           :headers="headers"
           :search="search"
-          class="data-table text-nowrap max-h-[720px]"
           :items-per-page-options="[10, 25, 50]"
           :items-per-page="10"
+          :sort-by="[{ key: 'created_at', order: 'desc' }]"
+          class="data-table text-nowrap max-h-[720px]"
         >
           <template v-slot:item="{ item }">
             <tr>
               <td>{{ item.activityCode }}</td>
               <td>{{ item.activityUser }}</td>
               <td>{{ item.activityAction }}</td>
-              <td>{{ item.activityDetails }}</td>
-              <td>{{ item.activityDate }}</td>
+              <td class="max-w-64 text-wrap">{{ item.activityDetails }}</td>
+              <td>{{ dateFormat(new Date(item.created_at)) }}</td>
             </tr>
           </template>
         </v-data-table>
@@ -46,6 +47,7 @@
 import { ref, onMounted } from 'vue'
 
 import useActivityLogApi from '@/composable/activityLogApi'
+import dateFormat from '@/constants/dateFormat'
 
 const { getActivityLogs, activityLogs } = useActivityLogApi()
 onMounted(async () => {
@@ -58,6 +60,6 @@ const headers = ref([
   { key: 'activityUser', title: 'Full Name' },
   { key: 'activityAction', title: 'Action' },
   { key: 'activityDetails', title: 'Detail' },
-  { key: 'activityDate', title: 'Date' },
+  { key: 'created_at', title: 'Date' },
 ])
 </script>

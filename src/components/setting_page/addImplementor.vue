@@ -121,7 +121,7 @@
                       implementor[0].email,
                     )
                   "
-                  class="text-sm text-gray-500"
+                  class="text-sm text-gray-500 space-y-2"
                 >
                   <v-text-field
                     label="Name"
@@ -140,13 +140,12 @@
                     :rules="emailRules"
                     type="email"
                   />
+                  <div class="mt-4">
+                    <v-btn color="#facc15" type="submit">
+                      <p class="capitalize">Submit</p>
+                    </v-btn>
+                  </div>
                 </v-form>
-              </div>
-
-              <div class="mt-4">
-                <v-btn color="#facc15">
-                  <p class="capitalize">Submit</p>
-                </v-btn>
               </div>
             </DialogPanel>
           </TransitionChild>

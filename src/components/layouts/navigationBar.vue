@@ -17,7 +17,7 @@
         "
       >
         <router-link
-          :to="menu.link"
+          :to="{ name: menu.title }"
           class="flex items-center gap-x-2 w-full h-full p-2 capitalize"
         >
           <nt_icon :icon="menu.icon" />
@@ -75,7 +75,7 @@
           class="w-full"
         >
           <router-link
-            :to="menu.link"
+            :to="{ name: menu.title }"
             class="flex items-center gap-x-2 w-full h-full p-2 capitalize"
           >
             <nt_icon :icon="menu.icon" />
@@ -84,7 +84,12 @@
         </li>
       </ul>
       <div class="col-span-full">
-        <v-btn color="#facc15" to="/login" v-if="userInfo === ''" class="w-full">
+        <v-btn
+          color="#facc15"
+          to="/login"
+          v-if="userInfo === ''"
+          class="w-full"
+        >
           <template #append>
             <svg
               width="18"
@@ -118,7 +123,9 @@
           </template>
           Login
         </v-btn>
-        <v-btn v-else color="#facc15" @click="handleLogout" class="w-full"> Logout </v-btn>
+        <v-btn v-else color="#facc15" @click="handleLogout" class="w-full">
+          Logout
+        </v-btn>
       </div>
     </div>
   </transition>

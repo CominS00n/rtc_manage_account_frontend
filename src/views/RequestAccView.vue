@@ -337,6 +337,7 @@ import {
 } from '@/rules/inputRules'
 import { useToast } from 'vue-toastification'
 
+import dateFormat from '@/constants/dateFormat'
 import trashIcon from '@/assets/logo/icons/trashIcon.vue'
 import nt_icon from '@/components/icon/nt_icon.vue'
 
@@ -373,7 +374,7 @@ const email = ref<string>('')
 
 // Data variable request information
 const request_type = ref<string[]>([])
-const request_date = ref<string | null>(null)
+const request_date = ref<Date>(new Date())
 const system = ref<string[] | null>(null)
 
 // Data variable Requisition information
@@ -461,9 +462,7 @@ const sendRequest = async () => {
     email: email.value,
     req_type: request_type.value[0].toString(),
     system: system.value,
-    req_date: request_date.value
-      ? new Date(request_date.value).toISOString()
-      : null,
+    req_date: dateFormat(request_date.value),
     account_type: selected_type.value,
     expiry_date: expire_date.value
       ? new Date(expire_date.value).toISOString()

@@ -10,7 +10,7 @@
         class="grid gap-4 grid-cols-2"
       >
         <v-text-field
-          v-model="userData.username"
+          v-model="username"
           label="Username"
           variant="outlined"
           density="compact"
@@ -18,7 +18,7 @@
           :rules="[v => !!v || 'Username is required']"
         />
         <v-text-field
-          v-model="userData.password"
+          v-model="password"
           label="Password"
           variant="outlined"
           density="compact"
@@ -29,7 +29,7 @@
           @click:append-inner="visible = !visible"
         />
         <v-text-field
-          v-model="userData.name"
+          v-model="name"
           label="Fullname"
           variant="outlined"
           density="compact"
@@ -37,7 +37,7 @@
           :rules="[v => !!v || 'Fullname is required']"
         />
         <v-text-field
-          v-model="userData.position"
+          v-model="position"
           label="Position"
           variant="outlined"
           density="compact"
@@ -45,7 +45,7 @@
           :rules="[v => !!v || 'Position is required']"
         />
         <v-text-field
-          v-model="userData.company"
+          v-model="company"
           label="Company"
           variant="outlined"
           density="compact"
@@ -53,7 +53,7 @@
           :rules="[v => !!v || 'Company is required']"
         />
         <v-text-field
-          v-model="userData.division"
+          v-model="division"
           label="Division"
           variant="outlined"
           density="compact"
@@ -61,7 +61,7 @@
           :rules="[v => !!v || 'Division is required']"
         />
         <v-text-field
-          v-model="userData.email"
+          v-model="email"
           label="Email"
           variant="outlined"
           density="compact"
@@ -69,7 +69,7 @@
           :rules="emailRules"
         />
         <v-text-field
-          v-model="userData.phone"
+          v-model="phone"
           label="Phone"
           variant="outlined"
           density="compact"
@@ -144,16 +144,15 @@ onMounted(async () => {
   await getGroups()
 })
 
-const userData = reactive<UserRegister>({
-  username: '',
-  password: '',
-  name: '',
-  position: '',
-  company: '',
-  division: '',
-  email: '',
-  phone: '',
-})
+const username = ref<string>('')
+const password = ref<string>('')
+const name = ref<string>('')
+const position = ref<string>('')
+const company = ref<string>('')
+const division = ref<string>('')
+const email = ref<string>('')
+const phone = ref<string>('')
+
 const roleId = ref<string[]>([])
 const groupId = ref<string[]>([])
 const addUserRef = ref()
@@ -166,7 +165,18 @@ const submitForm = async () => {
   }
   if (roleId.value.length === 0 || groupId.value.length === 0)
     return toast.error('Please select role or group')
-  userData.name = userData.name.toLowerCase()
+
+  const cleanedPassword = password.value.replace(/\s+/g, '')
+  const userData = reactive<UserRegister>({
+    username: username.value.toLowerCase(),
+    password: cleanedPassword,
+    name: name.value,
+    position: position.value,
+    company: company.value,
+    division: division.value,
+    email: email.value,
+    phone: phone.value,
+  })
   await postUser(userData, roleId.value, groupId.value).finally(async () => {
     await addUserRef.value.reset()
     userData.password = ''

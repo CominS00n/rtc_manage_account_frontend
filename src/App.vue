@@ -80,7 +80,7 @@
               </div>
             </v-container>
           </nav>
-          <v-container class="overflow-y-auto h-svh">
+          <v-container id="content-container" class="overflow-y-auto h-svh">
             <div>
               <transition name="slide-fade" mode="out-in">
                 <component :is="Component" :key="route.path"></component>
@@ -143,6 +143,10 @@ aside {
 }
 
 .content-body {
+  scrollbar-width: none;
+}
+
+#content-container {
   scrollbar-width: none;
 }
 
