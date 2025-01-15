@@ -51,7 +51,7 @@ const routes = [
       {
         path: 'user-management',
         name: 'user management',
-        component: () => import('../views/userManageView.vue'),
+        component: () => import('../views/UserManageView.vue'),
         meta: {
           title: 'User Management',
           requiresAuth: true,
@@ -78,7 +78,7 @@ const routes = [
       {
         path: 'settings',
         name: 'settings',
-        component: () => import('../views/settingView.vue'),
+        component: () => import('../views/SettingView.vue'),
         meta: {
           title: 'Settings',
           requiresAuth: true,
@@ -97,7 +97,7 @@ const routes = [
   {
     path: '/tracking-status/id/:id',
     name: 'tracking status',
-    component: () => import('../views/trackStatusView.vue'),
+    component: () => import('../views/TrackStatusView.vue'),
   },
   {
     path: '/notfound-item',

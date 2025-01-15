@@ -77,7 +77,17 @@
         <v-card-text>
           <div class="grid grid-cols-2 gap-x-6 gap-y-3">
             <div id="request_type">
-              <div
+              <v-select
+                v-model="request_type"
+                label="Select Request Type"
+                :items="req_types"
+                density="compact"
+                variant="outlined"
+                clearable
+                :rules="[v => !!v || 'You must select an request type']"
+                validate-on="submit"
+              ></v-select>
+              <!-- <div
                 class="flex gap-2 flex-wrap content-start"
                 :class="
                   error && request_type.length === 0 ? 'text-[#b00020]' : ''
@@ -99,7 +109,7 @@
                 class="text-[#b00020] text-xs pl-4"
               >
                 Please select at least one request type.
-              </span>
+              </span> -->
             </div>
             <div>
               <v-date-input
@@ -113,6 +123,7 @@
                 :rules="dateRules"
                 v-model="request_date"
                 validate-on="submit"
+                readonly
               ></v-date-input>
             </div>
             <div>
@@ -373,7 +384,7 @@ const telephone = ref<string>('')
 const email = ref<string>('')
 
 // Data variable request information
-const request_type = ref<string[]>([])
+const request_type = ref<string | null>(null)
 const request_date = ref<Date>(new Date())
 const system = ref<string[] | null>(null)
 
@@ -422,7 +433,7 @@ const scrollToError = (id: string) => {
 }
 
 const validateSelection = () => {
-  if (request_type.value.length === 0) {
+  if (request_type.value === '') {
     error.value = true
     scrollToError('request_type')
     return false
@@ -460,7 +471,7 @@ const sendRequest = async () => {
     division: division.value,
     telephone: telephone.value,
     email: email.value,
-    req_type: request_type.value[0].toString(),
+    req_type: request_type.value || '',
     system: system.value,
     req_date: dateFormat(request_date.value),
     account_type: selected_type.value,
@@ -513,7 +524,6 @@ const sendRequest = async () => {
     toast.success('Request has been sent')
     // Reset all form
     await reqAccRef.value.reset()
-    request_type.value = []
     service_type.value = []
     user_type.value = []
     otherServiceType.value = []

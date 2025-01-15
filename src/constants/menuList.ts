@@ -33,6 +33,6 @@ export const menuList = [
     title: 'settings',
     link: 'settings',
     icon: 'cog-6-tooth',
-    role: 'allowAll',
+    role: 'guest',
   },
 ]

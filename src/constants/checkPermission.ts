@@ -1,7 +1,7 @@
 import { useUserStore } from '@/stores/user'
 
-export function checkPermission(permissions: string) {
+export function checkPermission(permissionsCheck: string) {
   return useUserStore().permissions.some(
-    permission => permissions.includes(permission) || permission === 'allowAll',
+    permission => permissionsCheck.includes(permission) || permission === 'allowAll',
   )
 }

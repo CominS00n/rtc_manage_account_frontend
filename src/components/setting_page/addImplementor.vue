@@ -8,6 +8,7 @@
         @submit.prevent="addImplementor"
         ref="implementorRef"
         class="mt-6"
+        :disabled="!checkPermission('implementorCreate')"
       >
         <!-- <h2 class="text-lg font-bold mb-4">Add Implementor</h2> -->
         <div class="flex gap-x-4">
@@ -36,7 +37,7 @@
           class="w-full"
           :disabled="!checkPermission('implementorCreate')"
         >
-          <p class="capitalize">save</p>
+          <p class="capitalize">Create</p>
         </v-btn>
       </v-form>
 
@@ -55,15 +56,15 @@
               <template #append>
                 <div class="flex gap-x-4">
                   <edit-icon
+                    v-show="checkPermission('implementorUpdate')"
                     class="cursor-pointer"
                     @click="handleEditClick(implementor.id)"
-                    v-show="checkPermission('implementorUpdate')"
                   />
                   <trash-icon
+                    v-show="checkPermission('implementorDelete')"
                     color="red"
                     class="cursor-pointer"
                     @click="handleDeleteClick(implementor.id)"
-                    v-show="checkPermission('implementorDelete')"
                   />
                 </div>
               </template>
