@@ -29,10 +29,10 @@
           fixed-header
         >
           <template v-slot:item="{ item }">
-            <tr>
+            <tr class="text-capitalize">
               <td>{{ item.user_name }}</td>
               <td>{{ item.user_position }}</td>
-              <td>{{ item.user_email }}</td>
+              <td class="text-none">{{ item.user_email }}</td>
               <td>{{ item.user_phone }}</td>
               <td>{{ item.user_username }}</td>
               <td>

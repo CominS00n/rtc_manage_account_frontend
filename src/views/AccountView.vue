@@ -26,11 +26,11 @@
           :sort-by="[{ key: 'req_date', order: 'desc' }]"
         >
           <template v-slot:item="{ item }">
-            <tr>
+            <tr class="text-capitalize">
               <td>{{ item.full_name }}</td>
               <td>{{ item.position }}</td>
               <td>{{ item.company }}</td>
-              <td>{{ item.email }}</td>
+              <td class="text-none">{{ item.email }}</td>
               <td>{{ item.req_type }}</td>
               <td>{{ item.system.join(', ') }}</td>
               <td>{{ item.req_date }}</td>
