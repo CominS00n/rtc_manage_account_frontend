@@ -119,7 +119,11 @@
               >
                 Edit User
               </DialogTitle>
-              <v-form class="mt-6" @submit.prevent="editSubmit" ref="userForm">
+              <v-form
+                class="mt-6 space-y-2"
+                @submit.prevent="editSubmit"
+                ref="userForm"
+              >
                 <v-text-field
                   v-model="userData.username"
                   label="Username"
@@ -133,10 +137,9 @@
                   label="Password"
                   variant="outlined"
                   density="compact"
-                  validate-on="submit"
                   :type="visible ? 'text' : 'password'"
-                  :rules="passwordRules"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                  :rules="userData.password === '' ? [] : inputPasswordRules"
                   @click:append-inner="visible = !visible"
                 />
                 <v-text-field
@@ -246,7 +249,7 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import { useToast } from 'vue-toastification'
-import { passwordRules, emailRules } from '@/rules/inputRules'
+import { inputPasswordRules, emailRules } from '@/rules/inputRules'
 
 import useUserApi from '@/composable/userApi'
 import useGroupApi from '@/composable/groupApi'
@@ -416,7 +419,9 @@ const editSubmit = async () => {
   // Update user data here
   const userId = user.value[0].user_id
   await updateUser(userData, userId, roleId.value, groupId.value)
-  await getUsers()
+  for (const name of group_name.value) {
+    await getUserGroups(name)
+  }
   toast.success('User has been updated')
   closeModal()
 }
