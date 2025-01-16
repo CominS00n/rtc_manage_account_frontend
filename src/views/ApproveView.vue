@@ -208,7 +208,17 @@
                           <br />
                         </p>
                         <p class="text-xs text-left">
-                          <v-chip size="x-small">{{ approved.status }}</v-chip>
+                          <v-chip
+                            size="x-small"
+                            :color="
+                              approved.status === 'Approved'
+                                ? 'green'
+                                : approved.status === 'Rejected'
+                                  ? 'red'
+                                  : ''
+                            "
+                            >{{ approved.status }}</v-chip
+                          >
                         </p>
                       </div>
                     </template>
@@ -274,7 +284,7 @@
                         class="flex w-full gap-2 mt-4"
                         v-show="
                           approved.signature === null &&
-                          approval?.status !== 'Rejected'
+                          approved.status !== 'Rejected'
                         "
                       >
                         <v-btn
@@ -288,8 +298,8 @@
                         </v-btn>
                         <v-btn
                           size="small"
-                          variant="outlined"
-                          @click="rejectApproved"
+                          variant="text"
+                          @click="setRejectOpen(index, approved)"
                           v-if="approved.email === emailToken"
                         >
                           Reject
@@ -306,6 +316,7 @@
     </div>
   </div>
 
+  <!-- Approved Modal -->
   <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
@@ -370,10 +381,86 @@
                 ></v-text-field>
               </div>
 
-              <div class="mt-4">
-                <v-btn @click="approvalSubmit" class="w-full">
-                  <span class="capitalize">Approval</span>
-                </v-btn>
+              <div class="mt-4 flex gap-2">
+                <v-btn
+                  @click="approvalSubmit"
+                  class="w-full flex-1"
+                  color="#facc15"
+                  text="Approve"
+                />
+                <v-btn @click="isOpen = !isOpen" variant="text" text="Cancel" />
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
+
+  <!-- Rejected Modal -->
+  <TransitionRoot appear :show="isRejectOpen" as="template">
+    <Dialog
+      as="div"
+      @close="isRejectOpen = !isRejectOpen"
+      class="relative z-10"
+    >
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black/25" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 overflow-y-auto">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center"
+        >
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+            >
+              <DialogTitle
+                as="h3"
+                class="text-lg font-medium leading-6 text-gray-900"
+              >
+                Reject Approval
+              </DialogTitle>
+              <div class="mt-2 space-y-4">
+                <v-text-field
+                  label="Remark"
+                  prepend-icon=""
+                  variant="outlined"
+                  density="compact"
+                  v-model="rejectedRemark"
+                  hide-details
+                ></v-text-field>
+              </div>
+
+              <div class="mt-4 flex gap-2">
+                <v-btn
+                  @click="rejectApproved"
+                  class="w-full flex-1"
+                  color="red"
+                  text="reject"
+                />
+                <v-btn
+                  @click="isRejectOpen = !isRejectOpen"
+                  variant="text"
+                  text="Cancel"
+                />
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -398,6 +485,7 @@ import {
 import { useToast } from 'vue-toastification'
 
 import useActivityLogApi from '@/composable/activityLogApi'
+import Swal from 'sweetalert2'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
 
@@ -408,17 +496,39 @@ import { status_type } from '@/types/sendReq'
 import { VueSignaturePad } from '@selemondev/vue3-signature-pad'
 import type { CanvasSignatureRef } from '@selemondev/vue3-signature-pad'
 
+interface approval_type {
+  id?: string
+  acc_req_id: string
+  type?: string
+  name: string
+  email: string
+  signature: string | null
+  remark: string | null
+  status: string
+  date: string | null
+  created_at?: string
+  updated_at?: string
+}
+
 const toast = useToast()
 const route = useRoute()
 const { postActivityLog } = useActivityLogApi()
 
 const isOpen = ref<boolean>(false)
+const isRejectOpen = ref<boolean>(false)
 const approvalIndex = ref<number>(0)
 const approvalValue = ref<approval_type | null>(null)
+const rejectedRemark = ref<string>('')
+
 const setIsOpen = (index: number, approved: approval_type) => {
   approvalIndex.value = index
   approvalValue.value = approved
   isOpen.value = !isOpen.value
+}
+const setRejectOpen = (index: number, approved: approval_type) => {
+  approvalIndex.value = index
+  approvalValue.value = approved
+  isRejectOpen.value = !isRejectOpen.value
 }
 const closeModal = () => {
   isOpen.value = false
@@ -447,20 +557,6 @@ const approvalSubmit = () => {
   } finally {
     closeModal()
   }
-}
-
-interface approval_type {
-  id?: string
-  acc_req_id: string
-  type?: string
-  name: string
-  email: string
-  signature: string | null
-  remark: string | null
-  status: string
-  date: string | null
-  created_at?: string
-  updated_at?: string
 }
 
 const token = ref(route.params.token as string)
@@ -568,18 +664,33 @@ const rejectApproved = async () => {
       email: approvedInformation.value[approvalIndex.value].email,
       status: status_type.rejected,
       signature: '',
-      remark: '',
+      remark: rejectedRemark.value,
       date: new Date().toISOString(),
     }
 
-    await approveAccReq(data).finally(async () => {
-      await postActivityLog(
-        'REJECT-' + new Date().getTime(),
-        data.name,
-        'Reject',
-        'User rejected request',
-      )
-      toast.success(resMessage)
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, reject it!',
+      customClass: {
+        confirmButton: 'custom-confirm-button',
+        cancelButton: 'custom-cancel-button',
+      },
+    }).then(async result => {
+      if (result.isConfirmed) {
+        await approveAccReq(data).finally(async () => {
+          await postActivityLog(
+            'REJECT-' + new Date().getTime(),
+            data.name,
+            'Reject',
+            'User rejected request',
+          )
+          toast.success(resMessage)
+          await getAccReq(id.value)
+        })
+      }
     })
   } catch (error) {
     console.error(error)

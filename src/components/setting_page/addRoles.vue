@@ -52,8 +52,8 @@
           color="#facc15"
           class="w-full mt-4"
           :disabled="!checkPermission('roleCreate')"
+          text="add"
         >
-          <p class="capitalize">Create</p>
         </v-btn>
       </v-form>
       <div class="flex flex-col h-full">
@@ -182,11 +182,9 @@
                   </div>
                 </div>
                 <div class="mt-4 flex gap-4">
-                  <v-btn color="#facc15" class="flex-1" type="submit">
-                    <p class="capitalize">Submit</p>
+                  <v-btn color="#facc15" class="flex-1" type="submit" text="update">
                   </v-btn>
-                  <v-btn variant="outlined" @click="closeModal">
-                    <p class="capitalize">Cancel</p>
+                  <v-btn variant="text" @click="closeModal" text="cancel">
                   </v-btn>
                 </div>
               </v-form>

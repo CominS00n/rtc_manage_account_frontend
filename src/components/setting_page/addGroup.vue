@@ -27,8 +27,13 @@
           :rules="inputDefaultRules"
         ></v-textarea>
 
-        <v-btn type="submit" color="#facc15" class="w-full mt-4" :disabled="!checkPermission('groupCreate')">
-          <p class="capitalize">Submit</p>
+        <v-btn
+          type="submit"
+          color="#facc15"
+          class="w-full mt-4"
+          :disabled="!checkPermission('groupCreate')"
+          text="add"
+        >
         </v-btn>
       </v-form>
       <div class="flex flex-col h-full">
@@ -100,7 +105,7 @@
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
-                Update Implementor
+                Update Group
               </DialogTitle>
               <v-form
                 class="mt-6"
@@ -125,11 +130,9 @@
                   :rules="inputDefaultRules"
                 ></v-textarea>
                 <div class="mt-4 flex gap-4">
-                  <v-btn color="#facc15" class="flex-1" type="submit">
-                    <p class="capitalize">Submit</p>
+                  <v-btn color="#facc15" class="flex-1" type="submit" text="update">
                   </v-btn>
-                  <v-btn variant="outlined" @click="closeModal">
-                    <p class="capitalize">Cancel</p>
+                  <v-btn variant="text" @click="closeModal" text="cancel">
                   </v-btn>
                 </div>
               </v-form>

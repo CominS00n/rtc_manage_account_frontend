@@ -23,19 +23,43 @@
           :headers="headers"
           :search="search"
           class="data-table text-nowrap"
-          :sort-by="[{ key: 'req_date', order: 'desc' }]"
+          :sort-by="[{ key: 'created_at', order: 'desc' }]"
         >
           <template v-slot:item="{ item }">
             <tr class="text-capitalize">
               <td>{{ item.full_name }}</td>
               <td>{{ item.position }}</td>
               <td>{{ item.company }}</td>
-              <td class="text-none">{{ item.email }}</td>
+              <td class="text-none">
+                <!-- {{ item.email }} -->
+                <v-tooltip location="top">
+                  <template v-slot:activator="{ props }">
+                    <p v-bind="props" class="max-w-[200px] truncate">
+                      {{ item.email }}
+                    </p>
+                  </template>
+                  <template #default>
+                    <p>{{ item.email }}</p>
+                  </template>
+                </v-tooltip>
+              </td>
               <td>{{ item.req_type }}</td>
               <td>{{ item.system.join(', ') }}</td>
               <td>{{ item.req_date }}</td>
               <td>{{ item.account_type }}</td>
-              <td>{{ item.user_type.join(', ') }}</td>
+              <td>
+                <v-tooltip
+                  location="top"
+                  :text="item.user_type.join(', ') ?? undefined"
+                >
+                  <template v-slot:activator="{ props }">
+                    <p v-bind="props" class="max-w-[200px] truncate">
+                      {{ item.user_type.join(', ') }}
+                    </p>
+                  </template>
+                </v-tooltip>
+                <!-- {{ item.user_type.join(', ') }} -->
+              </td>
               <td>
                 <v-chip
                   :color="
@@ -48,6 +72,20 @@
                   >{{ item.status }}</v-chip
                 >
               </td>
+              <td>
+                <v-tooltip location="top" :text="item.remarks ?? undefined">
+                  <template v-slot:activator="{ props }">
+                    <p v-bind="props" class="max-w-[200px] truncate">{{ item.remarks }}</p>
+                  </template>
+                </v-tooltip>
+              </td>
+              <td>
+                {{
+                  item.created_at
+                    ? formatDateTime(new Date(item.created_at))
+                    : ''
+                }}
+              </td>
               <td class="fixed-column">
                 <v-menu location="left top">
                   <template v-slot:activator="{ props: menu }">
@@ -57,15 +95,6 @@
                   </template>
                   <v-list>
                     <v-list-item>
-                      <div
-                        @click="openModal(item.id)"
-                        class="inline-flex items-center gap-x-2 cursor-pointer"
-                      >
-                        <document-text />
-                        <span>Comment</span>
-                      </div>
-                    </v-list-item>
-                    <v-list-item>
                       <router-link
                         :to="{ name: 'ViewRequest', params: { id: item.id } }"
                         class="inline-flex items-center gap-x-2"
@@ -73,6 +102,15 @@
                         <document-download />
                         <span>Download(PDF)</span>
                       </router-link>
+                    </v-list-item>
+                    <v-list-item>
+                      <div
+                        @click="openModal(item.id)"
+                        class="inline-flex items-center gap-x-2 cursor-pointer"
+                      >
+                        <document-text />
+                        <span>Comment</span>
+                      </div>
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -203,6 +241,10 @@
                     readonly
                   ></v-text-field>
                   <div class="flex flex-wrap gap-4 items-center">
+                    <span>Request Type: </span>
+                    <v-chip class="capitalize">{{ accReq[0].req_type }}</v-chip>
+                  </div>
+                  <div class="flex flex-wrap gap-4 items-center mt-1">
                     <span>Systems: </span>
                     <ul class="flex flex-wrap gap-4">
                       <li v-for="item in accReq[0]?.system" :key="item">
@@ -210,25 +252,27 @@
                       </li>
                     </ul>
                   </div>
-                  <div class="flex flex-wrap gap-4 items-center">
+                  <div class="flex flex-wrap gap-4 items-center mt-1">
                     <span>Service type: </span>
                     <ul class="flex flex-wrap gap-4">
                       <li v-for="item in accReq[0]?.service_type" :key="item">
-                        <span class="inline-flex gap-2">
+                        <v-chip class="capitalize">{{ item }}</v-chip>
+                        <!-- <span class="inline-flex gap-2">
                           <tick-icon />
                           <p class="capitalize">{{ item }}</p>
-                        </span>
+                        </span> -->
                       </li>
                     </ul>
                   </div>
-                  <div class="flex flex-wrap gap-4 items-center">
+                  <div class="flex flex-wrap gap-4 items-center mt-1">
                     <span>User type: </span>
                     <ul class="flex flex-wrap gap-4">
                       <li v-for="item in accReq[0]?.user_type" :key="item">
-                        <span class="inline-flex gap-2">
+                        <v-chip class="capitalize">{{ item }}</v-chip>
+                        <!-- <span class="inline-flex gap-2">
                           <tick-icon />
                           <p class="capitalize">{{ item }}</p>
-                        </span>
+                        </span> -->
                       </li>
                     </ul>
                   </div>
@@ -269,13 +313,14 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 
+import formatDateTime from '@/constants/dateFormat'
 import nt_icon from '@/components/icon/nt_icon.vue'
 import documentDownload from '@/assets/logo/icons/documents/documentDownload.vue'
 import documentIcon from '@/assets/logo/icons/documents/documentIcon.vue'
 import documentText from '@/assets/logo/icons/documents/documentText.vue'
 // import menuIcon from '@/assets/logo/icons/menuIcon.vue'
 import moreIcon from '@/assets/logo/icons/moreIcon.vue'
-import tickIcon from '@/assets/logo/icons/tickIcon.vue'
+// import tickIcon from '@/assets/logo/icons/tickIcon.vue'
 
 const { getAllAccReqs, allAccReqs, accReq, getAccReq, putAccReqComment } =
   useAccReqApi()
@@ -293,6 +338,8 @@ const headers = ref([
   { key: 'account_type', title: 'Account Type' },
   { key: 'user_type', title: 'User Type' },
   { key: 'status', title: 'Status' },
+  { key: 'remarks', title: 'Remarks' },
+  { key: 'created_at', title: 'Created' },
 ])
 
 onMounted(async () => {
@@ -329,5 +376,9 @@ const saveData = async () => {
   z-index: 10;
   width: 3rem;
   background-color: white;
+}
+
+td {
+  @apply max-w-[200px] truncate cursor-default;
 }
 </style>

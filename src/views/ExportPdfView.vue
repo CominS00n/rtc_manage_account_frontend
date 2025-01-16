@@ -39,7 +39,7 @@
             <p class="sub-text font-bold px-3 bg-gray-300">User Information</p>
             <div class="detail">
               <div class="grid grid-cols-2 gap-y-2">
-                <p>
+                <p class="capitalize">
                   <span class="font-bold">Full Name:</span>
                   {{ data?.full_name }}
                 </p>
@@ -69,7 +69,7 @@
               <div class="grid grid-cols-2 gap-y-2">
                 <label class="flex items-center gap-2">
                   <span class="font-bold">Request type: </span>
-                  <tick-icon />
+                  <!-- <tick-icon /> -->
                   <p class="capitalize">{{ data?.req_type }}</p>
                 </label>
                 <p>
@@ -101,8 +101,8 @@
                   <ul class="ml-2">
                     <li v-for="item in data?.service_type" :key="item">
                       <span class="inline-flex gap-2">
-                        <tick-icon />
-                        <p class="capitalize">{{ item }}</p>
+                        <!-- <tick-icon /> -->
+                        <p class="capitalize">- {{ item }}</p>
                       </span>
                     </li>
                   </ul>
@@ -112,8 +112,8 @@
                   <ul class="ml-2">
                     <li v-for="item in data?.user_type" :key="item">
                       <span class="inline-flex gap-2">
-                        <tick-icon />
-                        <p class="capitalize">{{ item }}</p>
+                        <!-- <tick-icon /> -->
+                        <p class="capitalize">- {{ item }}</p>
                       </span>
                     </li>
                   </ul>
@@ -217,7 +217,7 @@ import jsPDF from 'jspdf'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
 import documentDownload from '@/assets/logo/icons/documents/documentDownload.vue'
-import tickIcon from '@/assets/logo/icons/tickIcon.vue'
+// import tickIcon from '@/assets/logo/icons/tickIcon.vue'
 
 import { useAccReqApi } from '@/composable/accReqApi'
 import type { AccReq } from '@/types/accReqs'

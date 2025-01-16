@@ -107,9 +107,7 @@
         >
         </v-select>
         <div class="col-span-2 flex gap-2">
-          <v-btn type="submit" color="#facc15" class="flex-1">
-            <p class="capitalize">Submit</p>
-          </v-btn>
+          <v-btn type="submit" color="#facc15" class="flex-1" text="Add" />
           <v-btn variant="outlined" @click="handleCancel">Cancel</v-btn>
         </div>
       </v-form>
