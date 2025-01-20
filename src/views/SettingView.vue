@@ -6,7 +6,7 @@
         <a
           href="#users"
           @click.prevent="scrollToSection('users')"
-          v-show="!checkPermission('userCreate')"
+          v-show="checkPermission('userCreate')"
         >
           #Users
         </a>
