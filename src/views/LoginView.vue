@@ -58,7 +58,7 @@ const toast = useToast()
 
 const loginForm = ref()
 const username = ref<string>('administration')
-const password = ref<string>('qZvy42]eDo42Di.')
+const password = ref<string>('33exZ85bpTBcu1@')
 
 const { login } = useLoginApi()
 const { postActivityLog } = useActivityLogApi()

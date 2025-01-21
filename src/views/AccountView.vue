@@ -257,10 +257,6 @@
                     <ul class="flex flex-wrap gap-4">
                       <li v-for="item in accReq[0]?.service_type" :key="item">
                         <v-chip class="capitalize">{{ item }}</v-chip>
-                        <!-- <span class="inline-flex gap-2">
-                          <tick-icon />
-                          <p class="capitalize">{{ item }}</p>
-                        </span> -->
                       </li>
                     </ul>
                   </div>
@@ -269,10 +265,6 @@
                     <ul class="flex flex-wrap gap-4">
                       <li v-for="item in accReq[0]?.user_type" :key="item">
                         <v-chip class="capitalize">{{ item }}</v-chip>
-                        <!-- <span class="inline-flex gap-2">
-                          <tick-icon />
-                          <p class="capitalize">{{ item }}</p>
-                        </span> -->
                       </li>
                     </ul>
                   </div>
@@ -364,8 +356,11 @@ const saveData = async () => {
     ...accReq.value[0],
     remarks: accReq.value[0].remarks,
   }
-  await putAccReqComment(id_select.value, data)
-  closeModal()
+  await putAccReqComment(id_select.value, data).finally(async () => {
+    await getAllAccReqs()
+    closeModal()
+  })
+
 }
 </script>
 

@@ -126,6 +126,7 @@ import {
 } from '@/rules/inputRules'
 import { useToast } from 'vue-toastification'
 
+import useActivityLogApi from '@/composable/activityLogApi'
 import usePermRoleApi from '@/composable/permRolesApi'
 import useGroupApi from '@/composable/groupApi'
 import useUserApi from '@/composable/userApi'
@@ -133,6 +134,7 @@ import useUserApi from '@/composable/userApi'
 const { getRoles, roles } = usePermRoleApi()
 const { getGroups, groups } = useGroupApi()
 const { postUser } = useUserApi()
+const { postActivityLog } = useActivityLogApi()
 
 const toast = useToast()
 const visible = ref<boolean>(false)
@@ -176,6 +178,12 @@ const submitForm = async () => {
     phone: phone.value,
   })
   await postUser(userData, roleId.value, groupId.value).finally(async () => {
+    await postActivityLog(
+      'CREATE-USER-' + new Date().getTime(),
+      localStorage.getItem('user') || '',
+      'Create user',
+      `Crated user ${userData.username}`,
+    )
     await addUserRef.value.reset()
     userData.password = ''
     toast.success('User added successfully')

@@ -204,6 +204,7 @@
                   validate-on="submit"
                 >
                 </v-select>
+                {{ roleId }}
                 <v-select
                   v-model="groupId"
                   :items="groups"
@@ -254,6 +255,7 @@ import { inputPasswordRules, emailRules } from '@/rules/inputRules'
 import useUserApi from '@/composable/userApi'
 import useGroupApi from '@/composable/groupApi'
 import usePermRoleApi from '@/composable/permRolesApi'
+import useActivityLogApi from '@/composable/activityLogApi'
 import Swal from 'sweetalert2'
 
 import nt_icon from '@/components/icon/nt_icon.vue'
@@ -271,6 +273,7 @@ const {
 } = useUserApi()
 const { group, getGroupID, getGroups, groups } = useGroupApi()
 const { getRoles, roles } = usePermRoleApi()
+const { postActivityLog } = useActivityLogApi()
 
 const toast = useToast()
 const userStore = useUserStore()
@@ -389,6 +392,12 @@ const handleDeleteClick = (id: string) => {
   }).then(async result => {
     if (result.isConfirmed) {
       await deleteUser(id) // Delete user
+      await postActivityLog(
+        'DELETE-USER-' + new Date().getTime(),
+        localStorage.getItem('user') || '',
+        'Delete user',
+        `Deleted user with id ${id}`,
+      )
       toast.success('Group deleted successfully')
       await getUsers()
     }
@@ -400,15 +409,23 @@ const closeModal = () => {
 }
 
 const editSubmit = async () => {
-  if (userData.password === '') {
-    user.value[0].user_password = user.value[0].user_password
-  }
   if (roleId.value.length === 0) {
-    user.value[0].roles = user.value[0].roles
+    roleId.value.push(user.value[0].roles[0].role_id)
   }
   if (groupId.value.length === 0) {
-    user.value[0].groups = user.value[0].groups
+    groupId.value.push(user.value[0].groups[0].group_id)
   }
+
+  if (user.value[0].roles[0].role_name.includes('super_admin')) {
+    roleId.value.push(user.value[0].roles[0].role_id)
+  }
+
+  if (user.value[0].groups[0].group_name.includes('super_admin')) {
+    groupId.value.push(user.value[0].groups[0].group_id)
+  }
+  // remove duplicate roleId and groupId
+  roleId.value = Array.from(new Set(roleId.value))
+  groupId.value = Array.from(new Set(groupId.value))
 
   const isValid = await userForm.value.validate()
   if (!isValid.valid) {
@@ -422,6 +439,12 @@ const editSubmit = async () => {
   for (const name of group_name.value) {
     await getUserGroups(name)
   }
+  await postActivityLog(
+    'UPDATE-USER-' + new Date().getTime(),
+    localStorage.getItem('user') || '',
+    'Update user',
+    `Updated user with id ${userId}`,
+  )
   toast.success('User has been updated')
   closeModal()
 }

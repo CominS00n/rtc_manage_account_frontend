@@ -27,5 +27,5 @@ COPY --from=builder /app/dist .
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose Port และ Start Nginx
-EXPOSE 82
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
