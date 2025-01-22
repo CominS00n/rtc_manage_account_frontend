@@ -204,7 +204,6 @@
                   validate-on="submit"
                 >
                 </v-select>
-                {{ roleId }}
                 <v-select
                   v-model="groupId"
                   :items="groups"

@@ -57,8 +57,8 @@ const userStore = useUserStore()
 const toast = useToast()
 
 const loginForm = ref()
-const username = ref<string>('administration')
-const password = ref<string>('33exZ85bpTBcu1@')
+const username = ref<string>('')
+const password = ref<string>('')
 
 const { login } = useLoginApi()
 const { postActivityLog } = useActivityLogApi()
@@ -72,7 +72,7 @@ const handleLogin = async () => {
     return false
   }
   try {
-    const res = await login(username.value, password.value)
+    const res = await login(username.value.toLocaleLowerCase(), password.value)
     if (res && res.data.status !== 200) {
       toast.error('Invalid username or password')
       password.value = ''

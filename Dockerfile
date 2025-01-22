@@ -10,6 +10,7 @@ RUN apk add --no-cache bash curl \
 
 # Copy package files และ install dependencies
 COPY package.json yarn.lock ./
+COPY .env ./
 RUN yarn install --frozen-lockfile
 
 # Build the project
