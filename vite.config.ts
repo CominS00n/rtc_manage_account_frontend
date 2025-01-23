@@ -15,12 +15,19 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
-    // proxy: {
-    //   '/api/v2': {
-    //     target: 'http://192.168.127.174:8000',
-    //     changeOrigin: true,
-    //     secure: false,
-    //   },
-    // },
+    proxy: {
+      '/api/v2': {
+        target: 'http://192.168.21.25:8002',
+        changeOrigin: true,
+        configure: proxy => {
+          proxy.on('proxyReq', proxyReq => {
+            console.log('Proxying request:', proxyReq.path)
+          })
+        },
+      },
+    },
+  },
+  preview: {
+    port: 8080,
   },
 })

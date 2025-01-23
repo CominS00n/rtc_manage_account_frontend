@@ -36,7 +36,6 @@ export const useImplementorApi = () => {
 
   const postImplementor = async (result: saveImplementor) => {
     try {
-      console.log(result)
       const response = await api({
         method: 'post',
         url: '/implementor/',

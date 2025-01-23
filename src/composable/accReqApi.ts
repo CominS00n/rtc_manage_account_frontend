@@ -27,7 +27,6 @@ export const useAccReqApi = () => {
 
   const postAccReq = async (result: sendReq) => {
     try {
-      console.log(result)
       const response = await api({
         method: 'post',
         url: '/account_request',
@@ -41,7 +40,6 @@ export const useAccReqApi = () => {
 
   const putAccReqComment = async (id: string, result: AccReq) => {
     try {
-      console.log(result)
       const response = await api({
         method: 'put',
         url: '/account_request/' + id,
